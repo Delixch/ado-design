@@ -70,6 +70,7 @@ const ContactPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant 
                 src="/images/contact-bg-color.webp"
                 className="absolute inset-0 h-full w-full object-cover rounded-2xl"
                 alt="Contact Background"
+                loading="lazy"
               />
 
               {/* 3D Fold Shadow Overlay - Creates the bottom wing of the paper airplane */}
@@ -187,7 +188,6 @@ export const ContactSection: React.FC = () => {
               eyebrow="Kontakt"
               line1="Schreiben"
               line2="Sie mir."
-              onDark={false}
               gradientLine2={true}
               headClass="fluid-display-xs"
               className="mb-2"
@@ -234,6 +234,7 @@ export const ContactSection: React.FC = () => {
                     <div className="flex flex-col-reverse relative group/input">
                       <input
                         id="contact-name"
+                        name="name"
                         type="text"
                         required
                         value={form.name}
@@ -248,6 +249,7 @@ export const ContactSection: React.FC = () => {
                     <div className="flex flex-col-reverse relative group/input">
                       <input
                         id="contact-email"
+                        name="email"
                         type="email"
                         required
                         value={form.email}
@@ -264,6 +266,7 @@ export const ContactSection: React.FC = () => {
                   <div className="flex flex-col-reverse relative group/input">
                     <textarea
                       id="contact-message"
+                      name="message"
                       required
                       rows={4}
                       value={form.message}

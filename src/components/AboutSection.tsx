@@ -134,6 +134,7 @@ const AboutPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
             <img
               src="/images/about-portrait.webp"
               alt="Portrait"
+              loading="lazy"
               className="absolute inset-0 h-full w-full object-cover"
             />
 
@@ -259,7 +260,6 @@ export const AboutSection: React.FC = () => {
               eyebrow="Über mich"
               line1="Ich schreibe nicht nur Code."
               line2="Ich baue, was bleibt."
-              onDark={false}
               gradientLine2={false}
               className="mb-6"
             />

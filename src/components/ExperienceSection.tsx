@@ -141,6 +141,7 @@ const ExperiencePortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ varia
             <img
               src="/images/experience-board-color.webp"
               alt="Experience Board"
+              loading="lazy"
               className="absolute inset-[2px] h-[calc(100%-4px)] w-[calc(100%-4px)] rounded-[inherit] object-cover"
             />
           </div>
@@ -159,6 +160,8 @@ const ExperiencePortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ varia
           {/* This is the zoomed-in image. Its transformOrigin tracks the pointer perfectly. */}
           <motion.img
             src="/images/experience-board-color.webp"
+            alt=""
+            aria-hidden
             className="absolute inset-0 w-full h-full object-cover object-center"
             style={{
               scale: 1.5,
@@ -291,8 +294,6 @@ export const ExperienceSection: React.FC = () => {
               eyebrow="Werdegang"
               line1="Werdegang &"
               line2="Stationen."
-              accent="coral"
-              onDark={false}
               gradientLine2={true}
               headClass="fluid-display-xs"
               className="mb-8 max-w-3xl"

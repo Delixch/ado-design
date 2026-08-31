@@ -28,7 +28,15 @@ const DRIFT_TOLERANCE = 8;
  * weil inzwischen alles steht. Darum wird nach dem Sprung noch etwa anderthalb
  * Sekunden lang gemessen und bei Abweichung nachgezogen.
  */
+// Jeder Aufruf bekommt eine neue Generation. Ein laufender Settle-Zyklus
+// prueft vor jedem Schritt, ob er noch die aktuelle ist — klickt man
+// waehrend der ~1.8s Korrekturzeit ein zweites Ziel an, bricht der alte
+// Zyklus sofort ab, statt mit dem neuen um `window.scrollTo` zu konkurrieren.
+let currentGen = 0;
+
 export const scrollToSection = (id: string): void => {
+  const gen = ++currentGen;
+
   const jump = () => {
     const element = document.getElementById(id);
     if (!element) {
@@ -45,6 +53,7 @@ export const scrollToSection = (id: string): void => {
 
   let tries = 0;
   const settle = () => {
+    if (gen !== currentGen) return;
     jump();
     tries += 1;
     if (tries < SETTLE_TRIES) {

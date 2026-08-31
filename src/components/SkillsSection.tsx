@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import type { MotionValue } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import { SectionHead } from './ui';
 
@@ -101,7 +102,7 @@ const FloatingParticles: React.FC = () => {
 };
 
 /* ─── Card 1: Precision grid coordinate tooltip ────────────── */
-const PrecisionCoordinates: React.FC<{ mx: any; my: any }> = ({ mx, my }) => {
+const PrecisionCoordinates: React.FC<{ mx: MotionValue<number>; my: MotionValue<number> }> = ({ mx, my }) => {
   const xVal = useTransform(mx, [-0.5, 0.5], [0, 400]);
   const yVal = useTransform(my, [-0.5, 0.5], [0, 240]);
   const [coords, setCoords] = useState({ x: 200, y: 120 });
@@ -120,23 +121,31 @@ const PrecisionCoordinates: React.FC<{ mx: any; my: any }> = ({ mx, my }) => {
   );
 };
 
+const AI_PROMPTS = [
+  'ai.generate("3d_blueprint")',
+  'ai.optimize_performance()',
+  'ai.sync_database()',
+  'ai.deploy_production()'
+];
+
 /* ─── Card 3: AI Typewriter Prompt Simulator ───────────────── */
 const AICommandPrompt: React.FC = () => {
-  const prompts = [
-    'ai.generate("3d_blueprint")',
-    'ai.optimize_performance()',
-    'ai.sync_database()',
-    'ai.deploy_production()'
-  ];
   const [text, setText] = useState('');
   const [promptIndex, setPromptIndex] = useState(0);
   const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     let timer: number;
-    const currentFullText = prompts[promptIndex];
-    
-    if (isDeleting) {
+    const currentFullText = AI_PROMPTS[promptIndex];
+
+    if (!isDeleting && text === currentFullText) {
+      timer = window.setTimeout(() => setIsDeleting(true), 2000);
+    } else if (isDeleting && text === '') {
+      timer = window.setTimeout(() => {
+        setIsDeleting(false);
+        setPromptIndex((prev) => (prev + 1) % AI_PROMPTS.length);
+      }, 0);
+    } else if (isDeleting) {
       timer = window.setTimeout(() => {
         setText(currentFullText.substring(0, text.length - 1));
       }, 30);
@@ -144,13 +153,6 @@ const AICommandPrompt: React.FC = () => {
       timer = window.setTimeout(() => {
         setText(currentFullText.substring(0, text.length + 1));
       }, 70);
-    }
-
-    if (!isDeleting && text === currentFullText) {
-      timer = window.setTimeout(() => setIsDeleting(true), 2000);
-    } else if (isDeleting && text === '') {
-      setIsDeleting(false);
-      setPromptIndex((prev) => (prev + 1) % prompts.length);
     }
 
     return () => window.clearTimeout(timer);
@@ -283,7 +285,7 @@ const SkillsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant }
   const distortion = useSpring(0, { damping: 15, stiffness: 60 });
   const darkOpacity = useTransform(distortion, [0, 250], [0, 0.95]);
 
-  const lastTime = React.useRef(Date.now());
+  const lastTime = React.useRef<number | null>(null);
   const lastPos = React.useRef({ x: 0, y: 0 });
   const distortionTimeout = React.useRef<number | undefined>(undefined);
 
@@ -293,7 +295,7 @@ const SkillsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant }
     const y = e.clientY - top;
 
     const now = Date.now();
-    const dt = Math.max(now - lastTime.current, 1);
+    const dt = lastTime.current === null ? 16 : Math.max(now - lastTime.current, 1);
     const dx = x - lastPos.current.x;
     const dy = y - lastPos.current.y;
     const speed = Math.sqrt(dx * dx + dy * dy) / dt;
@@ -357,6 +359,7 @@ const SkillsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant }
               <motion.img
                 src="/images/skills-team-color.webp"
                 alt="Team"
+                loading="lazy"
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{ filter: `url(#${filterId}) ${variant === 'mobile' ? 'brightness(1.35) contrast(1.05)' : ''}` }}
               />
@@ -493,7 +496,6 @@ export const SkillsSection: React.FC = () => {
               line2="wirklich beherrsche."
               headClass="fluid-display-xs"
               className="mb-8 max-w-4xl"
-              onDark={false}
               gradientLine2={true}
             />
 

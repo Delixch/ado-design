@@ -148,7 +148,6 @@ export const ContactSection: React.FC = () => {
               eyebrow="Kontakt"
               line1="Schreiben"
               line2="Sie mir."
-              onDark={false}
               gradientLine2={true}
               headClass="fluid-display-xs"
               className="mb-2"

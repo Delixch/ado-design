@@ -13,12 +13,9 @@ interface SectionHeadProps {
   line1: string;
   /** Zweite Zeile im Akzent. */
   line2: string;
-  accent?: 'punch' | 'coral';
   className?: string;
   /** Zusatzklasse fuer die Ueberschrift, z. B. eine kleinere Stufe. */
   headClass?: string;
-  /** Steht der Kopf auf schwarzem Grund, drehen sich die Werte um. */
-  onDark?: boolean;
   /** Fuellt die zweite Zeile mit einem edlen Premium-Verlauf anstelle einer Vollfarbe. */
   gradientLine2?: boolean;
   /** Optional custom tailwind classes for horizontal padding and margins on the content wrapper. */

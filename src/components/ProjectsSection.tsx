@@ -142,6 +142,7 @@ const ProjectsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant
             <img
               src="/images/projects-portrait-color.webp"
               alt="Portrait"
+              loading="lazy"
               className="absolute inset-0 h-full w-full object-cover"
             />
 
