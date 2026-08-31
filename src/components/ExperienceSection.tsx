@@ -1,6 +1,10 @@
-import React, { useRef, useState } from 'react';
-import { motion, useScroll, useTransform, useMotionValue, useMotionTemplate } from 'framer-motion';
+import React, { useEffect, useRef, useState } from 'react';
+import { motion, useMotionValue, useMotionTemplate } from 'framer-motion';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SectionHead } from './ui';
+
+gsap.registerPlugin(ScrollTrigger);
 
 interface RouteStop {
   id: string;
@@ -213,13 +217,31 @@ const ExperiencePortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ varia
 
 export const ExperienceSection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const lineRef = useRef<HTMLDivElement>(null);
 
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ['start 70%', 'end 90%'],
-  });
-
-  const lineHeight = useTransform(scrollYProgress, [0, 1], ['0%', '100%']);
+  /* GSAP ScrollTrigger statt framer `useScroll`: die Spur fuellt
+     sich `scrub`-exakt mit der Scrollposition, kein Nachfedern.
+     `gsap.context` raeumt die Trigger beim Unmount wieder auf. */
+  useEffect(() => {
+    const ctx = gsap.context(() => {
+      if (!containerRef.current || !lineRef.current) return;
+      gsap.fromTo(
+        lineRef.current,
+        { height: '0%' },
+        {
+          height: '100%',
+          ease: 'none',
+          scrollTrigger: {
+            trigger: containerRef.current,
+            start: 'top 70%',
+            end: 'bottom 90%',
+            scrub: true,
+          },
+        },
+      );
+    }, containerRef);
+    return () => ctx.revert();
+  }, []);
 
   return (
     <section
@@ -287,9 +309,10 @@ export const ExperienceSection: React.FC = () => {
               {/* Grundspur */}
               <div className="rail-line absolute bottom-6 top-2 w-[2px] rounded-full bg-ink/10" />
 
-              <motion.div
-                style={{ height: lineHeight }}
+              <div
+                ref={lineRef}
                 className="rail-line absolute top-2 w-[2px] origin-top rounded-full bg-gradient-to-b bg-white/20"
+                style={{ height: '0%' }}
               />
 
               <ol className="space-y-9">
