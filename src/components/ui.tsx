@@ -226,7 +226,7 @@ export const ScrollProgress: React.FC = () => {
   return (
     <div aria-hidden className="fixed left-0 right-0 top-0 z-[60] h-[3px] bg-transparent">
       <div
-        className="h-full bg-gradient-to-r from-punch to-coral"
+        className="h-full bg-gradient-to-r from-[#FF5A1F] to-[#C23E10]"
         style={{ transform: `scaleX(${progress})`, transformOrigin: 'left' }}
       />
     </div>
