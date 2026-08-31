@@ -1,0 +1,441 @@
+@import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Orbitron:wght@600;800;900&family=Space+Grotesk:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+@import "tailwindcss";
+
+/*
+  ============================================================
+  PALETTE
+  ============================================================
+  Aus der Vorlage abgenommen. Ein einziger Grundton traegt Seite
+  und Karten: `--ground`. Wer ihn tauscht, tauscht beides.
+*/
+/*
+  Drei Farben, genauer: keine. Schwarz, Weiss und die Graustufen
+  dazwischen. Was vorher der Farbton unterschied, unterscheidet
+  jetzt allein die Helligkeit — die Namen der Rollen bleiben,
+  damit jede Stelle im Aufbau dieselbe Bedeutung behaelt.
+
+  Hell -> dunkel:
+  ground FAFAFA · peach EFEFEF · haze E5E5E5 · punch D4D4D4
+  mist BDBDBD · coral 8A8A8A · ink-soft 6B6B6B · ink 111111
+*/
+@theme {
+  --color-ground: #FAFAFA;   /* Seiten- und Kartengrund */
+  --color-mist:   #BDBDBD;   /* mittleres Grau, Flaechen */
+  --color-haze:   #E5E5E5;   /* Linien, Trenner */
+  --color-punch:  #D4D4D4;   /* erster Akzent: hell genug fuer
+                                schwarze Schrift darauf, dunkel
+                                genug als Schrift auf Schwarz */
+  --color-coral:  #8A8A8A;   /* zweiter Akzent */
+  --color-peach:  #EFEFEF;   /* weiche Fuellung */
+  --color-ink:    #111111;   /* Schrift */
+  --color-ink-soft: #6B6B6B; /* zweite Schriftstufe */
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background-color: #FAFAFA;
+  color: #111111;
+  /* Kein waagrechtes Gummiband auf Tablets. Bewusst nicht
+     `overflow-x: hidden` — das macht body zum Scrollbehaelter und
+     killt `position: sticky` im ganzen Projekt. */
+  overscroll-behavior-x: none;
+  -webkit-font-smoothing: antialiased;
+}
+
+html {
+  scroll-padding-top: 5rem;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: #D4D4D4 #E5E5E5;
+}
+::-webkit-scrollbar { width: 12px; height: 12px; }
+::-webkit-scrollbar-track { background: #E5E5E5; }
+::-webkit-scrollbar-thumb {
+  background-color: #D4D4D4;
+  border: 3px solid #E5E5E5;
+  border-radius: 6px;
+}
+::-webkit-scrollbar-thumb:hover { background-color: #8A8A8A; }
+
+/*
+  ============================================================
+  FLUIDE GROESSEN
+  ============================================================
+  Keine Haltepunktketten fuer Schrift, Innenabstand und Rand.
+  Jede Formel erreicht ab 1500px Fensterbreite genau ihren Zielwert.
+*/
+
+/* Abschnittsueberschrift: --gross ist der Zielwert in rem ab 1500px.
+   5.5 -> 41.6px (bis 557px) ... 51.9px (768px) ... 88px (ab 1500px) */
+.fluid-display {
+  --gross: 3.8;
+  font-size: clamp(
+    calc(var(--gross) * 0.473rem),
+    calc(var(--gross) * 0.1616rem + var(--gross) * 0.894vw),
+    calc(var(--gross) * 1rem)
+  );
+  line-height: 0.9;
+  letter-spacing: -0.03em;
+}
+.fluid-display-s { --gross: 3.0; }
+.fluid-display-xs { --gross: 2.4; }
+
+/* Kartenueberschrift: 24px -> 36px (ab 1500px) */
+.fluid-title { font-size: clamp(1.2rem, 1.05rem + 0.5vw, 1.75rem); }
+
+/* Hero: 44px (320px) -> 96px (ab 1500px)
+   Steigung: (96-44) / (1500-320) * 100 = 4.41vw
+   Sockel:   44 - 0.0441 * 320 = 29.9px = 1.87rem
+   Die technische Schrift laeuft breiter als eine Grotesk —
+   deshalb kleiner als die vorige Stufe und mit Zeilenabstand
+   ueber 1: bei 0.84 stiessen die Versalien aneinander. */
+.fluid-hero {
+  font-size: clamp(2.25rem, 1.6rem + 3.2vw, 4.5rem);
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+}
+
+
+/* Fliesstext: 13px -> 16px (ab 1500px) */
+.fluid-body { font-size: clamp(0.8125rem, 0.68rem + 0.44vw, 1rem); }
+
+/* Karten-Fliesstext: 12.5px -> 14.5px */
+.fluid-body-m { font-size: clamp(0.78rem, 0.69rem + 0.3vw, 0.906rem); }
+
+/* Bildunterschrift: 11px -> 13px */
+.fluid-body-s { font-size: clamp(0.6875rem, 0.6rem + 0.29vw, 0.8125rem); }
+
+/* Augenbrauenzeile: 10px -> 11.5px */
+.fluid-eyebrow {
+  font-size: clamp(0.625rem, 0.58rem + 0.14vw, 0.719rem);
+  letter-spacing: 0.32em;
+}
+
+/* Karteninnenabstand: 20px (320px) -> 36px (ab 1500px) */
+.fluid-pad { padding: clamp(1.25rem, 0.98rem + 0.85vw, 2.25rem); }
+.fluid-pad-gross { padding: clamp(1.5rem, 1.16rem + 1.07vw, 2.75rem); }
+
+/* Abstand zwischen Karten: 14px -> 24px */
+.fluid-gap { gap: clamp(0.875rem, 0.72rem + 0.53vw, 1.5rem); }
+
+/* Seitenrand: 20px (320px) -> 80px (ab 1500px) */
+.fluid-gutter {
+  padding-left: clamp(1.25rem, 0.24rem + 3.19vw, 5rem);
+  padding-right: clamp(1.25rem, 0.24rem + 3.19vw, 5rem);
+}
+
+/*
+  ============================================================
+  BEWEGUNG
+  ============================================================
+*/
+@keyframes blobDrift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  33%  { transform: translate3d(6%, -5%, 0) scale(1.12); }
+  66%  { transform: translate3d(-5%, 4%, 0) scale(0.94); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+.blob-drift { animation: blobDrift 18s ease-in-out infinite; }
+
+/* Schraffur fuer Flaechen, die sonst leer wirken. */
+.hatch {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgba(54, 47, 44, 0.07) 0 1px,
+    transparent 1px 7px
+  );
+}
+
+/* Feste Schriftfamilien als Klassen, damit sie nicht in jedem
+   style-Attribut wiederholt werden. */
+.font-display { font-family: 'Chakra Petch', system-ui, sans-serif; font-weight: 700; }
+.font-robot  { font-family: 'Orbitron', 'Chakra Petch', system-ui, sans-serif; font-weight: 800; }
+.font-sans-ui { font-family: 'Space Grotesk', system-ui, sans-serif; }
+.font-mono-ui { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+/* Bewegung ist Zierde, nie Funktion: bei reduzierter Bewegung
+   steht alles still, sichtbar bleibt es trotzdem. */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/*
+  ============================================================
+  ZEITSPUR
+  ============================================================
+  Linie, Knoten und Jahresspalte haengen an EINEM Wert. Stuenden
+  die drei Zahlen getrennt im Markup, wandert eine davon beim
+  naechsten Umbau und der Knoten sitzt neben seiner Linie.
+  Unter 768px liegt die Spur am linken Rand, darueber wechselt
+  die Topologie auf zwei Spalten — deshalb dort ein Haltepunkt.
+    9rem (768px) -> 12rem (ab 1500px): 6rem + 4vw
+*/
+.rail { --rail-x: 15px; }
+@media (min-width: 768px) {
+  .rail { --rail-x: clamp(9rem, 6rem + 4vw, 12rem); }
+}
+.rail-line { left: var(--rail-x); }
+.rail-col  { width: var(--rail-x); }
+
+
+/*
+  ============================================================
+  ABSCHNITTSGRUENDE
+  ============================================================
+  Der Creme-Ton bleibt ueberall der Grund; darauf legen sich
+  zwei weiche Farbfelder, die einander UEBERLAPPEN. Die
+  Ueberschneidung ist der eigentliche Effekt: `multiply` mischt
+  die beiden Toene dort, wo sie sich treffen, statt einen ueber
+  den anderen zu legen.
+*/
+.tinted {
+  position: relative;
+  isolation: isolate;
+  /* Jeder Abschnitt traegt den Ton seines Menueeintrags — aber nur
+     als Hauch ueber dem Creme-Grund, damit die Karten darauf
+     weiter in Creme stehen. Ohne gesetzten Ton bleibt es der
+     reine Grund. */
+  background-color: var(--ground-tone, var(--color-ground));
+}
+/* Erst der Inhalt: alles, was direkt im Abschnitt steht, liegt
+   ueber den Farbfeldern. */
+.tinted > * { position: relative; z-index: 1; }
+
+/*
+  Eine Schicht, die hinter dem Inhalt liegt statt in der Reihe zu
+  stehen. Sie braucht eine eigene Klasse: `.tinted > *` setzt
+  jedes direkte Kind auf `position: relative`, und diese Regel
+  gewinnt gegen die gleichnamige Utility-Klasse, weil sie ausser-
+  halb der Ebenen steht. Ein Hintergrundvideo landete damit im
+  Textfluss statt dahinter.
+*/
+.layer {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+}
+
+/* Aus demselben Grund: was am Fenster haengen soll, braucht eine
+   eigene Klasse — die Utility `fixed` verliert gegen
+   `.tinted > *`, und das Element faellt zurueck in den Fluss. */
+.pinned { position: fixed; }
+
+/*
+  Dann die Felder selbst. `.tint` steht bewusst OHNE Elternteil
+  im Selektor — die Felder haengen nicht immer direkt unter dem
+  Abschnitt, auf der Projektbuehne sitzen sie eine Ebene tiefer.
+  Stuende hier `.tinted > .tint`, blieben sie dort ohne
+  Positionierung: als Flex-Kinder in der Spalte fressen sie dann
+  die ganze Hoehe und die Karten stehen auf 0px.
+  Die Reihenfolge zaehlt: gleiche Spezifitaet, spaeter gewinnt.
+*/
+.tint {
+  position: absolute;
+  border-radius: 9999px;
+  mix-blend-mode: multiply;
+  pointer-events: none;
+  z-index: 0;
+  filter: blur(60px);
+}
+
+/*
+  Sanftes Wandern. Nur `transform` — das laeuft im Kompositor
+  und loest kein Neuzeichnen der Flaeche aus. Bewusst kein
+  vollflaechiger Dauerlaeufer, jeder Fleck gehoert einem
+  Abschnitt und ist mit ihm aus dem Bild.
+*/
+@keyframes tintDrift {
+  0%   { transform: translate3d(0, 0, 0) scale(1); }
+  50%  { transform: translate3d(4%, -3%, 0) scale(1.1); }
+  100% { transform: translate3d(0, 0, 0) scale(1); }
+}
+.tint-drift { animation: tintDrift 22s ease-in-out infinite; }
+
+/*
+  ============================================================
+  KINETISCHER SATZ
+  ============================================================
+*/
+
+/* Umrissschrift fuer die dritte Zeile. */
+.stroke-text {
+  color: transparent;
+  -webkit-text-stroke: 2px var(--color-ink);
+  paint-order: stroke fill;
+}
+/* Ab 900px traegt der Umriss mehr Gewicht. */
+@media (min-width: 900px) {
+  .stroke-text { -webkit-text-stroke-width: 3px; }
+}
+
+/* Derselbe Umriss auf schwarzem Grund. */
+.stroke-text-light { -webkit-text-stroke-color: var(--color-ground); }
+
+/* Buchstabe faellt aus der Kante herein. */
+@keyframes charIn {
+  from { transform: translate3d(0, 115%, 0) rotate(6deg); }
+  to   { transform: translate3d(0, 0, 0) rotate(0deg); }
+}
+
+/* Farbversatz beim Laden: die beiden Geisterebenen laufen
+   auseinander und wieder zusammen. Einmalig, kein Dauerlauf. */
+@keyframes chromaSettle {
+  0%   { transform: translate3d(calc(var(--chroma-dir) * 18px), -6px, 0); opacity: 0.9; }
+  60%  { transform: translate3d(calc(var(--chroma-dir) * 6px), 2px, 0); opacity: 0.55; }
+  100% { transform: translate3d(0, 0, 0); opacity: 0; }
+}
+.chroma-layer {
+  animation: chromaSettle 1.8s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
+  mix-blend-mode: multiply;
+}
+
+/* Waagrechter Lichtstreifen ueber der Videoschrift. */
+@keyframes sheen {
+  0%   { transform: translate3d(-120%, 0, 0); }
+  100% { transform: translate3d(320%, 0, 0); }
+}
+.sheen { animation: sheen 5.5s cubic-bezier(0.5, 0, 0.5, 1) infinite; }
+
+/* Rasterlinien, die ueber das Portraet wandern. */
+@keyframes scanRun {
+  from { transform: translate3d(0, -100%, 0); }
+  to   { transform: translate3d(0, 100%, 0); }
+}
+.scan-run { animation: scanRun 4.5s linear infinite; }
+
+/* Halbtonraster fuer die Zweitverwendung des Portraets. */
+.halftone {
+  background-image: radial-gradient(var(--color-ink) 1px, transparent 1.2px);
+  background-size: 5px 5px;
+}
+
+/*
+  ============================================================
+  MENUE
+  ============================================================
+  Ein einziges Menue fuer alle Breiten. Es faehrt als Flaeche
+  auf und schneidet sich dabei frei — deshalb ein Uebergang auf
+  `clip-path` statt auf Hoehe, das ruckelt sonst.
+*/
+@keyframes menuIn {
+  from { clip-path: inset(0 0 100% 0); }
+  to   { clip-path: inset(0 0 0% 0); }
+}
+.menu-in { animation: menuIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .tint-drift, .sheen, .scan-run, .chroma-layer, .menu-in { animation: none !important; }
+  .chroma-layer { opacity: 0 !important; }
+}
+
+
+/* Farbverlauf, der durch die Schrift wandert. `background-clip`
+   traegt ihn; bewegt wird nur die Position, kein Neuzeichnen. */
+@keyframes gradShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+.grad-text {
+  background-image: linear-gradient(
+    100deg,
+    #FAFAFA 0%, #888888 26%, #FFFFFF 45%,
+    #888888 68%, #FAFAFA 100%
+  );
+  background-size: 260% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: gradShift 9s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grad-text { animation: none; }
+}
+
+
+/*
+  ============================================================
+  FARBSCHLAG
+  ============================================================
+  Beim Fingerschnippen im Video schlaegt die Seitenfarbe einmal
+  durch und faellt zurueck. Volltonflaeche, kein Weichzeichner
+  und keine Maske — die waeren auf einer bildschirmfuellenden
+  Ebene je Bild neu zu rechnen. Nach dem Schlag verlaesst die
+  Ebene den Baum wieder.
+*/
+@keyframes burstFlash {
+  0%   { opacity: 0; }
+  6%   { opacity: 1; }
+  14%  { opacity: 0.55; }
+  22%  { opacity: 0.95; }
+  45%  { opacity: 0.25; }
+  100% { opacity: 0; }
+}
+.burst-flash { animation: burstFlash 1400ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+@keyframes burstRing {
+  from { transform: translate(-50%, -50%) scale(0.05); opacity: 1; }
+  to   { transform: translate(-50%, -50%) scale(3.4); opacity: 0; }
+}
+.burst-ring { animation: burstRing 1400ms cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+@media (prefers-reduced-motion: reduce) {
+  .burst-flash, .burst-ring { animation-duration: 1ms !important; }
+}
+
+
+/*
+  ============================================================
+  RAHMEN
+  ============================================================
+  Der Rahmen liegt ganz aussen um den Abschnitt, von Blattkante
+  zu Blattkante. Die Abschnitte stehen damit untereinander wie
+  die Zeilen einer Tafel.
+
+  `margin-top: -2px` laesst die Linie zwischen zwei Abschnitten
+  zu EINER werden; ohne das stuenden dort zwei Striche
+  nebeneinander.
+*/
+/*
+  Breite: 8px (320px) -> 0.5cm (ab 1500px)
+  Steigung: (18.9-8) / (1500-320) * 100 = 0.924vw
+  Sockel:   8 - 0.00924 * 320 = 5.04px = 0.315rem
+  Auf dem Handy waere ein halber Zentimeter je Seite ein Drittel
+  der Spalte, deshalb waechst er mit.
+
+  Ein Wert, zweimal benutzt: der negative Aussenabstand muss
+  genau der Rahmenbreite entsprechen, sonst stehen zwischen zwei
+  Abschnitten zwei Linien statt einer.
+*/
+.framed {
+  --frame: clamp(0.5rem, 0.315rem + 0.924vw, 0.5cm);
+  border: var(--frame) solid var(--color-ink);
+  margin-top: calc(var(--frame) * -1);
+}
+
+/* Hacker-Code-Scroll im Telefon */
+@keyframes codeScroll {
+  0%   { transform: translateY(0%); }
+  100% { transform: translateY(-50%); }
+}
+.code-scroll {
+  animation: codeScroll 6s linear infinite;
+}
+
+/* Cursor blink */
+@keyframes cursorBlink {
+  50% { opacity: 0; }
+}
+.cursor-blink {
+  animation: cursorBlink 1s step-end infinite;
+}
