@@ -132,7 +132,7 @@ const AboutPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
         <div className="absolute inset-0 z-0 flex items-center justify-center" style={{ isolation: 'isolate' }}>
           <div className="relative max-w-full" style={{ aspectRatio: '1 / 1', width: 'auto', height: '100%' }}>
             <img
-              src="/images/about-portrait.jpg"
+              src="/images/about-portrait.webp"
               alt="Portrait"
               className="absolute inset-0 h-full w-full object-cover"
             />

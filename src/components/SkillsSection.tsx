@@ -355,7 +355,7 @@ const SkillsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant }
           <div className="relative max-w-full" style={{ aspectRatio: '1535 / 1024', width: 'auto', height: variant === 'desktop' ? '68%' : '92%' }}>
             <div className="absolute inset-0" style={{ transform: 'scale(1.1)' }}>
               <motion.img
-                src="/images/skills-team-color.png"
+                src="/images/skills-team-color.webp"
                 alt="Team"
                 className="absolute inset-0 w-full h-full object-cover"
                 style={{ filter: `url(#${filterId}) ${variant === 'mobile' ? 'brightness(1.35) contrast(1.05)' : ''}` }}

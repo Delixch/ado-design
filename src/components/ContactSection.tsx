@@ -67,7 +67,7 @@ const ContactPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant 
           <div className="absolute inset-0 flex items-center justify-center">
             <div className="relative max-w-full" style={{ aspectRatio: '1537 / 1023', width: 'auto', height: '58%' }}>
               <img
-                src="/images/contact-bg-color.png"
+                src="/images/contact-bg-color.webp"
                 className="absolute inset-0 h-full w-full object-cover rounded-2xl"
                 alt="Contact Background"
               />

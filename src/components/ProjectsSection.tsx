@@ -140,7 +140,7 @@ const ProjectsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant
         <div className="absolute inset-0 flex items-center justify-center">
           <div ref={photoRef} className="relative max-w-full" style={{ aspectRatio: '1 / 1', width: 'auto', height: '74%' }}>
             <img
-              src="/images/projects-portrait-color.png"
+              src="/images/projects-portrait-color.webp"
               alt="Portrait"
               className="absolute inset-0 h-full w-full object-cover"
             />
