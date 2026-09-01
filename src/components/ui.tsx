@@ -40,6 +40,10 @@ export const SectionHead: React.FC<SectionHeadProps> = (props) => {
     onToggleOpen,
   } = props;
   const collapsible = onToggleOpen !== undefined;
+  // Zugeklappt (und beim allerersten Laden, da alle Sektionen dann
+  // zu sind) traegt der Kopf Orange/Schwarz statt Dunkelgrau/Weiss —
+  // ein sichtbarer "hier ist noch was"-Zustand.
+  const closed = collapsible && !open;
   const headRef = useRef<HTMLHeadingElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -49,7 +53,7 @@ export const SectionHead: React.FC<SectionHeadProps> = (props) => {
   const fillClip = useTransform(scrollYProgress, [0, 1], ['inset(100% 0 0 0)', 'inset(0% 0 0 0)']);
 
   // Use a sleek monochrome dark color for the band across all sections
-  const bgAccentColor = '#0A0A0A';
+  const bgAccentColor = closed ? '#FF5A1F' : '#0A0A0A';
 
   const isLeftSide = index === '01' || index === '03' || index === '05';
 
@@ -100,7 +104,7 @@ export const SectionHead: React.FC<SectionHeadProps> = (props) => {
           <span className="font-mono-ui rounded-full px-2.5 py-0.5 text-[9px] font-semibold bg-white text-ink">
             {index}
           </span>
-          <span className="font-mono-ui text-[10px] uppercase tracking-wider text-white/80">
+          <span className={`font-mono-ui text-[10px] uppercase tracking-wider ${closed ? 'text-black/70' : 'text-white/80'}`}>
             {eyebrow}
           </span>
           <motion.span
@@ -108,7 +112,7 @@ export const SectionHead: React.FC<SectionHeadProps> = (props) => {
             whileInView={{ scaleX: 1 }}
             viewport={{ once: true }}
             transition={{ duration: 0.9, delay: 0.15, ease: [0.16, 1, 0.3, 1] }}
-            className="h-[1.5px] w-12 origin-left rounded-full bg-white/30 sm:w-20"
+            className={`h-[1.5px] w-12 origin-left rounded-full sm:w-20 ${closed ? 'bg-black/30' : 'bg-white/30'}`}
           />
         </motion.div>
 
@@ -118,7 +122,7 @@ export const SectionHead: React.FC<SectionHeadProps> = (props) => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-60px' }}
-          className={`font-display relative flex flex-wrap gap-x-[0.3em] uppercase text-white text-base md:text-lg lg:text-xl font-bold tracking-tight ${headClass}`}
+          className={`font-display relative flex flex-wrap gap-x-[0.3em] uppercase text-base md:text-lg lg:text-xl font-bold tracking-tight ${closed ? 'text-black' : 'text-white'} ${headClass}`}
         >
           <motion.span className="relative block">
             <motion.span
