@@ -225,7 +225,8 @@ export const ExperienceSection: React.FC = () => {
   const [sectionOpen, setSectionOpen] = useState(false);
   useEffect(() => {
     const onOpen = (e: Event) => {
-      if ((e as CustomEvent<string>).detail === 'experience') setSectionOpen(true);
+      const d = (e as CustomEvent<string>).detail;
+      if (d === 'experience' || d === 'all') setSectionOpen(true);
     };
     window.addEventListener(OPEN_SECTION_EVENT, onOpen);
     return () => window.removeEventListener(OPEN_SECTION_EVENT, onOpen);

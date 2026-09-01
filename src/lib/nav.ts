@@ -39,6 +39,11 @@ let currentGen = 0;
 // Die Sektionen hoeren selbst auf dieses Event und filtern per `id`.
 export const OPEN_SECTION_EVENT = 'ado:open-section';
 
+// `detail: 'all'` — jede Sektion oeffnet sich, nicht nur eine.
+export const openAllSections = (): void => {
+  window.dispatchEvent(new CustomEvent(OPEN_SECTION_EVENT, { detail: 'all' }));
+};
+
 export const scrollToSection = (id: string): void => {
   window.dispatchEvent(new CustomEvent(OPEN_SECTION_EVENT, { detail: id }));
   const gen = ++currentGen;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { navItems, scrollToSection } from '../lib/nav';
+import { navItems, scrollToSection, openAllSections } from '../lib/nav';
 import { SocialLinks } from './ui';
 
 /**
@@ -230,6 +230,20 @@ export const Header: React.FC = () => {
                   </motion.li>
                 ))}
               </ul>
+
+              {/* Sonderfarbe statt Orange — deutlich ein anderer Knopf
+                  als die fuenf Abschnitte, dazu ein Puls, damit er
+                  auffaellt, statt zwischen den Zeilen unterzugehen. */}
+              <motion.button
+                onClick={() => { openAllSections(); setOpen(false); }}
+                animate={{ opacity: [1, 0.55, 1] }}
+                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+                className="font-mono-ui mt-6 flex items-center gap-2 rounded-full border-2 px-4 py-2 text-[10px] uppercase tracking-[0.2em]"
+                style={{ borderColor: '#4FC3FF', color: '#4FC3FF' }}
+              >
+                <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: '#4FC3FF' }} />
+                Alle Abschnitte öffnen
+              </motion.button>
             </nav>
 
             <div

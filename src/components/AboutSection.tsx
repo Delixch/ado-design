@@ -232,7 +232,8 @@ export const AboutSection: React.FC = () => {
   const [open, setOpen] = useState(false);
   useEffect(() => {
     const onOpen = (e: Event) => {
-      if ((e as CustomEvent<string>).detail === 'about') setOpen(true);
+      const d = (e as CustomEvent<string>).detail;
+      if (d === 'about' || d === 'all') setOpen(true);
     };
     window.addEventListener(OPEN_SECTION_EVENT, onOpen);
     return () => window.removeEventListener(OPEN_SECTION_EVENT, onOpen);

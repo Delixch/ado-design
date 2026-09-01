@@ -248,7 +248,8 @@ export const ProjectsSection: React.FC = () => {
   const [sectionOpen, setSectionOpen] = useState(false);
   useEffect(() => {
     const onOpen = (e: Event) => {
-      if ((e as CustomEvent<string>).detail === 'work') setSectionOpen(true);
+      const d = (e as CustomEvent<string>).detail;
+      if (d === 'work' || d === 'all') setSectionOpen(true);
     };
     window.addEventListener(OPEN_SECTION_EVENT, onOpen);
     return () => window.removeEventListener(OPEN_SECTION_EVENT, onOpen);
