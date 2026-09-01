@@ -13,6 +13,7 @@ import { CursorTrail } from './components/CursorTrail';
 import { SecretTerminal } from './components/SecretTerminal';
 import { MatrixMode } from './components/MatrixMode';
 import { ScrollToTop } from './components/ScrollToTop';
+import { KonamiCode } from './components/KonamiCode';
 
 function App() {
   useSmoothScroll();
@@ -76,6 +77,7 @@ function App() {
       <SecretTerminal />
       <MatrixMode />
       <ScrollToTop />
+      <KonamiCode />
     </div>
   );
 }
