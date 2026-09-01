@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { SectionHead, SocialLinks } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
+import { useGyroTilt } from '../hooks/useGyroTilt';
 
 
 
@@ -152,6 +153,7 @@ export const ContactSection: React.FC = () => {
   const my = useMotionValue(0);
   const rx = useSpring(useTransform(mx, [-0.5, 0.5], [6, -6]), { stiffness: 200, damping: 22 });
   const ry = useSpring(useTransform(my, [-0.5, 0.5], [-6, 6]), { stiffness: 200, damping: 22 });
+  useGyroTilt(mx, my);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

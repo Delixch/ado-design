@@ -5,6 +5,7 @@ import type { Variants } from 'framer-motion';
 import { SectionHead } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { OPEN_TERMINAL_EVENT } from './SecretTerminal';
+import { useGyroTilt } from '../hooks/useGyroTilt';
 
 /* ─── Type definitions & Data ───────────────────────────── */
 interface SkillBlock {
@@ -176,6 +177,7 @@ const SkillCard: React.FC<{ block: SkillBlock; i: number }> = ({ block, i }) => 
   const my = useMotionValue(0);
   const rx = useSpring(useTransform(mx, [-0.5, 0.5], [12, -12]), { stiffness: 200, damping: 20 });
   const ry = useSpring(useTransform(my, [-0.5, 0.5], [-12, 12]), { stiffness: 200, damping: 20 });
+  useGyroTilt(mx, my);
 
   const cardContent = (
     <motion.article
