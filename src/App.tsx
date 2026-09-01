@@ -14,6 +14,7 @@ import { SecretTerminal } from './components/SecretTerminal';
 import { MatrixMode } from './components/MatrixMode';
 import { ScrollToTop } from './components/ScrollToTop';
 import { KonamiCode } from './components/KonamiCode';
+import { AiBotBubble } from './components/AiBotBubble';
 
 function App() {
   useSmoothScroll();
@@ -78,6 +79,7 @@ function App() {
       <MatrixMode />
       <ScrollToTop />
       <KonamiCode />
+      <AiBotBubble />
     </div>
   );
 }
