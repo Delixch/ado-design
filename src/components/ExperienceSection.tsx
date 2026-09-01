@@ -5,6 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SectionHead } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { useGyroTilt } from '../hooks/useGyroTilt';
+import { useEnterSound } from '../lib/sound';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -103,8 +104,12 @@ const ExperiencePortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ varia
   const flashlightMask = useMotionTemplate`radial-gradient(160px circle at ${maskX}px ${maskY}px, black 0%, transparent 100%)`;
   const transformOrigin = useMotionTemplate`${maskX}px ${maskY}px`;
 
+  const rootRef = useRef<HTMLDivElement>(null);
+  useEnterSound(rootRef, variant === 'desktop');
+
   return (
     <div
+      ref={rootRef}
       className={
         variant === 'desktop'
           ? 'absolute top-0 left-0 bottom-0 w-1/2 hidden min-[1000px]:block border-r border-ink/5 overflow-hidden pointer-events-auto'

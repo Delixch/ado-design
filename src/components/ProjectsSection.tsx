@@ -5,6 +5,7 @@ import type { Project } from '../lib/projects';
 import { useMediaQuery } from '../lib/motion';
 import { SectionHead } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
+import { useEnterSound } from '../lib/sound';
 
 /** Zu jedem Projekt liegt ein Bildschirmfoto unter /shots. */
 const shot = (project: Project) => `/shots/${project.number}.webp`;
@@ -95,6 +96,8 @@ const ProjectsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant
      sobald er ins Foto oder aus der Flaeche wandert. */
   const [bgHover, setBgHover] = useState(false);
   const photoRef = useRef<HTMLDivElement>(null);
+  const rootRef = useRef<HTMLDivElement>(null);
+  useEnterSound(rootRef, variant === 'desktop');
   const trackOutside = (e: React.PointerEvent<HTMLDivElement>) => {
     const photo = photoRef.current;
     if (!photo) return;
@@ -105,6 +108,7 @@ const ProjectsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant
 
   return (
     <div
+      ref={rootRef}
       onPointerMove={trackOutside}
       onPointerLeave={() => setBgHover(false)}
       className={

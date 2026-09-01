@@ -3,6 +3,7 @@ import { motion, useMotionValue, useMotionTemplate } from 'framer-motion';
 import { useCountUp } from '../lib/motion';
 import { SectionHead } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
+import { useEnterSound } from '../lib/sound';
 
 /* ─── Stats ─────────────────────────────────────────────── */
 const stats = [
@@ -83,6 +84,8 @@ const AboutPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
   const mouseX = useMotionValue(-1000);
   const mouseY = useMotionValue(-1000);
   const [active, setActive] = useState(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  useEnterSound(rootRef, variant === 'desktop');
 
   const track = (e: React.PointerEvent<HTMLDivElement>) => {
     const { left, top } = e.currentTarget.getBoundingClientRect();
@@ -103,6 +106,7 @@ const AboutPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
 
   return (
     <div
+      ref={rootRef}
       className={
         variant === 'desktop'
           ? 'absolute top-0 right-0 bottom-0 w-1/2 hidden min-[1000px]:block border-l border-white/5 overflow-hidden pointer-events-auto'

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { navItems, scrollToSection, openAllSections } from '../lib/nav';
 import { SocialLinks } from './ui';
+import { isSoundMuted, toggleSound, playChime, SOUND_MUTE_EVENT } from '../lib/sound';
 
 /**
  * Ein einziges Menue fuer alle Breiten. Statt einer waagrechten
@@ -27,6 +28,13 @@ export const Header: React.FC = () => {
   const [active, setActive] = useState('');
   const [hovered, setHovered] = useState<string | null>(null);
   const [time, setTime] = useState(clock);
+  const [soundMuted, setSoundMuted] = useState(isSoundMuted());
+
+  useEffect(() => {
+    const onChange = () => setSoundMuted(isSoundMuted());
+    window.addEventListener(SOUND_MUTE_EVENT, onChange);
+    return () => window.removeEventListener(SOUND_MUTE_EVENT, onChange);
+  }, []);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -145,6 +153,24 @@ export const Header: React.FC = () => {
               ZRH {time}
             </span>
             <button
+              type="button"
+              onClick={toggleSound}
+              aria-pressed={!soundMuted}
+              aria-label={soundMuted ? 'Ton einschalten' : 'Ton ausschalten'}
+              className="flex h-6 w-6 shrink-0 items-end justify-center gap-[2px] rounded-full border-2 border-ground/40 transition-colors hover:border-ground"
+            >
+              {[3, 6, 4].map((h, i) => (
+                <span
+                  key={i}
+                  className="w-[2.5px] rounded-full transition-all duration-300"
+                  style={{
+                    height: soundMuted ? 2 : h,
+                    backgroundColor: soundMuted ? 'rgba(250,250,250,0.3)' : '#FF5A1F',
+                  }}
+                />
+              ))}
+            </button>
+            <button
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-label={open ? 'Menü schliessen' : 'Menü öffnen'}
@@ -242,7 +268,7 @@ export const Header: React.FC = () => {
                   className="border-b border-current/20"
                 >
                   <motion.button
-                    onClick={() => { openAllSections(); setOpen(false); }}
+                    onClick={() => { playChime(); openAllSections(); setOpen(false); }}
                     animate={{ opacity: [1, 0.4, 1] }}
                     transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
                     className="group flex w-full items-baseline gap-4 py-[clamp(0.35rem,0.1rem+0.9vh,0.9rem)] text-left"

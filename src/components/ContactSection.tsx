@@ -1,8 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { SectionHead, SocialLinks } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { useGyroTilt } from '../hooks/useGyroTilt';
+import { useEnterSound } from '../lib/sound';
 
 
 
@@ -16,9 +17,12 @@ const ContactPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant 
   const [active, setActive] = useState(false);
   const engage = () => setActive(true);
   const disengage = () => setActive(false);
+  const rootRef = useRef<HTMLDivElement>(null);
+  useEnterSound(rootRef, variant === 'desktop');
 
   return (
     <div
+      ref={rootRef}
       className={
         variant === 'desktop'
           ? 'absolute top-0 right-0 bottom-0 w-1/2 hidden min-[1000px]:block border-l border-white/5 pointer-events-auto'

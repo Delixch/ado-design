@@ -6,6 +6,7 @@ import { SectionHead } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { OPEN_TERMINAL_EVENT } from './SecretTerminal';
 import { useGyroTilt } from '../hooks/useGyroTilt';
+import { useEnterSound } from '../lib/sound';
 
 /* ─── Type definitions & Data ───────────────────────────── */
 interface SkillBlock {
@@ -353,8 +354,12 @@ const SkillsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant }
     clearTimeout(distortionTimeout.current);
   };
 
+  const rootRef = React.useRef<HTMLDivElement>(null);
+  useEnterSound(rootRef, variant === 'desktop');
+
   return (
     <div
+      ref={rootRef}
       className={
         variant === 'desktop'
           ? 'absolute top-0 right-0 bottom-0 w-1/2 hidden min-[1000px]:block border-l border-white/5 overflow-hidden pointer-events-auto'

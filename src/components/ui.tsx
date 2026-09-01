@@ -1,5 +1,6 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
+import { playOpen, playClose } from '../lib/sound';
 
 /**
  * Kleinteile, die mehrere Abschnitte teilen. Sie liegen zusammen,
@@ -62,7 +63,10 @@ export const SectionHead: React.FC<SectionHeadProps> = (props) => {
       {collapsible && (
         <button
           type="button"
-          onClick={onToggleOpen}
+          onClick={() => {
+            (open ? playClose : playOpen)();
+            onToggleOpen?.();
+          }}
           aria-expanded={open}
           aria-label={open ? `${eyebrow} einklappen` : `${eyebrow} ausklappen`}
           className="relative z-10 flex w-9 shrink-0 items-center justify-center rounded-sm border border-white/15 bg-[#0A0A0A] text-white/70 transition-colors hover:border-white/40 hover:text-white sm:w-11"

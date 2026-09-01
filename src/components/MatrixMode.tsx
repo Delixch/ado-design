@@ -1,4 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
+import { playGlitch } from '../lib/sound';
 
 export const MATRIX_MODE_EVENT = 'ado:matrix-mode';
 
@@ -12,7 +13,10 @@ export const MatrixMode: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    const onTrigger = () => setActive(true);
+    const onTrigger = () => {
+      setActive(true);
+      playGlitch();
+    };
     window.addEventListener(MATRIX_MODE_EVENT, onTrigger);
     return () => window.removeEventListener(MATRIX_MODE_EVENT, onTrigger);
   }, []);

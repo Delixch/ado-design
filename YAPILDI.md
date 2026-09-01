@@ -189,3 +189,42 @@ Hover/tık'larda çok kısa terminal-klik sesi, sağ üstte sessize alma düğme
 
 > [!NOTE]
 > Bu özellikler öncelik sırasına göre değil, hayal gücü sırasına göre listelenmiştir. Hangisinden başlanacağına birlikte karar verilecek.
+
+---
+
+## ⏸️ Ertelenen — Yarın Bakılacak
+
+### 🌈 Tüm Site Rengi Tek Tıkla Değişsin (Rainbow Icon → Global Accent)
+Header'a eklenen küçük rainbow ikon şu an sadece `.framed` bölüm çerçevesinin
+(`border-color`) rengini değiştiriyor — `--frame-color` CSS değişkeni,
+`src/index.css` + `src/components/Header.tsx`. Çalışıyor ama etkisi zayıf,
+kullanıcı yeterince etkileyici bulmadı.
+
+**İstenen:** Aynı ikon tıklanınca sitedeki **her** turuncu aynı anda değişsin
+— buton, kenarlık, halka, ışıltı, terminal yazısı, kayan şeritler (scrolling
+gradient strip'ler) dahil her yer.
+
+**Neden ertelendi — kullanıcının uyarısı:**
+> "kayan seritler var her yer ayni turuncu deyil daha hafif tutuncular var
+> daha acik daha zayif tutuncular var — o kadar enginde hafifini güclüsünü
+> ayarlamak lazim, kac dakikalik bir isten bahsediyoruz ve cok temiz kod
+> yazilacak öyle icine atim calisiyor istemem"
+
+Yani: turuncu tek ton değil — bazı yerlerde tam `#FF5A1F`, bazı yerlerde
+düşük opacity'li/açık tonlar (rgba glow'lar, gradient stop'lar, kayan şerit
+opacity katmanları). Basit bulup-değiştir (`#FF5A1F` → `var(--accent)`) bunu
+kaçırır, ton hiyerarşisi bozulur.
+
+**Kapsam (önceki analiz):** `#FF5A1F` / `#C23E10` toplam 61 yerde, 12 dosyada
+(bkz. `AboutSection`, `ExperienceSection`, `Header`, `HeroSection`,
+`MatrixMode`, `ProjectsSection`, `ScrollToTop`, `SecretTerminal`,
+`SkillsSection`, `ui.tsx`, `index.css`, `app/duel/page.tsx`).
+
+**Yarın yapılacak — düzgün plan:**
+1. Önce kayan şeritler + tüm rgba/opacity varyasyonlarını tek tek çıkar,
+   "güçlü / orta / zayıf" diye 3 seviyeye ayır (kaç ton gerçekten var, say).
+2. Buna göre CSS değişkenleri: `--accent`, `--accent-dark`,
+   `--accent-rgb` (rgba glow'lar için), gerekirse `--accent-soft` (zayıf ton).
+3. 61 yeri tek tek, dosya dosya değiştir — build + görsel kontrol her adımda.
+4. Süre tahmini ve "temiz kod" sözü: iş küçük görünüp aceleye getirilmeyecek,
+   önce ton envanteri çıkmadan kod yazılmayacak.
