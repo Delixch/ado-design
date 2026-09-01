@@ -1,9 +1,10 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue, useMotionTemplate } from 'framer-motion';
+import { motion, useMotionValue, useMotionTemplate, useSpring, useTransform } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SectionHead } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
+import { useGyroTilt } from '../hooks/useGyroTilt';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -219,6 +220,81 @@ const ExperiencePortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ varia
   );
 };
 
+/* Timeline-Karte mit 3D-Tilt: Maus auf dem Desktop, Gyroskop
+   mobil — dieselben mx/my Motion-Values wie bei den Skill- und
+   Kontakt-Karten. Der Lupen-Spotlight im Portrait bleibt davon
+   unberuehrt, das ist ein eigener Effekt in ExperiencePortrait. */
+const TimelineCard: React.FC<{ stop: RouteStop; i: number }> = ({ stop, i }) => {
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const rx = useSpring(useTransform(mx, [-0.5, 0.5], [8, -8]), { stiffness: 200, damping: 20 });
+  const ry = useSpring(useTransform(my, [-0.5, 0.5], [-8, 8]), { stiffness: 200, damping: 20 });
+  useGyroTilt(mx, my);
+
+  const cardContent = (
+    <motion.div
+      className="w-full relative overflow-hidden rounded-2xl p-[1px] transition-all duration-500 shadow-lg border border-white/15"
+      onMouseMove={(e) => {
+        const r = e.currentTarget.getBoundingClientRect();
+        mx.set((e.clientX - r.left) / r.width - 0.5);
+        my.set((e.clientY - r.top) / r.height - 0.5);
+      }}
+      onMouseLeave={() => { mx.set(0); my.set(0); }}
+      style={{ backgroundColor: 'transparent', rotateX: ry, rotateY: rx, transformStyle: 'preserve-3d' }}
+      whileHover={{
+        borderColor: 'rgba(255, 255, 255, 0.4)',
+        y: -2,
+      }}
+    >
+      {/* Animated Neon Line */}
+      <div
+        className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] pointer-events-none"
+        style={{
+          background: 'conic-gradient(from 0deg, transparent 70%, rgba(255,255,255,0.4) 95%, #ffffff 100%)',
+          animation: `sequence-spin-6 12s linear infinite`,
+          animationDelay: `${i * 2}s`,
+          opacity: 0,
+          zIndex: 0,
+        }}
+      />
+      {/* Inner Card Content */}
+      <div className="relative w-full h-full rounded-[15px] z-10 p-5 overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] bg-[#0A0A0A]">
+        <span className="font-mono-ui mb-1.5 block text-[10.5px] uppercase tracking-[0.14em] md:hidden font-semibold text-white/85">
+          {stop.year}
+        </span>
+        <h3 className="font-display text-[15px] uppercase leading-none text-[#FF5A1F] transition-colors duration-300 font-bold">
+          {stop.title}
+        </h3>
+        <span className="font-sans-ui mt-1.5 block text-[10.5px] font-semibold uppercase tracking-[0.16em] text-white/90">
+          {stop.organization}
+        </span>
+        <p className="font-sans-ui text-[11px] mt-3 max-w-xl leading-[1.7] text-white/80 transition-colors duration-300">
+          {stop.description}
+        </p>
+      </div>
+    </motion.div>
+  );
+
+  if (i === 1) {
+    return (
+      <motion.div
+        animate={{ y: [0, -12, 0] }}
+        transition={{ duration: 4.5, repeat: Infinity, ease: 'easeInOut' }}
+        className="ml-9 flex-1"
+        style={{ perspective: 1000 }}
+      >
+        {cardContent}
+      </motion.div>
+    );
+  }
+
+  return (
+    <div className="ml-9 flex-1" style={{ perspective: 1000 }}>
+      {cardContent}
+    </div>
+  );
+};
+
 export const ExperienceSection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
@@ -365,67 +441,7 @@ export const ExperienceSection: React.FC = () => {
                       />
                     </span>
 
-                    {(() => {
-                      const cardContent = (
-                        <motion.div
-                          className="w-full relative overflow-hidden rounded-2xl p-[1px] transition-all duration-500 shadow-lg border border-white/15"
-                          style={{ backgroundColor: 'transparent' }}
-                          whileHover={{
-                            borderColor: 'rgba(255, 255, 255, 0.4)',
-                            y: -2,
-                          }}
-                        >
-                          {/* Animated Neon Line */}
-                          <div 
-                            className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] pointer-events-none"
-                            style={{
-                              background: 'conic-gradient(from 0deg, transparent 70%, rgba(255,255,255,0.4) 95%, #ffffff 100%)',
-                              animation: `sequence-spin-6 12s linear infinite`,
-                              animationDelay: `${i * 2}s`,
-                              opacity: 0,
-                              zIndex: 0,
-                            }}
-                          />
-                          {/* Inner Card Content */}
-                          <div className="relative w-full h-full rounded-[15px] z-10 p-5 overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.15)] bg-[#0A0A0A]">
-                            <span className="font-mono-ui mb-1.5 block text-[10.5px] uppercase tracking-[0.14em] md:hidden font-semibold text-white/85">
-                              {stop.year}
-                            </span>
-                            <h3 className="font-display text-[15px] uppercase leading-none text-[#FF5A1F] transition-colors duration-300 font-bold">
-                              {stop.title}
-                            </h3>
-                            <span className="font-sans-ui mt-1.5 block text-[10.5px] font-semibold uppercase tracking-[0.16em] text-white/90">
-                              {stop.organization}
-                            </span>
-                            <p className="font-sans-ui text-[11px] mt-3 max-w-xl leading-[1.7] text-white/80 transition-colors duration-300">
-                              {stop.description}
-                            </p>
-                          </div>
-                        </motion.div>
-                      );
-
-                      if (i === 1) {
-                        return (
-                          <motion.div
-                            animate={{ y: [0, -12, 0] }}
-                            transition={{
-                              duration: 4.5,
-                              repeat: Infinity,
-                              ease: "easeInOut",
-                            }}
-                            className="ml-9 flex-1"
-                          >
-                            {cardContent}
-                          </motion.div>
-                        );
-                      }
-
-                      return (
-                        <div className="ml-9 flex-1">
-                          {cardContent}
-                        </div>
-                      );
-                    })()}
+                    <TimelineCard stop={stop} i={i} />
                   </motion.li>
                 ))}
               </ol>
