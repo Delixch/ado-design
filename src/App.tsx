@@ -12,6 +12,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { CursorTrail } from './components/CursorTrail';
 import { SecretTerminal } from './components/SecretTerminal';
 import { MatrixMode } from './components/MatrixMode';
+import { ScrollToTop } from './components/ScrollToTop';
 
 function App() {
   useSmoothScroll();
@@ -74,6 +75,7 @@ function App() {
       <Analytics />
       <SecretTerminal />
       <MatrixMode />
+      <ScrollToTop />
     </div>
   );
 }
