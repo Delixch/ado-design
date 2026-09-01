@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Header } from './components/Header';
 import { HeroSection } from './components/HeroSection';
 import { AboutSection } from './components/AboutSection';
@@ -11,6 +11,15 @@ import { useSmoothScroll } from './lib/motion';
 
 function App() {
   useSmoothScroll();
+
+  // Handys stellen beim (Neu-)Laden gern die letzte Scrollposition
+  // wieder her — die Seite soll aber immer ganz oben starten.
+  useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual';
+    }
+    window.scrollTo(0, 0);
+  }, []);
 
   // Der Farbschlag haengt am Fingerschnippen im Auftaktvideo.
   // Er laeuft genau einmal: die Ebene kommt in den Baum, spielt

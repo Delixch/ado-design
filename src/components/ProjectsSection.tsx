@@ -1,9 +1,10 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion';
 import { projects } from '../lib/projects';
 import type { Project } from '../lib/projects';
 import { useMediaQuery } from '../lib/motion';
 import { SectionHead } from './ui';
+import { OPEN_SECTION_EVENT } from '../lib/nav';
 
 /** Zu jedem Projekt liegt ein Bildschirmfoto unter /shots. */
 const shot = (project: Project) => `/shots/${project.number}.webp`;
@@ -244,7 +245,14 @@ export const ProjectsSection: React.FC = () => {
 
   const [active, setActive] = useState<number | null>(null);
   const [open, setOpen] = useState<number | null>(null);
-  const [sectionOpen, setSectionOpen] = useState(true);
+  const [sectionOpen, setSectionOpen] = useState(false);
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      if ((e as CustomEvent<string>).detail === 'work') setSectionOpen(true);
+    };
+    window.addEventListener(OPEN_SECTION_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_SECTION_EVENT, onOpen);
+  }, []);
 
   // Zeigerlage in Fensterkoordinaten, auf eine Feder gelegt: das
   // Bild zieht dem Zeiger nach, statt an ihm zu kleben.

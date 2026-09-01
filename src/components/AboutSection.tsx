@@ -1,7 +1,8 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useMotionTemplate } from 'framer-motion';
 import { useCountUp } from '../lib/motion';
 import { SectionHead } from './ui';
+import { OPEN_SECTION_EVENT } from '../lib/nav';
 
 /* ─── Stats ─────────────────────────────────────────────── */
 const stats = [
@@ -228,7 +229,14 @@ const AboutPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
 /* ─── Section ────────────────────────────────────────────── */
 export const AboutSection: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
-  const [open, setOpen] = useState(true);
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      if ((e as CustomEvent<string>).detail === 'about') setOpen(true);
+    };
+    window.addEventListener(OPEN_SECTION_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_SECTION_EVENT, onOpen);
+  }, []);
 
   return (
     <section

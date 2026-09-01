@@ -3,6 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import type { MotionValue } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import { SectionHead } from './ui';
+import { OPEN_SECTION_EVENT } from '../lib/nav';
 
 /* ─── Type definitions & Data ───────────────────────────── */
 interface SkillBlock {
@@ -448,7 +449,14 @@ const SkillsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant }
 
 /* ─── Main Skills Section ───────────────────────────────── */
 export const SkillsSection: React.FC = () => {
-  const [sectionOpen, setSectionOpen] = useState(true);
+  const [sectionOpen, setSectionOpen] = useState(false);
+  useEffect(() => {
+    const onOpen = (e: Event) => {
+      if ((e as CustomEvent<string>).detail === 'skills') setSectionOpen(true);
+    };
+    window.addEventListener(OPEN_SECTION_EVENT, onOpen);
+    return () => window.removeEventListener(OPEN_SECTION_EVENT, onOpen);
+  }, []);
 
   return (
     <section

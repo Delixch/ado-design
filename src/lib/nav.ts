@@ -34,7 +34,13 @@ const DRIFT_TOLERANCE = 8;
 // Zyklus sofort ab, statt mit dem neuen um `window.scrollTo` zu konkurrieren.
 let currentGen = 0;
 
+// Jeder Abschnitt startet zugeklappt — nur wer per Menue dorthin
+// springt, bekommt genau diesen einen Abschnitt automatisch offen.
+// Die Sektionen hoeren selbst auf dieses Event und filtern per `id`.
+export const OPEN_SECTION_EVENT = 'ado:open-section';
+
 export const scrollToSection = (id: string): void => {
+  window.dispatchEvent(new CustomEvent(OPEN_SECTION_EVENT, { detail: id }));
   const gen = ++currentGen;
 
   const jump = () => {
