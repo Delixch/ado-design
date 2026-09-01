@@ -231,19 +231,35 @@ export const Header: React.FC = () => {
                 ))}
               </ul>
 
-              {/* Sonderfarbe statt Orange — deutlich ein anderer Knopf
-                  als die fuenf Abschnitte, dazu ein Puls, damit er
-                  auffaellt, statt zwischen den Zeilen unterzugehen. */}
-              <motion.button
-                onClick={() => { openAllSections(); setOpen(false); }}
-                animate={{ opacity: [1, 0.55, 1] }}
-                transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-                className="font-mono-ui mt-6 flex items-center gap-2 rounded-full border-2 px-4 py-2 text-[10px] uppercase tracking-[0.2em]"
-                style={{ borderColor: '#4FC3FF', color: '#4FC3FF' }}
-              >
-                <span className="h-1.5 w-1.5 rounded-full" style={{ backgroundColor: '#4FC3FF' }} />
-                Alle Abschnitte öffnen
-              </motion.button>
+              {/* Gleiche Zeile wie die fuenf Abschnitte, durch einen
+                  Trennstrich abgesetzt — nur der Puls markiert sie
+                  als Sonderfall, keine eigene Farbe. */}
+              <ul className="border-t border-current/20 pt-0">
+                <motion.li
+                  initial={{ opacity: 0, y: 34 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: 0.16 + navItems.length * 0.07, duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                  className="border-b border-current/20"
+                >
+                  <motion.button
+                    onClick={() => { openAllSections(); setOpen(false); }}
+                    animate={{ opacity: [1, 0.4, 1] }}
+                    transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
+                    className="group flex w-full items-baseline gap-4 py-[clamp(0.35rem,0.1rem+0.9vh,0.9rem)] text-left"
+                  >
+                    <span className="font-mono-ui w-8 shrink-0 text-[11px] opacity-60">
+                      ✦
+                    </span>
+                    <span className="font-robot fluid-display fluid-display-xs uppercase transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-3">
+                      Alle öffnen
+                    </span>
+                    <span
+                      className="ml-auto h-2.5 w-2.5 shrink-0 scale-0 rounded-full transition-transform duration-300 group-hover:scale-100"
+                      style={{ backgroundColor: TONE.dot }}
+                    />
+                  </motion.button>
+                </motion.li>
+              </ul>
             </nav>
 
             <div
