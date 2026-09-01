@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, useScroll } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import { scrollToSection } from '../lib/nav';
+import { MATRIX_MODE_EVENT } from './MatrixMode';
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -362,6 +363,36 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
                 </div>
               </div>
             )}
+
+            {/* Matrix-Trigger: bleibt dauerhaft im Screen, unter dem
+                hochlaufenden Code — der Standby-Screen wechselt nach 8s
+                weg und war zu kurz sichtbar. */}
+            <motion.button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent(MATRIX_MODE_EVENT))}
+              animate={{ opacity: [0.5, 1, 0.5], boxShadow: ['0 0 4px #FF5A1F', '0 0 14px #FF5A1F', '0 0 4px #FF5A1F'] }}
+              transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+              style={{
+                position: 'absolute',
+                bottom: 22,
+                right: 12,
+                width: 26,
+                height: 26,
+                borderRadius: 7,
+                background: '#0A0A0A',
+                border: '1px solid #FF5A1F',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontFamily: 'monospace',
+                fontSize: 9,
+                color: '#FF5A1F',
+                fontWeight: 700,
+                zIndex: 45,
+              }}
+            >
+              &gt;_
+            </motion.button>
           </div>
           {/* Home indicator */}
           <div
