@@ -37,7 +37,7 @@ function App() {
   }, []);
 
   return (
-    <div className="w-full bg-ground text-ink selection:bg-punch selection:text-ink">
+    <div className="w-full bg-black text-ink selection:bg-punch selection:text-ink">
       <CursorTrail />
       <ScrollProgress />
 

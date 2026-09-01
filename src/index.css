@@ -34,7 +34,11 @@
 html, body {
   margin: 0;
   padding: 0;
-  background-color: #FAFAFA;
+  /* Schwarz statt --color-ground: die Sektionen sind alle dunkel,
+     eine helle Grundflaeche dahinter blitzt bei Rundungsluecken
+     (Zoom, Sektionsraender, iOS-Ueberscrollen) als grauer Rahmen
+     durch. Schwarz macht dieselbe Luecke unsichtbar. */
+  background-color: #000000;
   color: #111111;
   /* Kein waagrechtes Gummiband auf Tablets. Bewusst nicht
      `overflow-x: hidden` — das macht body zum Scrollbehaelter und
@@ -203,7 +207,7 @@ html {
      als Hauch ueber dem Creme-Grund, damit die Karten darauf
      weiter in Creme stehen. Ohne gesetzten Ton bleibt es der
      reine Grund. */
-  background-color: var(--ground-tone, var(--color-ground));
+  background-color: var(--ground-tone, #000000);
 }
 /* Erst der Inhalt: alles, was direkt im Abschnitt steht, liegt
    ueber den Farbfeldern. */
