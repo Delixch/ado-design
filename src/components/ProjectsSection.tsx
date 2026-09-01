@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import { motion, AnimatePresence, useMotionValue, useSpring, useTransform, useMotionTemplate } from 'framer-motion';
 import { projects } from '../lib/projects';
 import type { Project } from '../lib/projects';
-import { useMediaQuery } from '../lib/motion';
+import { useMediaQuery, useReducedMotion } from '../lib/motion';
 import { SectionHead } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { useEnterSound } from '../lib/sound';
@@ -98,6 +98,7 @@ const ProjectsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant
   const photoRef = useRef<HTMLDivElement>(null);
   const rootRef = useRef<HTMLDivElement>(null);
   useEnterSound(rootRef, variant === 'desktop');
+  const reducedMotion = useReducedMotion();
   const trackOutside = (e: React.PointerEvent<HTMLDivElement>) => {
     const photo = photoRef.current;
     if (!photo) return;
@@ -208,30 +209,31 @@ const ProjectsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant
               { color: '#0A0A0A', delay: 2.25, id: `pulse-projects-2-${variant}` },
               { color: '#0A0A0A', delay: 3.375, id: `pulse-projects-3-${variant}` }
             ].map((s) => (
-              <motion.linearGradient
-                key={s.id}
-                id={s.id}
-                x1="100%"
-                y1="-100%"
-                x2="0%"
-                y2="0%"
-                animate={{
-                  y1: ["-100%", "200%"],
-                  y2: ["0%", "300%"]
-                }}
-                transition={{
-                  duration: 4.5,
-                  repeat: Infinity,
-                  ease: "linear",
-                  delay: s.delay,
-                }}
-              >
+              <linearGradient key={s.id} id={s.id} x1="100%" y1="-100%" x2="0%" y2="0%">
+                {!reducedMotion && (
+                  <>
+                    <animate
+                      attributeName="y1"
+                      values="-100%;200%"
+                      dur="4.5s"
+                      begin={`${s.delay}s`}
+                      repeatCount="indefinite"
+                    />
+                    <animate
+                      attributeName="y2"
+                      values="0%;300%"
+                      dur="4.5s"
+                      begin={`${s.delay}s`}
+                      repeatCount="indefinite"
+                    />
+                  </>
+                )}
                 <stop offset="0%" stopColor={s.color} />
                 <stop offset="42%" stopColor={s.color} />
                 <stop offset="50%" stopColor="#FF5A1F" />
                 <stop offset="58%" stopColor={s.color} />
                 <stop offset="100%" stopColor={s.color} />
-              </motion.linearGradient>
+              </linearGradient>
             ))}
           </defs>
           <polygon points="106.3,-10 105.95,-10 30,110 28.4,110" fill={`url(#pulse-projects-0-${variant})`} />

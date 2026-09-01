@@ -6,6 +6,7 @@ import { SectionHead } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { useGyroTilt } from '../hooks/useGyroTilt';
 import { useEnterSound } from '../lib/sound';
+import { useReducedMotion } from '../lib/motion';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -106,6 +107,7 @@ const ExperiencePortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ varia
 
   const rootRef = useRef<HTMLDivElement>(null);
   useEnterSound(rootRef, variant === 'desktop');
+  const reducedMotion = useReducedMotion();
 
   return (
     <div
@@ -189,30 +191,31 @@ const ExperiencePortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ varia
               { color: '#1E202A', delay: 2.25, id: `pulse-experience-2-${variant}` },
               { color: '#1E202A', delay: 3.375, id: `pulse-experience-3-${variant}` }
             ].map((s) => (
-              <motion.linearGradient
-                key={s.id}
-                id={s.id}
-                x1="100%"
-                y1="-100%"
-                x2="0%"
-                y2="0%"
-                animate={{
-                  y1: ["-100%", "200%"],
-                  y2: ["0%", "300%"]
-                }}
-                transition={{
-                  duration: 4.5,
-                  repeat: Infinity,
-                  ease: "linear",
-                  delay: s.delay,
-                }}
-              >
+              <linearGradient key={s.id} id={s.id} x1="100%" y1="-100%" x2="0%" y2="0%">
+                {!reducedMotion && (
+                  <>
+                    <animate
+                      attributeName="y1"
+                      values="-100%;200%"
+                      dur="4.5s"
+                      begin={`${s.delay}s`}
+                      repeatCount="indefinite"
+                    />
+                    <animate
+                      attributeName="y2"
+                      values="0%;300%"
+                      dur="4.5s"
+                      begin={`${s.delay}s`}
+                      repeatCount="indefinite"
+                    />
+                  </>
+                )}
                 <stop offset="0%" stopColor={s.color} />
                 <stop offset="42%" stopColor={s.color} />
                 <stop offset="50%" stopColor="#FF5A1F" />
                 <stop offset="58%" stopColor={s.color} />
                 <stop offset="100%" stopColor={s.color} />
-              </motion.linearGradient>
+              </linearGradient>
             ))}
           </defs>
           <polygon points="106.3,-10 105.95,-10 30,110 28.4,110" fill={`url(#pulse-experience-0-${variant})`} />

@@ -7,6 +7,7 @@ import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { OPEN_TERMINAL_EVENT } from './SecretTerminal';
 import { useGyroTilt } from '../hooks/useGyroTilt';
 import { useEnterSound } from '../lib/sound';
+import { useReducedMotion } from '../lib/motion';
 
 /* ─── Type definitions & Data ───────────────────────────── */
 interface SkillBlock {
@@ -356,6 +357,7 @@ const SkillsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant }
 
   const rootRef = React.useRef<HTMLDivElement>(null);
   useEnterSound(rootRef, variant === 'desktop');
+  const reducedMotion = useReducedMotion();
 
   return (
     <div
@@ -451,30 +453,31 @@ const SkillsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant }
               { color: '#1E202A', delay: 2.25, id: `pulse-skills-2-${variant}` },
               { color: '#1E202A', delay: 3.375, id: `pulse-skills-3-${variant}` }
             ].map((s) => (
-              <motion.linearGradient
-                key={s.id}
-                id={s.id}
-                x1="100%"
-                y1="-100%"
-                x2="0%"
-                y2="0%"
-                animate={{
-                  y1: ["-100%", "200%"],
-                  y2: ["0%", "300%"]
-                }}
-                transition={{
-                  duration: 4.5,
-                  repeat: Infinity,
-                  ease: "linear",
-                  delay: s.delay,
-                }}
-              >
+              <linearGradient key={s.id} id={s.id} x1="100%" y1="-100%" x2="0%" y2="0%">
+                {!reducedMotion && (
+                  <>
+                    <animate
+                      attributeName="y1"
+                      values="-100%;200%"
+                      dur="4.5s"
+                      begin={`${s.delay}s`}
+                      repeatCount="indefinite"
+                    />
+                    <animate
+                      attributeName="y2"
+                      values="0%;300%"
+                      dur="4.5s"
+                      begin={`${s.delay}s`}
+                      repeatCount="indefinite"
+                    />
+                  </>
+                )}
                 <stop offset="0%" stopColor={s.color} />
                 <stop offset="42%" stopColor={s.color} />
                 <stop offset="50%" stopColor="#FF5A1F" />
                 <stop offset="58%" stopColor={s.color} />
                 <stop offset="100%" stopColor={s.color} />
-              </motion.linearGradient>
+              </linearGradient>
             ))}
           </defs>
           <polygon points="70,-10 71.6,-10 -5.95,110 -6.3,110" fill={`url(#pulse-skills-0-${variant})`} />
