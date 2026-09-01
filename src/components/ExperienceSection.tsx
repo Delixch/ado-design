@@ -221,6 +221,7 @@ const ExperiencePortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ varia
 export const ExperienceSection: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
+  const [sectionOpen, setSectionOpen] = useState(true);
 
   /* GSAP ScrollTrigger statt framer `useScroll`: die Spur fuellt
      sich `scrub`-exakt mit der Scrollposition, kein Nachfedern.
@@ -298,8 +299,18 @@ export const ExperienceSection: React.FC = () => {
               headClass="fluid-display-xs"
               className="mb-8 max-w-3xl"
               contentClass="min-[1000px]:pl-12 min-[1000px]:pr-0"
+              open={sectionOpen}
+              onToggleOpen={() => setSectionOpen((v) => !v)}
             />
 
+            {sectionOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden"
+            >
             {/* Mobil: gleicher Lupen-Effekt wie das Split-Panel, im
                 Inhaltsfluss. Halten statt Hover. */}
             <div className="mb-6 min-[1000px]:hidden">
@@ -410,6 +421,8 @@ export const ExperienceSection: React.FC = () => {
                 ))}
               </ol>
             </div>
+            </motion.div>
+            )}
           </div>
         </div>
       </div>

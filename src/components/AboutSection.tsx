@@ -228,6 +228,7 @@ const AboutPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
 /* ─── Section ────────────────────────────────────────────── */
 export const AboutSection: React.FC = () => {
   const sectionRef = useRef<HTMLElement>(null);
+  const [open, setOpen] = useState(true);
 
   return (
     <section
@@ -262,8 +263,18 @@ export const AboutSection: React.FC = () => {
               line2="Ich baue, was bleibt."
               gradientLine2={false}
               className="mb-6"
+              open={open}
+              onToggleOpen={() => setOpen((v) => !v)}
             />
 
+            {open && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col gap-5 overflow-hidden"
+            >
             {/* Minimized Bio card containing small Portrait avatar */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -339,6 +350,8 @@ export const AboutSection: React.FC = () => {
                 </span>
               </motion.a>
             </div>
+            </motion.div>
+            )}
           </div>
 
           {/* Right half is completely empty */}

@@ -244,6 +244,7 @@ export const ProjectsSection: React.FC = () => {
 
   const [active, setActive] = useState<number | null>(null);
   const [open, setOpen] = useState<number | null>(null);
+  const [sectionOpen, setSectionOpen] = useState(true);
 
   // Zeigerlage in Fensterkoordinaten, auf eine Feder gelegt: das
   // Bild zieht dem Zeiger nach, statt an ihm zu kleben.
@@ -300,8 +301,18 @@ export const ProjectsSection: React.FC = () => {
               className="mb-8 max-w-4xl"
               gradientLine2={true}
               contentClass="min-[1000px]:pl-12 min-[1000px]:pr-0"
+              open={sectionOpen}
+              onToggleOpen={() => setSectionOpen((v) => !v)}
             />
 
+            {sectionOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden"
+            >
             {/* Mobil: gleicher Grid-Effekt wie das Split-Panel, im
                 Inhaltsfluss. Halten statt Hover. */}
             <div className="mb-6 min-[1000px]:hidden">
@@ -454,6 +465,8 @@ export const ProjectsSection: React.FC = () => {
             <p className="font-mono-ui mt-10 text-[9px] uppercase tracking-[0.2em] text-white/45">
               {canHover ? 'Zeiger auf eine Zeile — das Bild folgt' : 'Zeile antippen'} · neun Arbeiten
             </p>
+            </motion.div>
+            )}
           </div>
         </div>
       </div>

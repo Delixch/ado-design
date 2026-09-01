@@ -136,6 +136,7 @@ const ContactPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant 
 export const ContactSection: React.FC = () => {
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [sent, setSent] = useState(false);
+  const [sectionOpen, setSectionOpen] = useState(true);
 
   // 3D Magnetic Card Tilts for the Form
   const mx = useMotionValue(0);
@@ -191,8 +192,18 @@ export const ContactSection: React.FC = () => {
               gradientLine2={true}
               headClass="fluid-display-xs"
               className="mb-2"
+              open={sectionOpen}
+              onToggleOpen={() => setSectionOpen((v) => !v)}
             />
 
+            {sectionOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col gap-5 overflow-hidden"
+            >
             <p className="font-sans-ui text-[12px] max-w-xl leading-relaxed text-white/80">
               Ein Projekt, eine Website, die nicht mehr passt, oder einfach eine Frage? Schreiben Sie
               mir — unverbindlich und ohne Fachjargon.
@@ -330,6 +341,8 @@ export const ContactSection: React.FC = () => {
                 <SocialLinks />
               </div>
             </motion.div>
+            </motion.div>
+            )}
           </div>
 
           {/* Right half is completely empty */}

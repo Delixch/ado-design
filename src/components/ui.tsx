@@ -20,6 +20,10 @@ interface SectionHeadProps {
   gradientLine2?: boolean;
   /** Optional custom tailwind classes for horizontal padding and margins on the content wrapper. */
   contentClass?: string;
+  /** Ist gesetzt, erscheint links ein +/- Schalter; der Kopf selbst
+   *  bleibt immer sichtbar, nur der Koerper des Abschnitts klappt zu. */
+  open?: boolean;
+  onToggleOpen?: () => void;
 }
 
 export const SectionHead: React.FC<SectionHeadProps> = (props) => {
@@ -32,7 +36,10 @@ export const SectionHead: React.FC<SectionHeadProps> = (props) => {
     headClass = '',
     gradientLine2 = false,
     contentClass = 'min-[1000px]:px-0',
+    open,
+    onToggleOpen,
   } = props;
+  const collapsible = onToggleOpen !== undefined;
   const headRef = useRef<HTMLHeadingElement>(null);
 
   const { scrollYProgress } = useScroll({
@@ -47,7 +54,26 @@ export const SectionHead: React.FC<SectionHeadProps> = (props) => {
   const isLeftSide = index === '01' || index === '03' || index === '05';
 
   return (
-    <div className={`relative ${className}`}>
+    <div className={`relative flex items-stretch gap-3 ${className}`}>
+      {collapsible && (
+        <button
+          type="button"
+          onClick={onToggleOpen}
+          aria-expanded={open}
+          aria-label={open ? `${eyebrow} einklappen` : `${eyebrow} ausklappen`}
+          className="relative z-10 flex w-9 shrink-0 items-center justify-center rounded-sm border border-white/15 bg-[#0A0A0A] text-white/70 transition-colors hover:border-white/40 hover:text-white sm:w-11"
+        >
+          <span className="relative block h-3.5 w-3.5 sm:h-4 sm:w-4">
+            <span className="absolute left-0 top-1/2 h-[2px] w-full -translate-y-1/2 rounded-full bg-current" />
+            <motion.span
+              animate={{ opacity: open ? 0 : 1, rotate: open ? 90 : 0 }}
+              transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+              className="absolute left-1/2 top-0 h-full w-[2px] -translate-x-1/2 rounded-full bg-current"
+            />
+          </span>
+        </button>
+      )}
+      <div className="relative flex-1">
       {/* Full-bleed background band */}
       <div 
         className="absolute top-0 bottom-0 z-0 pointer-events-none border-y border-white/10 shadow-md"
@@ -155,6 +181,7 @@ export const SectionHead: React.FC<SectionHeadProps> = (props) => {
             </motion.span>
           </motion.span>
         </motion.h2>
+      </div>
       </div>
     </div>
   );

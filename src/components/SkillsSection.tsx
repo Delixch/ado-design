@@ -448,6 +448,8 @@ const SkillsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant }
 
 /* ─── Main Skills Section ───────────────────────────────── */
 export const SkillsSection: React.FC = () => {
+  const [sectionOpen, setSectionOpen] = useState(true);
+
   return (
     <section
       id="skills"
@@ -497,8 +499,18 @@ export const SkillsSection: React.FC = () => {
               headClass="fluid-display-xs"
               className="mb-8 max-w-4xl"
               gradientLine2={true}
+              open={sectionOpen}
+              onToggleOpen={() => setSectionOpen((v) => !v)}
             />
 
+            {sectionOpen && (
+            <motion.div
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="overflow-hidden"
+            >
             {/* Mobil: gleicher Distorsion-Effekt wie das Split-Panel,
                 im Inhaltsfluss. Halten statt Hover. */}
             <div className="mb-6 min-[1000px]:hidden">
@@ -511,6 +523,8 @@ export const SkillsSection: React.FC = () => {
                 <SkillCard key={block.title} block={block} i={i} />
               ))}
             </div>
+            </motion.div>
+            )}
           </div>
 
           {/* Right half is completely empty */}
