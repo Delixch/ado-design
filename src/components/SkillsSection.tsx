@@ -4,6 +4,7 @@ import type { MotionValue } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import { SectionHead } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
+import { OPEN_TERMINAL_EVENT } from './SecretTerminal';
 
 /* ─── Type definitions & Data ───────────────────────────── */
 interface SkillBlock {
@@ -280,9 +281,13 @@ const SkillCard: React.FC<{ block: SkillBlock; i: number }> = ({ block, i }) => 
           <div className="text-white/50">$ echo "gefunden?"</div>
           <div className="mb-2">gefunden das versteckte terminal 👀</div>
           <div className="text-white/50">$ open --full</div>
-          <div>
-            drück <span className="font-bold text-white">~</span> für mehr
-          </div>
+          <button
+            type="button"
+            onClick={() => window.dispatchEvent(new CustomEvent(OPEN_TERMINAL_EVENT))}
+            className="pointer-events-auto underline decoration-dotted underline-offset-2 hover:text-white"
+          >
+            klick für mehr
+          </button>
           <span className="cursor-blink mt-2 inline-block h-3 w-1.5 align-middle" style={{ backgroundColor: '#FF5A1F' }} />
         </div>
       )}

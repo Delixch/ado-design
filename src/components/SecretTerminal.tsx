@@ -22,7 +22,10 @@ export const SecretTerminal: React.FC = () => {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if (e.key === '~' || e.key === '`') setOpen((v) => !v);
+      // `event.code` ist die physische Taste, unabhaengig vom
+      // Layout — auf CH/DE-Tastaturen ist `~`/`` ` `` sonst eine
+      // "tote Taste" und feuert allein gar kein `key`-Zeichen.
+      if (e.code === 'Backquote') setOpen((v) => !v);
       if (e.key === 'Escape') setOpen(false);
     };
     const onEvent = () => setOpen(true);
