@@ -9,6 +9,7 @@ import { ContactSection } from './components/ContactSection';
 import { ScrollProgress } from './components/ui';
 import { useSmoothScroll } from './lib/motion';
 import { Analytics } from '@vercel/analytics/react';
+import { CursorTrail } from './components/CursorTrail';
 
 function App() {
   useSmoothScroll();
@@ -34,6 +35,7 @@ function App() {
 
   return (
     <div className="w-full bg-ground text-ink selection:bg-punch selection:text-ink">
+      <CursorTrail />
       <ScrollProgress />
 
       {burst && (

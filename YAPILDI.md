@@ -5,6 +5,14 @@
 - **Çerçeve**: Tüm bölümler diagonal çizgili (`stripes`) arkaplan, portakal renkli animasyonlu pulslarla
 - **Tipografi**: Modern, büyük ve bold font hiyerarşisi
 
+## ✅ Sonradan Güncellenenler (Bağımsız Yapıldı)
+- **WebP dönüşümü**: Tüm resimler `.jpg` → `.webp` formatına çevrildi, boyutlar küçüldü
+- **Renkli resimler**: Dosya adlarına `-color` suffix eklendi, resimler artık orijinal renkli
+- **Mobil desteği tamamlandı**: Her bölüm `variant: 'desktop' | 'mobile'` aldı
+- **Touch olayları**: `onPointerDown / Up / Cancel` ile tüm hover efektleri parmakla da çalışıyor
+- **Lamba efekti yeniden tasarlandı**: Radial gradient mücadelesi yerine fotoğraftaki dairesel elemanlara portakal **spinning sweep halkası** (`conic-gradient`) eklendi — çok daha temiz ve doğru
+- **Uçak touch desteği**: `whileHover` yerine `state` tabanlı sisteme geçildi, telefonda parmakla da tetikleniyor
+
 ---
 
 ## 📸 Her Bölüme Eklenen Resimler & Efektler
@@ -126,22 +134,58 @@ transition={{ duration: 0.3, repeat: Infinity, repeatType: "mirror" }}
 
 ---
 
-> **Not:** Her resimdeki lambanın koordinatı farklı olduğu için her birini ayrı ayrı piksel-piksel konumlandırmak gerekiyor. Bölüm bölüm gidilecek.
+> **Not:** Lamba efektleri spinning sweep halkasına dönüştüğü için koordinat uğraşı ortadan kalktı. Tüm bölümlerde halkalar zaten aktif.
 
 ---
 
-## 📱 Mobil Ayarları — YAPILMADI
+## 📱 Mobil Ayarları — ✅ TAMAMLANDI
 
-> [!WARNING]
-> Tüm hover efektleri ve resim yerleşimleri şu an **sadece masaüstü** için optimize edilmiştir. Mobil cihazlarda görüntü bozulabilir.
+- [x] Her bölüm `variant: 'desktop' | 'mobile'` aldı
+- [x] Touch olayları (`onPointerDown / Up / Cancel`) eklendi
+- [x] Resimler mobilde ayrı bir blok olarak görünüyor
+- [x] Kağıt uçak efekti telefonda parmakla tetikleniyor
+- [x] TV Static, Matrix, Büyüteç, Sıvı distorsiyon → touch destekli
 
-Kontrol edilip yapılacaklar:
+---
 
-- [ ] **AboutSection** — Resim ve TV static efekti mobilde gözüküyor mu?
-- [ ] **ProjectsSection** — Matrix grid efekti mobilde çalışıyor mu?
-- [ ] **SkillsSection** — Sıvı distorsiyon efekti mobilde performanslı mı?
-- [ ] **ExperienceSection** — Büyüteç efekti mobilde touch ile çalışıyor mu?
-- [ ] **ContactSection** — Kağıt uçak efekti mobilde touch ile tetikleniyor mu?
-- [ ] Tüm resimlerin mobil `breakpoint`'lerde (`min-[1000px]:block`) doğru gizlenip göründüğü test edilecek
-- [ ] Portakal lamba efektlerinin mobilde koordinatları kontrol edilecek
-- [ ] Touch cihazlarda hover yerine `onTouchStart` / `onTouchMove` gerekip gerekmediği değerlendirilecek
+## 🎯 Planlanan Easter Egg & Gelişmiş Özellikler
+
+### 1. 🖥️ Gizli Terminal Modu
+`~` tuşuna basınca alttan gerçek görünümlü bir terminal açılır.
+- `whoami` → `Adnan Aydin`
+- Birkaç sahte komut çalışır (`ls`, `ping`, `git log` vb.)
+- ESC veya `exit` ile kapanır
+
+### 2. ✨ Cursor Parçacık İzi
+Fare hareket ederken arkasında turuncu kıvılcım/toz izi bırakır (sadece masaüstü).
+
+### 3. 🟩 Logo'ya 5× Tıkla → Matrix Modu
+Tüm site birden yeşil-siyah koda dönüşür, birkaç saniye sonra normale döner.
+
+### 4. 🤖 Sahte AI Asistan Balonu
+Sağ altta **"Adnan'ın botu"** — önceden yazılmış birkaç soruya (fiyat, süre, iletişim) cevap veriyormuş gibi yazar-siler animasyonuyla yanıt verir.
+
+### 5. 🔢 Kod Satırı Sayacı (Açılışta)
+Sayfa yüklenirken:
+> *"47.382 satır yazıldı — 6.104 kahve içildi"*
+gibi sahte-eğlenceli sayaç animasyonu.
+
+### 6. 🎉 Konfeti Patlaması
+"Nachricht senden" butonuna basınca ekranda parçacık kutlaması.
+
+### 7. 📱 Gyroscope Tilt (Telefonda)
+Telefonu eğdikçe kartlar/ışıklar gerçekten 3D eğiliyor. Mouse-tilt'in dokunmatik hâli, jiroskopla.
+
+### 8. 🎮 Konami Kodu Easter Egg
+`↑↑↓↓←→←→BA` yazınca gizli bir **"teşekkürler, gerçekten denedin"** ekranı/rozet çıkar.
+
+### 9. 👁️ Canlı "Şu an kaç kişi bakıyor" Rozeti
+Analytics'ten gerçek veri — header'da küçük yeşil nokta + sayı.
+
+### 10. 🔊 Ses Tasarımı
+Hover/tık'larda çok kısa terminal-klik sesi, sağ üstte sessize alma düğmesiyle.
+
+---
+
+> [!NOTE]
+> Bu özellikler öncelik sırasına göre değil, hayal gücü sırasına göre listelenmiştir. Hangisinden başlanacağına birlikte karar verilecek.
