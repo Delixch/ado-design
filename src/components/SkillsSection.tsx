@@ -175,8 +175,8 @@ const AICommandPrompt: React.FC = () => {
 const SkillCard: React.FC<{ block: SkillBlock; i: number }> = ({ block, i }) => {
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const rx = useSpring(useTransform(mx, [-0.5, 0.5], [12, -12]), { stiffness: 200, damping: 20 });
-  const ry = useSpring(useTransform(my, [-0.5, 0.5], [-12, 12]), { stiffness: 200, damping: 20 });
+  const rx = useSpring(useTransform(mx, [-0.5, 0.5], [18, -18]), { stiffness: 200, damping: 20 });
+  const ry = useSpring(useTransform(my, [-0.5, 0.5], [-18, 18]), { stiffness: 200, damping: 20 });
   useGyroTilt(mx, my);
 
   const cardContent = (

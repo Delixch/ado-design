@@ -227,8 +227,8 @@ const ExperiencePortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ varia
 const TimelineCard: React.FC<{ stop: RouteStop; i: number }> = ({ stop, i }) => {
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
-  const rx = useSpring(useTransform(mx, [-0.5, 0.5], [8, -8]), { stiffness: 200, damping: 20 });
-  const ry = useSpring(useTransform(my, [-0.5, 0.5], [-8, 8]), { stiffness: 200, damping: 20 });
+  const rx = useSpring(useTransform(mx, [-0.5, 0.5], [14, -14]), { stiffness: 200, damping: 20 });
+  const ry = useSpring(useTransform(my, [-0.5, 0.5], [-14, 14]), { stiffness: 200, damping: 20 });
   useGyroTilt(mx, my);
 
   const cardContent = (

@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import type { MotionValue } from 'framer-motion';
 
 const TILT_RANGE = 0.5; // matches the -0.5..0.5 range onMouseMove writes into mx/my
-const DEG_PER_RANGE = 45; // full tilt reached after 45deg away from the held-up starting angle
+const DEG_PER_RANGE = 32; // full tilt reached after 32deg away from the held-up starting angle
 
 let iosPermissionRequested = false;
 
