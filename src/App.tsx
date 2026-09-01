@@ -10,6 +10,7 @@ import { ScrollProgress } from './components/ui';
 import { useSmoothScroll } from './lib/motion';
 import { Analytics } from '@vercel/analytics/react';
 import { CursorTrail } from './components/CursorTrail';
+import { SecretTerminal } from './components/SecretTerminal';
 
 function App() {
   useSmoothScroll();
@@ -70,6 +71,7 @@ function App() {
       </div>
 
       <Analytics />
+      <SecretTerminal />
     </div>
   );
 }

@@ -203,9 +203,16 @@ const SkillCard: React.FC<{ block: SkillBlock; i: number }> = ({ block, i }) => 
           zIndex: 0,
         }}
       />
+      {/* Karte 4 dreht sich bei Hover — Vorderseite (Inhalt) und
+          Rueckseite (Terminal-Vorschau) sind zwei Seiten desselben
+          Objekts, kein zusaetzliches Panel. */}
+      <div className="relative w-full h-full" style={{ perspective: '1600px' }}>
+      <div
+        className={`relative w-full h-full [transform-style:preserve-3d] transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] ${i === 3 ? 'group-hover:[transform:rotateY(180deg)]' : ''}`}
+      >
       {/* Inner Card */}
       <div className="relative w-full h-full rounded-[15px] z-10 p-5 overflow-hidden shadow-[inset_0_1px_0_rgba(255,255,255,0.15)]"
-           style={{ backgroundColor: '#0F0F0F' }}>
+           style={{ backgroundColor: '#0F0F0F', backfaceVisibility: 'hidden' }}>
         <div className="absolute inset-0 bg-gradient-to-tr from-white/0 via-white/5 to-white/10 pointer-events-none" />
         <div className="absolute inset-0 rounded-[15px] opacity-0 group-hover:opacity-100 transition-opacity duration-500"
           style={{ background: `radial-gradient(circle at 50% 0%, rgba(255,255,255,0.15) 0%, transparent 70%)` }}
@@ -259,6 +266,27 @@ const SkillCard: React.FC<{ block: SkillBlock; i: number }> = ({ block, i }) => 
             ))}
           </div>
         </div>
+      </div>
+
+      {/* Rueckseite: nur Karte 4, per CSS gespiegelt vorbereitet
+          (rotateY 180) — daher steht der Text hier schon "richtig". */}
+      {i === 3 && (
+        <div
+          className="absolute inset-0 rounded-[15px] z-10 overflow-hidden p-5 font-mono text-[10.5px] leading-relaxed text-[#FF5A1F]"
+          style={{ backgroundColor: '#0F0F0F', backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+        >
+          <div className="text-white/50">$ whoami</div>
+          <div className="mb-2">Adnan Aydin</div>
+          <div className="text-white/50">$ echo "gefunden?"</div>
+          <div className="mb-2">gefunden das versteckte terminal 👀</div>
+          <div className="text-white/50">$ open --full</div>
+          <div>
+            drück <span className="font-bold text-white">~</span> für mehr
+          </div>
+          <span className="cursor-blink mt-2 inline-block h-3 w-1.5 align-middle" style={{ backgroundColor: '#FF5A1F' }} />
+        </div>
+      )}
+      </div>
       </div>
     </motion.article>
   );
