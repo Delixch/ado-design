@@ -271,13 +271,13 @@ const TimelineCard: React.FC<{ stop: RouteStop; i: number }> = ({ stop, i }) => 
         <span className="font-mono-ui mb-1.5 block text-[10.5px] uppercase tracking-[0.14em] md:hidden font-semibold text-white/85">
           {stop.year}
         </span>
-        <h3 className="font-display text-[15px] uppercase leading-none text-[#FF5A1F] transition-colors duration-300 font-bold">
+        <h3 className="card-title">
           {stop.title}
         </h3>
         <span className="font-sans-ui mt-1.5 block text-[10.5px] font-semibold uppercase tracking-[0.16em] text-white/90">
           {stop.organization}
         </span>
-        <p className="font-sans-ui text-[11px] mt-3 max-w-xl leading-[1.7] text-white/80 transition-colors duration-300">
+        <p className="card-body mt-2">
           {stop.description}
         </p>
       </div>
@@ -362,12 +362,6 @@ export const ExperienceSection: React.FC = () => {
 
 
 
-      {/* Soft center ambient glow behind content */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-[0.08]">
-        
-        
-      </div>
-
       {/* Grain overlay */}
       <div className="pointer-events-none absolute inset-0 opacity-[0.03] z-10"
         style={{
@@ -385,7 +379,7 @@ export const ExperienceSection: React.FC = () => {
           {/* Right half with minimized experience content */}
           <div className="min-[1000px]:col-span-6 pointer-events-auto">
             <SectionHead
-              index="04"
+              index="06"
               eyebrow="Werdegang"
               line1="Werdegang &"
               line2="Stationen."

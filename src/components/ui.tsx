@@ -56,7 +56,7 @@ export const SectionHead: React.FC<SectionHeadProps> = (props) => {
   // Use a sleek monochrome dark color for the band across all sections
   const bgAccentColor = closed ? '#FF5A1F' : '#0A0A0A';
 
-  const isLeftSide = index === '01' || index === '03' || index === '05';
+  const isLeftSide = index === '01' || index === '03' || index === '05' || index === '07';
 
   return (
     <div className={`relative flex items-stretch gap-3 ${className}`}>

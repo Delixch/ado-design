@@ -6,6 +6,8 @@ export const navItems = [
   { name: 'ÜBER MICH', href: '#about', id: 'about' },
   { name: 'PROJEKTE', href: '#work', id: 'work' },
   { name: 'SKILLS', href: '#skills', id: 'skills' },
+  { name: 'INSPIRATION', href: '#repos', id: 'repos' },
+  { name: 'IM AUFBAU', href: '#construction', id: 'construction' },
   { name: 'ERFAHRUNG', href: '#experience', id: 'experience' },
   { name: 'KONTAKT', href: '#contact', id: 'contact' },
 ];

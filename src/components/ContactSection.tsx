@@ -192,12 +192,6 @@ export const ContactSection: React.FC = () => {
         <ContactPortrait variant="desktop" />
       </div>
 
-      {/* Ambient soft glow */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-[0.08]">
-        
-        
-      </div>
-
       {/* Grain overlay */}
       <div className="pointer-events-none absolute inset-0 opacity-[0.035] z-10"
         style={{
@@ -212,7 +206,7 @@ export const ContactSection: React.FC = () => {
           {/* Left half with all minimized content */}
           <div className="flex flex-col gap-5 min-[1000px]:col-span-6 pointer-events-auto">
             <SectionHead
-              index="05"
+              index="07"
               eyebrow="Kontakt"
               line1="Schreiben"
               line2="Sie mir."
@@ -231,7 +225,7 @@ export const ContactSection: React.FC = () => {
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
               className="flex flex-col gap-5 overflow-hidden"
             >
-            <p className="font-sans-ui text-[12px] max-w-xl leading-relaxed text-white/80">
+            <p className="card-body max-w-xl">
               Ein Projekt, eine Website, die nicht mehr passt, oder einfach eine Frage? Schreiben Sie
               mir — unverbindlich und ohne Fachjargon.
             </p>
@@ -258,10 +252,10 @@ export const ContactSection: React.FC = () => {
                   <span className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-[#2A2D39] border border-white/30 text-white text-md font-bold">
                     ✓
                   </span>
-                  <h3 className="font-display text-[14px] uppercase text-white font-bold">
+                  <h3 className="card-title">
                     Mailprogramm geöffnet
                   </h3>
-                  <p className="font-sans-ui text-[11px] mx-auto max-w-sm text-white/80 leading-relaxed">
+                  <p className="card-body mx-auto max-w-sm">
                     Ihre Nachricht ist vorbereitet — bitte im Mailprogramm noch abschicken. Alternativ
                     direkt an adnan.aydin@bluewin.ch.
                   </p>

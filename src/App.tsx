@@ -4,6 +4,8 @@ import { HeroSection } from './components/HeroSection';
 import { AboutSection } from './components/AboutSection';
 import { ProjectsSection } from './components/ProjectsSection';
 import { SkillsSection } from './components/SkillsSection';
+import { ReposSection } from './components/ReposSection';
+import { ConstructionSection } from './components/ConstructionSection';
 import { ExperienceSection } from './components/ExperienceSection';
 import { ContactSection } from './components/ContactSection';
 import { ScrollProgress } from './components/ui';
@@ -76,6 +78,8 @@ function App() {
         <AboutSection />
         <ProjectsSection />
         <SkillsSection />
+        <ReposSection />
+        <ConstructionSection />
         <ExperienceSection />
       </main>
       <ContactSection />
