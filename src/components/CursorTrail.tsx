@@ -61,6 +61,15 @@ export const CursorTrail: React.FC = () => {
           hue:  Math.random() * 20 - 10,        // ± 10° around orange (25°)
         });
       }
+
+      // Hard cap: without this a fast, sustained mouse sweep piles up
+      // hundreds of live particles, each drawing an expensive radial
+      // gradient every frame — that's the stutter felt when hovering
+      // over other animated UI (e.g. the repo cards' hover glow).
+      const MAX_PARTICLES = 80;
+      if (particles.current.length > MAX_PARTICLES) {
+        particles.current.splice(0, particles.current.length - MAX_PARTICLES);
+      }
     };
     window.addEventListener('mousemove', onMove);
 

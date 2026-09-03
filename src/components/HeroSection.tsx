@@ -467,7 +467,7 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
             </div>
           </h1>
 
-          <motion.div variants={fadeUp} className="mt-6 max-w-xl space-y-4">
+          <motion.div variants={fadeUp} className="mt-6 max-w-[clamp(200px,45vw,36rem)] space-y-4">
             <p className="font-mono-ui fluid-eyebrow uppercase text-ground/60">
               Web-Entwickler <span className="text-[#FF5A1F]">•</span> 3D &amp; Motion{' '}
               <span className="text-[#FF5A1F]">•</span> Zürich
