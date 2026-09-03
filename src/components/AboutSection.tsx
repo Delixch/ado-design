@@ -312,20 +312,16 @@ export const AboutSection: React.FC = () => {
 
                 {/* Bio text */}
                 <div className="flex-1 text-center sm:text-left">
-                  <p className="font-sans-ui text-[12px] leading-relaxed text-white/90 font-semibold">
-                    Ich bin <strong className="font-bold text-white">Adnan Aydin</strong>, Web-Entwickler in Zürich.
-                  </p>
-                  <p className="font-sans-ui text-[11px] leading-relaxed text-white/70 mt-1.5">
+                  <h3 className="card-title text-[18px]">
+                    Ich bin Adnan Aydin, Web-Entwickler in Zürich.
+                  </h3>
+                  <p className="card-body mt-2">
                     Angefangen habe ich mit dem Web-Publisher-Lehrgang (HTML, CSS, PHP, DB). Heute entwickle ich moderne High-End-Webseiten mit <strong className="font-semibold text-white">Echtzeit-3D</strong>, <strong className="font-semibold text-white">Motion Design</strong> und performantem Code.
                   </p>
 
                   <div className="mt-3 flex flex-wrap gap-1.5 justify-center sm:justify-start">
                     {['Echtzeit-3D', 'Mobil zuerst', 'Ohne Baukasten'].map((tag) => (
-                      <span
-                        key={tag}
-                        className="font-mono-ui rounded-sm px-2 py-0.5 text-[9px] uppercase tracking-[0.1em] text-white/60"
-                        style={{ border: '1px solid rgba(255,255,255,0.15)' }}
-                      >
+                      <span key={tag} className="card-tag">
                         {tag}
                       </span>
                     ))}

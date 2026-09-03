@@ -256,22 +256,21 @@ const SkillCard: React.FC<{ block: SkillBlock; i: number }> = ({ block, i }) => 
         {i === 3 && <AICommandPrompt />}
         <div className="relative z-10">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <span className="font-mono-ui text-[10px] uppercase tracking-[0.2em] text-white/70">
+            <span className="card-badge">
               {block.badge}
             </span>
-            <span className="font-mono-ui rounded-full px-3.5 py-1 text-[9.5px] uppercase tracking-[0.14em] text-white/90 border border-white/20 bg-white/5"
-            >
+            <span className="card-tag">
               {block.stat}
             </span>
           </div>
-          <h3 className="font-display text-[15px] mt-4 uppercase leading-none text-[#FF5A1F] font-bold">{block.title}</h3>
-          <p className="font-sans-ui text-[11px] mt-3 max-w-xl leading-[1.7] text-white/80">{block.description}</p>
-          <div className="mt-5 flex flex-wrap gap-1.5 border-t border-white/10 pt-4">
+          <h3 className="card-title mt-3">{block.title}</h3>
+          <p className="card-body mt-2">{block.description}</p>
+          <div className="mt-4 flex flex-wrap gap-1.5 border-t border-white/10 pt-3">
             {block.items.map((item) => (
               <motion.span
                 key={item}
-                className="font-mono-ui rounded-full px-3.5 py-1.5 text-[9.5px] uppercase tracking-[0.1em] transition-all duration-300 text-white/90 bg-white/10 border border-white/15"
-                whileHover={{ scale: 1.05, borderColor: '#ffffff', color: '#000000', background: '#ffffff' }}
+                className="card-tag cursor-pointer"
+                whileHover={{ scale: 1.05, borderColor: '#FF5A1F', color: '#FF5A1F' }}
               >
                 {item}
               </motion.span>
