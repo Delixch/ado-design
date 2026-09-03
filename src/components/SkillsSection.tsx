@@ -6,7 +6,7 @@ import { SectionHead } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { OPEN_TERMINAL_EVENT } from './SecretTerminal';
 import { useGyroTilt } from '../hooks/useGyroTilt';
-import { useEnterSound } from '../lib/sound';
+import { useEnterSound, playFissh, playClick } from '../lib/sound';
 import { useReducedMotion } from '../lib/motion';
 
 /* ─── Type definitions & Data ───────────────────────────── */
@@ -188,6 +188,13 @@ const SkillCard: React.FC<{ block: SkillBlock; i: number }> = ({ block, i }) => 
       initial="hidden"
       whileInView="visible"
       viewport={{ once: true, margin: '-70px' }}
+      onPointerEnter={() => {
+        if (i === 3) {
+          playFissh();
+        } else {
+          playClick();
+        }
+      }}
       onMouseMove={(e) => {
         const r = e.currentTarget.getBoundingClientRect();
         mx.set((e.clientX - r.left) / r.width - 0.5);

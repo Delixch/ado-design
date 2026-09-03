@@ -9,10 +9,9 @@ let iosPermissionRequested = false;
 function requestIOSPermissionOnce() {
   if (iosPermissionRequested) return;
   iosPermissionRequested = true;
-  const doe = DeviceOrientationEvent as unknown as {
-    requestPermission?: () => Promise<'granted' | 'denied'>;
-  };
-  if (typeof doe.requestPermission === 'function') {
+  if (typeof window === 'undefined' || !('DeviceOrientationEvent' in window)) return;
+  const doe = (window as unknown as { DeviceOrientationEvent: { requestPermission?: () => Promise<'granted' | 'denied'> } }).DeviceOrientationEvent;
+  if (doe && typeof doe.requestPermission === 'function') {
     doe.requestPermission().catch(() => {});
   }
 }

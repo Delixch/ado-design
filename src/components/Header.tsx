@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { navItems, scrollToSection, openAllSections } from '../lib/nav';
 import { SocialLinks } from './ui';
-import { isSoundMuted, toggleSound, playChime, SOUND_MUTE_EVENT } from '../lib/sound';
+import { isSoundMuted, toggleSound, playChime, playOpen, playClose, playClick, SOUND_MUTE_EVENT } from '../lib/sound';
 
 /**
  * Ein einziges Menue fuer alle Breiten. Statt einer waagrechten
@@ -82,6 +82,7 @@ export const Header: React.FC = () => {
   }, [open]);
 
   const go = (id: string) => {
+    playClick();
     setOpen(false);
     scrollToSection(id);
   };
@@ -171,7 +172,14 @@ export const Header: React.FC = () => {
               ))}
             </button>
             <button
-              onClick={() => setOpen((v) => !v)}
+              onClick={() => {
+                if (open) {
+                  playClose();
+                } else {
+                  playOpen();
+                }
+                setOpen((v) => !v);
+              }}
               aria-expanded={open}
               aria-label={open ? 'Menü schliessen' : 'Menü öffnen'}
               className="group flex items-center gap-2.5 rounded-full border-2 border-ground px-4 py-1.5 text-ground transition-colors hover:bg-ground hover:text-ink"

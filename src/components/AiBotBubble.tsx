@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { useReducedMotion } from '../lib/motion';
-import { playOpen, playClose, playReveal } from '../lib/sound';
+import { playOpen, playClose, playReveal, playTypewriter, isSoundMuted } from '../lib/sound';
 
 interface ChatMessage {
   role: 'bot' | 'user';
@@ -10,6 +10,28 @@ interface ChatMessage {
 
 const WELCOME = 'Hallo! Ich bin Adnans Bot. Frag mich nach Preis, Standort oder Kontakt.';
 const FALLBACK = 'Auf diese Frage bin ich noch nicht vorbereitet — schreib Adnan direkt: adnan.aydin@bluewin.ch';
+
+/** German AI Voice Speech Synthesis */
+const speakGermanAI = (text: string) => {
+  if (typeof window === 'undefined' || !('speechSynthesis' in window) || isSoundMuted()) return;
+  try {
+    window.speechSynthesis.cancel();
+    const cleanText = text.replace(/adnan\.aydin@bluewin\.ch/g, 'Adnan Aydin bluewin.ch');
+    const utterance = new SpeechSynthesisUtterance(cleanText);
+    utterance.lang = 'de-DE';
+    utterance.volume = 0.15; // Ultra soft & quiet volume (15%)
+    utterance.pitch = 0.9;   // Lower, calm tone
+    utterance.rate = 0.95;
+
+    const voices = window.speechSynthesis.getVoices();
+    const deVoice = voices.find((v) => v.lang.startsWith('de'));
+    if (deVoice) utterance.voice = deVoice;
+
+    window.speechSynthesis.speak(utterance);
+  } catch (err) {
+    // Ignore SpeechSynthesis errors if unsupported
+  }
+};
 
 /* Feste Stichwort-Antworten statt echter KI — der Bot tut nur so.
    Reihenfolge zaehlt: die engeren Themen (Preis/Kontakt/Standort)
@@ -62,7 +84,8 @@ const Typewriter: React.FC<{ text: string; reducedMotion: boolean; onDone?: () =
       onDone?.();
       return;
     }
-    const t = window.setTimeout(() => setShown((n) => n + 1), 16);
+    if (shown % 2 === 0) playTypewriter();
+    const t = window.setTimeout(() => setShown((n) => n + 1), 22);
     return () => window.clearTimeout(t);
   }, [shown, text, reducedMotion, onDone]);
 
@@ -84,9 +107,16 @@ export const AiBotBubble: React.FC = () => {
     const next = !open;
     setOpen(next);
     (next ? playOpen : playClose)();
-    if (next && messages.length === 0) {
-      setMessages([{ role: 'bot', text: WELCOME }]);
-      setTypingIndex(0);
+    if (next) {
+      if (messages.length === 0) {
+        setMessages([{ role: 'bot', text: WELCOME }]);
+        setTypingIndex(0);
+      }
+      speakGermanAI(WELCOME);
+    } else {
+      if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+        window.speechSynthesis.cancel();
+      }
     }
   };
 
@@ -102,6 +132,7 @@ export const AiBotBubble: React.FC = () => {
     setTypingIndex(messages.length + 1);
     setInput('');
     playReveal();
+    speakGermanAI(reply);
   };
 
   return (

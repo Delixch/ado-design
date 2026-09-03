@@ -15,6 +15,25 @@ import { MatrixMode } from './components/MatrixMode';
 import { ScrollToTop } from './components/ScrollToTop';
 import { KonamiCode } from './components/KonamiCode';
 import { AiBotBubble } from './components/AiBotBubble';
+import { FloatingDock } from './components/ui/floating-dock';
+import { Home, User, FolderGit2, Cpu, Briefcase, Mail } from 'lucide-react';
+
+const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+    <path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4" />
+    <path d="M9 18c-4.51 2-5-2-7-2" />
+  </svg>
+);
+
+const dockItems = [
+  { title: 'Start', icon: <Home className="h-5 w-5" />, href: '#top' },
+  { title: 'Über mich', icon: <User className="h-5 w-5" />, href: '#about' },
+  { title: 'Projekte', icon: <FolderGit2 className="h-5 w-5" />, href: '#work' },
+  { title: 'Werkzeuge', icon: <Cpu className="h-5 w-5" />, href: '#skills' },
+  { title: 'Werdegang', icon: <Briefcase className="h-5 w-5" />, href: '#experience' },
+  { title: 'Kontakt', icon: <Mail className="h-5 w-5" />, href: 'mailto:adnan.aydin@bluewin.ch' },
+  { title: 'GitHub', icon: <GithubIcon className="h-5 w-5" />, href: 'https://github.com' },
+];
 
 function App() {
   useSmoothScroll();
@@ -60,6 +79,11 @@ function App() {
         <ExperienceSection />
       </main>
       <ContactSection />
+
+      {/* Floating Dock - macOS style magnification dock */}
+      <div className="border-t border-white/10 bg-[#000000] pt-12 pb-0 flex justify-center items-center">
+        <FloatingDock items={dockItems} />
+      </div>
 
       {/* Kleiner Streifen ganz unten: welche Werkzeuge dahinter stehen —
           Impressum/Datenschutz kommen dazu, sobald die echten Angaben da sind. */}

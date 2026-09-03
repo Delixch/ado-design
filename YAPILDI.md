@@ -52,15 +52,8 @@
   5. Tam ortada arkasını dönüp sayfanın derinliğine (`scale: 0`) yok oluyor
   6. Toplam süre: **4.5 saniye**
 
-> [!IMPORTANT]
-> **İki uçak versiyonu mevcut — henüz karar verilmedi!**
->
-> | Versiyon | Dosya | Uçuş Şekli |
-> |----------|-------|------------|
-> | ✅ **Aktif** | `ContactSection.tsx` | Zikzaklı: önce sağa, sonra sola döner, ortada sayfanın içine dalar |
-> | 💾 **Yedek** | `ContactSection.backup.tsx` | Dümdüz sola uçup kayboluyor |
->
-> Karar verildiğinde beğenilmeyen dosya silinecek.
+> [!NOTE]
+> Zikzaklı kağıt uçak aktif kullanılıyor, eski yedek dosya temizlendi.
 
 ---
 

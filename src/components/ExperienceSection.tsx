@@ -5,7 +5,7 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { SectionHead } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { useGyroTilt } from '../hooks/useGyroTilt';
-import { useEnterSound } from '../lib/sound';
+import { useEnterSound, playClick } from '../lib/sound';
 import { useReducedMotion } from '../lib/motion';
 
 gsap.registerPlugin(ScrollTrigger);
@@ -242,6 +242,7 @@ const TimelineCard: React.FC<{ stop: RouteStop; i: number }> = ({ stop, i }) => 
   const cardContent = (
     <motion.div
       className="w-full relative overflow-hidden rounded-2xl p-[1px] transition-all duration-500 shadow-lg border border-white/15"
+      onPointerEnter={() => playClick()}
       onMouseMove={(e) => {
         const r = e.currentTarget.getBoundingClientRect();
         mx.set((e.clientX - r.left) / r.width - 0.5);

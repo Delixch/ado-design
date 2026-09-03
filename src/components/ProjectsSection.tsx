@@ -5,7 +5,7 @@ import type { Project } from '../lib/projects';
 import { useMediaQuery, useReducedMotion } from '../lib/motion';
 import { SectionHead } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
-import { useEnterSound } from '../lib/sound';
+import { useEnterSound, playClick } from '../lib/sound';
 
 /** Zu jedem Projekt liegt ein Bildschirmfoto unter /shots. */
 const shot = (project: Project) => `/shots/${project.number}.webp`;
@@ -367,9 +367,15 @@ export const ProjectsSection: React.FC = () => {
                           href={project.githubUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          onPointerEnter={() => setActive(i)}
+                          onPointerEnter={() => {
+                            setActive(i);
+                            playClick();
+                          }}
                           onPointerLeave={() => setActive((v) => (v === i ? null : v))}
-                          onFocus={() => setActive(i)}
+                          onFocus={() => {
+                            setActive(i);
+                            playClick();
+                          }}
                           onBlur={() => setActive((v) => (v === i ? null : v))}
                           className="relative block w-full overflow-hidden p-[1px] rounded-2xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] border border-white/5 shadow-sm"
                         >
@@ -393,7 +399,10 @@ export const ProjectsSection: React.FC = () => {
                         </a>
                       ) : (
                         <button
-                          onClick={() => setOpen((v) => (v === i ? null : i))}
+                          onClick={() => {
+                            playClick();
+                            setOpen((v) => (v === i ? null : i));
+                          }}
                           aria-expanded={isActive}
                           className="relative block text-left w-full overflow-hidden p-[1px] rounded-2xl transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] border border-white/5 shadow-sm"
                         >
