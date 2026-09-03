@@ -119,7 +119,7 @@ const FloatingDockDesktop: React.FC<{
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        'mx-auto hidden md:flex h-16 items-end gap-3.5 rounded-sm bg-[#000000] border-2 border-[#FF5A1F] px-4 pb-2.5 shadow-[0_0_45px_rgba(255,90,31,0.75)] transition-shadow duration-300',
+        'mx-auto hidden md:flex h-16 items-end gap-3.5 rounded-sm bg-[#000000] border-2 border-[#FF5A1F] px-4 pb-2.5 shadow-[0_0_32px_rgba(255,90,31,0.55)] transition-shadow duration-300',
         className
       )}
     >
