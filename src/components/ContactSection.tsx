@@ -4,6 +4,7 @@ import { SectionHead, SocialLinks } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { useGyroTilt } from '../hooks/useGyroTilt';
 import { useEnterSound } from '../lib/sound';
+import { useReducedMotion } from '../lib/motion';
 
 
 
@@ -18,6 +19,7 @@ const ContactPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant 
   const engage = () => setActive(true);
   const disengage = () => setActive(false);
   const rootRef = useRef<HTMLDivElement>(null);
+  const reducedMotion = useReducedMotion();
   useEnterSound(rootRef, variant === 'desktop');
 
   return (
@@ -102,38 +104,48 @@ const ContactPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant 
         </motion.div>
       </motion.div>
 
-      {/* Vertical Glowing Light Pillars - Wrapped in overflow-hidden so they don't spill */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none z-10">
-        <div className="absolute inset-x-0 bottom-0 h-[650px] flex gap-12 opacity-90 justify-center">
-          {[
-            { color: '#1E202A', delay: 0 },
-            { color: '#1E202A', delay: 1.25 },
-            { color: '#1E202A', delay: 2.5 },
-            { color: '#1E202A', delay: 3.75 }
-          ].map((s, idx) => (
-            <div
-              key={idx}
-              className="w-5 h-full rounded-t-full relative overflow-hidden"
-              style={{
-                background: `linear-gradient(to top, ${s.color} 20%, ${s.color}35 80%, transparent)`,
-                boxShadow: `0 0 30px ${s.color}33`,
-              }}
-            >
-              {/* Upward flowing light pulse */}
-              <motion.div
-                initial={{ y: "650px" }}
-                animate={{ y: "-200px" }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "linear",
-                  delay: s.delay,
-                }}
-                className="absolute left-0 right-0 h-48 bg-gradient-to-b from-transparent via-white/50 to-transparent pointer-events-none"
-              />
-            </div>
-          ))}
-        </div>
+      {/* Diagonal SVG Stripe Lines with Traveling Orange Pulses */}
+      <div className="absolute inset-0 pointer-events-none opacity-90 z-10">
+        <svg className="absolute inset-0 w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <defs>
+            {[
+              { color: '#1E202A', delay: 0, id: `pulse-contact-0-${variant}` },
+              { color: '#1E202A', delay: 1.125, id: `pulse-contact-1-${variant}` },
+              { color: '#1E202A', delay: 2.25, id: `pulse-contact-2-${variant}` },
+              { color: '#1E202A', delay: 3.375, id: `pulse-contact-3-${variant}` }
+            ].map((s) => (
+              <linearGradient key={s.id} id={s.id} x1="100%" y1="-100%" x2="0%" y2="0%">
+                {!reducedMotion && (
+                  <>
+                    <animate
+                      attributeName="y1"
+                      values="-100%;200%"
+                      dur="4.5s"
+                      begin={`${s.delay}s`}
+                      repeatCount="indefinite"
+                    />
+                    <animate
+                      attributeName="y2"
+                      values="0%;300%"
+                      dur="4.5s"
+                      begin={`${s.delay}s`}
+                      repeatCount="indefinite"
+                    />
+                  </>
+                )}
+                <stop offset="0%" stopColor={s.color} />
+                <stop offset="42%" stopColor={s.color} />
+                <stop offset="50%" stopColor="#FF5A1F" />
+                <stop offset="58%" stopColor={s.color} />
+                <stop offset="100%" stopColor={s.color} />
+              </linearGradient>
+            ))}
+          </defs>
+          <polygon points="75,-10 76.6,-10 -0.95,110 -1.3,110" fill={`url(#pulse-contact-0-${variant})`} />
+          <polygon points="78,-10 79.6,-10 -0.85,110 -1.2,110" fill={`url(#pulse-contact-1-${variant})`} />
+          <polygon points="81,-10 82.6,-10 -0.75,110 -1.1,110" fill={`url(#pulse-contact-2-${variant})`} />
+          <polygon points="84,-10 85.6,-10 -0.65,110 -1.0,110" fill={`url(#pulse-contact-3-${variant})`} />
+        </svg>
       </div>
     </div>
   );
