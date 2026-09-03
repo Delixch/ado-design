@@ -123,8 +123,8 @@ const FloatingDockDesktop: React.FC<{
         className
       )}
     >
-      {items.map((item) => (
-        <IconContainer mouseX={mouseX} key={item.title} {...item} />
+      {items.map((item, idx) => (
+        <IconContainer mouseX={mouseX} key={item.title} idx={idx} {...item} />
       ))}
     </motion.div>
   );
@@ -135,14 +135,17 @@ function IconContainer({
   title,
   icon,
   href,
+  idx = 0,
 }: {
   mouseX: any;
   title: string;
   icon: React.ReactNode;
   href: string;
+  idx?: number;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const [hovered, setHovered] = useState(false);
+  const isHeartbeat = title === 'Kontakt' || title === 'Contact';
 
   const distance = useTransform(mouseX, (val: number) => {
     const bounds = ref.current?.getBoundingClientRect() ?? { x: 0, width: 0 };
@@ -173,7 +176,10 @@ function IconContainer({
         style={{ width, height }}
         onMouseEnter={() => setHovered(true)}
         onMouseLeave={() => setHovered(false)}
-        className="relative flex items-center justify-center rounded-sm bg-[#000000] border border-white/10 hover:border-[#FF5A1F] hover:bg-[#FF5A1F]/20 transition-colors shadow-md"
+        className={cn(
+          "relative flex items-center justify-center rounded-sm bg-[#000000] border transition-colors shadow-md group",
+          isHeartbeat ? "border-[#FF5A1F]/60 shadow-[0_0_15px_rgba(255,90,31,0.35)]" : "border-white/10 hover:border-[#FF5A1F] hover:bg-[#FF5A1F]/20"
+        )}
       >
         <AnimatePresence>
           {hovered && (
@@ -189,8 +195,28 @@ function IconContainer({
         </AnimatePresence>
 
         <motion.div
+          animate={hovered ? { y: 0, scale: 1 } : (isHeartbeat ? {
+            scale: [1, 1.32, 1.08, 1.4, 1, 1],
+          } : {
+            y: [0, -3.5, 0, 2, 0],
+            scale: [1, 1.08, 1, 0.96, 1],
+          })}
+          transition={hovered ? { duration: 0.2 } : (isHeartbeat ? {
+            duration: 2.2,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            times: [0, 0.14, 0.28, 0.42, 0.6, 1],
+          } : {
+            duration: 3.6,
+            repeat: Infinity,
+            ease: 'easeInOut',
+            delay: idx * 0.45,
+          })}
           style={{ width: iconWidth, height: iconHeight }}
-          className="flex items-center justify-center text-white/80 group-hover:text-[#FF5A1F]"
+          className={cn(
+            "flex items-center justify-center transition-colors",
+            isHeartbeat ? "text-[#FF5A1F]" : "text-white/80 group-hover:text-[#FF5A1F]"
+          )}
         >
           {icon}
         </motion.div>
