@@ -58,7 +58,7 @@ export const HoverEffect = ({
         return (
           <div
             key={item.title}
-            className="relative group block p-2 h-[280px] w-full"
+            className={cn('relative group block p-2 w-full', isDesktop ? 'h-[280px]' : 'h-[320px]')}
             style={{ perspective: 1200 }}
             role={isDesktop ? undefined : 'button'}
             tabIndex={isDesktop ? undefined : 0}
