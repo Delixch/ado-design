@@ -416,7 +416,6 @@ export const ReposSection: React.FC = () => {
               eyebrow={t.repos.eyebrow}
               line1={t.repos.line1}
               line2={t.repos.line2}
-              headClass="fluid-display-xs"
               className="mb-8 max-w-4xl"
               gradientLine2={true}
               contentClass="min-[1000px]:pl-4 min-[1000px]:pr-0"

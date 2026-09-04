@@ -278,8 +278,9 @@ export const AboutSection: React.FC = () => {
               eyebrow={t.about.eyebrow}
               line1={t.about.line1}
               line2={t.about.line2}
-              gradientLine2={false}
-              className="mb-6"
+              className="mb-8 max-w-4xl"
+              gradientLine2={true}
+              contentClass="min-[1000px]:pl-4 min-[1000px]:pr-0"
               open={open}
               onToggleOpen={() => setOpen((v) => !v)}
             />

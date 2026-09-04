@@ -64,6 +64,13 @@ html, body {
      killt `position: sticky` im ganzen Projekt. */
   overscroll-behavior-x: none;
   -webkit-font-smoothing: antialiased;
+  /* iOS blaeht Text in schmalen Spalten automatisch auf ("Text-
+     Boost"), unabhaengig von font-weight - genau das erklaert, warum
+     echtes iOS-WebKit (Safari UND Chrome-iOS, beide auf WebKit)
+     Ueberschriften dicker zeigt als jede Desktop-Emulation je zeigen
+     kann. 100% deaktiviert das Aufblaehen komplett. */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 html {
@@ -177,6 +184,16 @@ html {
 .font-robot  { font-family: 'Orbitron', 'Chakra Petch', system-ui, sans-serif; font-weight: 800; }
 .font-sans-ui { font-family: 'Space Grotesk', system-ui, sans-serif; }
 .font-mono-ui { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+/* SectionHead-Titel: auf schmalen Screens wirkt Chakra Petch bei 700
+   zu schwer (v.a. schwarz auf hellem Amber-Band). Muss NACH
+   .font-display stehen, um dessen font-weight zu schlagen - Tailwinds
+   font-semibold/font-bold reichen nicht, weil .font-display unlayered
+   ist und Utility-Klassen aus dem @layer immer verliert. */
+.section-head-title { font-weight: 500; }
+@media (min-width: 640px) {
+  .section-head-title { font-weight: 700; }
+}
 
 /* Bewegung ist Zierde, nie Funktion: bei reduzierter Bewegung
    steht alles still, sichtbar bleibt es trotzdem. */

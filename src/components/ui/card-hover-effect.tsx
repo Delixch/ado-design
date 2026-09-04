@@ -92,7 +92,7 @@ export const HoverEffect = ({
           <div
             key={item.title}
             className={cn('relative group block p-2 w-full', isDesktop ? 'h-[280px]' : 'h-[320px]')}
-            style={{ perspective: 1200 }}
+            style={{ perspective: 1200, WebkitPerspective: 1200 }}
             role={isDesktop ? undefined : 'button'}
             tabIndex={isDesktop ? undefined : 0}
             onMouseEnter={() => {
@@ -136,8 +136,20 @@ export const HoverEffect = ({
               animate={{ rotateY: isFlipped ? 180 : 0 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
-              {/* Vorderseite */}
-              <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}>
+              {/* Vorderseite - translateZ(0) zwingt Safari, jede Seite auf
+                  eine eigene Compositing-Ebene zu legen. Ohne das ignoriert
+                  echtes iOS-Safari (nicht die Devtools-Emulation) manchmal
+                  backface-visibility und zeigt die gespiegelte Vorderseite
+                  statt der Rueckseite. */}
+              <div
+                className="absolute inset-0"
+                style={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  transform: 'translateZ(0)',
+                  WebkitTransform: 'translateZ(0)',
+                }}
+              >
                 <Card className={activeIndex !== null ? 'group-hover:border-white/40' : undefined}>
                   <div className="flex items-center justify-between gap-2 mb-3">
                     {item.badge && <span className="card-badge">{item.badge}</span>}
@@ -196,8 +208,8 @@ export const HoverEffect = ({
                 style={{
                   backfaceVisibility: 'hidden',
                   WebkitBackfaceVisibility: 'hidden',
-                  transform: 'rotateY(180deg)',
-                  WebkitTransform: 'rotateY(180deg)',
+                  transform: 'rotateY(180deg) translateZ(0)',
+                  WebkitTransform: 'rotateY(180deg) translateZ(0)',
                 }}
               >
                 <Card className="overflow-y-auto">

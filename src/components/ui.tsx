@@ -16,8 +16,6 @@ interface SectionHeadProps {
   /** Zweite Zeile im Akzent. */
   line2: string;
   className?: string;
-  /** Zusatzklasse fuer die Ueberschrift, z. B. eine kleinere Stufe. */
-  headClass?: string;
   /** Fuellt die zweite Zeile mit einem edlen Premium-Verlauf anstelle einer Vollfarbe. */
   gradientLine2?: boolean;
   /** Optional custom tailwind classes for horizontal padding and margins on the content wrapper. */
@@ -36,7 +34,6 @@ export const SectionHead: React.FC<SectionHeadProps> = (props) => {
     line1,
     line2,
     className = '',
-    headClass = '',
     gradientLine2 = false,
     contentClass = 'min-[1000px]:px-0',
     open,
@@ -128,34 +125,45 @@ export const SectionHead: React.FC<SectionHeadProps> = (props) => {
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, margin: '-60px' }}
-          className={`font-display relative flex flex-wrap gap-x-[0.3em] uppercase text-base md:text-lg lg:text-xl font-bold tracking-tight ${closed ? 'text-black' : 'text-white'} ${headClass}`}
+          className={`font-display section-head-title relative flex flex-wrap gap-x-[0.3em] uppercase text-base md:text-lg lg:text-xl tracking-tight ${closed ? 'text-black' : 'text-white'}`}
         >
           <motion.span className="relative block">
-            <motion.span
-              aria-hidden
-              variants={{
-                hidden: { x: 16, y: -6, opacity: 0.85 },
-                visible: { x: 0, y: 0, opacity: 0, transition: { duration: 1.5, ease: [0.16, 1, 0.3, 1] } },
-              }}
-              className="pointer-events-none absolute inset-0 block text-white/20 mix-blend-screen"
-            >
-              {line1}
-            </motion.span>
-            <motion.span
-              aria-hidden
-              variants={{
-                hidden: { x: -18, y: 7, opacity: 0.85 },
-                visible: {
-                  x: 0,
-                  y: 0,
-                  opacity: 0,
-                  transition: { duration: 1.5, delay: 0.08, ease: [0.16, 1, 0.3, 1] },
-                },
-              }}
-              className="pointer-events-none absolute inset-0 block text-white/10 mix-blend-screen"
-            >
-              {line1}
-            </motion.span>
+            {/* Glitch-Geisterschicht: ein weisser Doppelgaenger mit
+                Screen-Blend, der beim Einblenden wegfadet - passt nur
+                auf schwarzem Grund. Auf dem farbigen (Amber/Orange)
+                Balken im geschlossenen Zustand erzeugt Weiss+Screen
+                stattdessen einen hellen Schleier um den schwarzen Text,
+                der wie zu fette Schrift wirkt - deshalb geschlossen
+                komplett weglassen. */}
+            {!closed && (
+              <>
+                <motion.span
+                  aria-hidden
+                  variants={{
+                    hidden: { x: 16, y: -6, opacity: 0.85 },
+                    visible: { x: 0, y: 0, opacity: 0, transition: { duration: 1.5, ease: [0.16, 1, 0.3, 1] } },
+                  }}
+                  className="pointer-events-none absolute inset-0 block text-white/20 mix-blend-screen"
+                >
+                  {line1}
+                </motion.span>
+                <motion.span
+                  aria-hidden
+                  variants={{
+                    hidden: { x: -18, y: 7, opacity: 0.85 },
+                    visible: {
+                      x: 0,
+                      y: 0,
+                      opacity: 0,
+                      transition: { duration: 1.5, delay: 0.08, ease: [0.16, 1, 0.3, 1] },
+                    },
+                  }}
+                  className="pointer-events-none absolute inset-0 block text-white/10 mix-blend-screen"
+                >
+                  {line1}
+                </motion.span>
+              </>
+            )}
 
             <motion.span className="block overflow-hidden">
               <motion.span

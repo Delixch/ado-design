@@ -213,8 +213,8 @@ export const ContactSection: React.FC = () => {
               line1={t.contact.line1}
               line2={t.contact.line2}
               gradientLine2={true}
-              headClass="fluid-display-xs"
-              className="mb-2"
+              className="mb-8 max-w-4xl"
+              contentClass="min-[1000px]:pl-4 min-[1000px]:pr-0"
               open={sectionOpen}
               onToggleOpen={() => setSectionOpen((v) => !v)}
             />

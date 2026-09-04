@@ -202,8 +202,8 @@ export const de: TranslationSchema = {
   },
   about: {
     eyebrow: 'Über mich',
-    line1: 'Ich schreibe nicht nur Code.',
-    line2: 'Ich baue, was bleibt.',
+    line1: 'Nicht nur Code.',
+    line2: 'Bleibendes.',
     bioTitle: 'Ich bin Adnan Aydin, Web-Entwickler in Zürich.',
     bioPart1: 'Angefangen habe ich mit dem Web-Publisher-Lehrgang (HTML, CSS, PHP, DB). Heute entwickle ich moderne High-End-Webseiten mit ',
     bioStrong1: 'Echtzeit-3D',
@@ -216,8 +216,8 @@ export const de: TranslationSchema = {
   },
   skills: {
     eyebrow: 'Werkzeuge',
-    line1: 'Werkzeuge, die ich',
-    line2: 'wirklich beherrsche.',
+    line1: 'Werkzeuge,',
+    line2: 'beherrscht.',
     blocks: [
       {
         title: 'Echtzeit-3D & Motion',
@@ -572,8 +572,8 @@ export const tr: TranslationSchema = {
   },
   about: {
     eyebrow: 'Hakkımda',
-    line1: 'Sadece kod yazmıyorum.',
-    line2: 'Kalıcı olanı inşa ediyorum.',
+    line1: 'Sadece kod değil.',
+    line2: 'Kalıcılık.',
     bioTitle: 'Ben Adnan Aydin, Zürih\'te web geliştiriciyim.',
     bioPart1: 'Web Publisher eğitimiyle başladım (HTML, CSS, PHP, veritabanı). Bugün modern, üst düzey web siteleri geliştiriyorum — ',
     bioStrong1: 'gerçek zamanlı 3D',
@@ -586,8 +586,8 @@ export const tr: TranslationSchema = {
   },
   skills: {
     eyebrow: 'Araçlar',
-    line1: 'Gerçekten hakim olduğum',
-    line2: 'araçlar.',
+    line1: 'Araçlarım,',
+    line2: 'hakimim.',
     blocks: [
       {
         title: 'Gerçek Zamanlı 3D & Motion',

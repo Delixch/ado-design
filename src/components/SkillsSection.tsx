@@ -527,9 +527,9 @@ export const SkillsSection: React.FC = () => {
               eyebrow={t.skills.eyebrow}
               line1={t.skills.line1}
               line2={t.skills.line2}
-              headClass="fluid-display-xs"
               className="mb-8 max-w-4xl"
               gradientLine2={true}
+              contentClass="min-[1000px]:pl-4 min-[1000px]:pr-0"
               open={sectionOpen}
               onToggleOpen={() => setSectionOpen((v) => !v)}
             />
