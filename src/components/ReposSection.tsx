@@ -13,7 +13,9 @@ const repos: RepoItem[] = [
     description: 'Moderne, animierte und immersive Tailwind CSS Komponentensammlung.',
     details:
       'Kein eigenständiges npm-Paket: Komponenten werden per shadcn-CLI direkt in den eigenen Code kopiert. Danach gehört der Code vollständig dir, frei anpassbar mit Tailwind CSS und Framer Motion. Genau dieser Karten-Hover-Effekt hier stammt von dort.',
-    command: 'npx shadcn@latest add card-hover-effect',
+    commands: [
+      { cmd: 'npx shadcn@latest add card-hover-effect', note: 'Installiert genau diesen Karten-Hover-Effekt in dein Projekt.' },
+    ],
     stars: 14200,
     tags: ['React', 'TailwindCSS', 'Framer Motion'],
     link: 'https://ui.aceternity.com',
@@ -23,7 +25,12 @@ const repos: RepoItem[] = [
     badge: 'AI Agent Engine',
     description: 'Erweitertes KI-Pairing und autonomes Coding-Assistenten-System.',
     details:
-      'Eigenständige, agentische Entwicklungsumgebung von Google, kein npm-Paket. Download unter antigravity.google. Der Agent liest, schreibt und testet Code direkt im Editor.',
+      'Eigenständige, agentische Entwicklungsumgebung von Google, kein npm-Paket. Download unter antigravity.google. Statt Shell-Befehlen tippt man Aufgaben in natürlicher Sprache — der Agent plant, schreibt und testet den Code selbstständig. Beispielhafte Prompts:',
+    commands: [
+      { kind: 'prompt', cmd: 'Erstelle eine responsive Navbar mit Dark Mode', note: 'Beispiel-Prompt — Feature aus dem Nichts bauen lassen.' },
+      { kind: 'prompt', cmd: 'Finde und behebe den Bug in checkout.ts', note: 'Beispiel-Prompt — Agent sucht selbst nach der Ursache.' },
+      { kind: 'prompt', cmd: 'Schreibe Tests für alle Funktionen in utils.ts', note: 'Beispiel-Prompt — Testabdeckung automatisch erzeugen.' },
+    ],
     stars: 28900,
     tags: ['AI', 'Gemini', 'Agentic Workflow'],
     link: 'https://github.com/google',
@@ -34,7 +41,9 @@ const repos: RepoItem[] = [
     description: 'Produktionsreife 60FPS-Animationsbibliothek für React.',
     details:
       'Deklarative Animationen für React — motion.div, AnimatePresence, geteilte Layout-Übergänge über layoutId. Treibt auf dieser Seite fast jede Bewegung an: Karten-Hover, Sektionen-Aufklappen, Seitenübergänge, auch dieses Detail-Panel.',
-    command: 'npm install framer-motion',
+    commands: [
+      { cmd: 'npm install framer-motion', note: 'Installiert die Bibliothek als Projekt-Abhängigkeit.' },
+    ],
     stars: 24500,
     tags: ['React', 'TypeScript', 'Physics'],
     link: 'https://github.com/framer/motion',
@@ -45,6 +54,14 @@ const repos: RepoItem[] = [
     description: 'Echtzeit-Synthesizer für mechanische und Sci-Fi Soundeffekte.',
     details:
       'Kein externes Paket: eigener Code direkt auf der nativen Web Audio API, in src/lib/sound.ts. Erzeugt Klicks, Chimes und den Herzschlag-Puls der FloatingDock im Browser, ganz ohne Audio-Dateien.',
+    commands: [
+      { cmd: 'playClick()', note: 'Mechanischer Tastenklick — bei jedem UI-Klick.' },
+      { cmd: 'playOpen()', note: 'Warmer Akkord-Swoosh beim Aufklappen einer Sektion.' },
+      { cmd: 'playClose()', note: 'Tiefer, dumpfer Thud beim Zuklappen.' },
+      { cmd: 'playChime()', note: 'Retro-Arpeggio — z. B. beim Wiedereinschalten des Tons.' },
+      { cmd: 'playPrint()', note: 'Der Tintenstrahl-Sample für dieses Ausdruck-Panel.' },
+      { cmd: 'playGlitch()', note: 'Digitaler Bitcrush-Stotterer für Sci-Fi-Momente.' },
+    ],
     stars: 8700,
     tags: ['WebAudio API', 'Synthesizer', 'DSP'],
     link: 'https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API',
@@ -55,7 +72,9 @@ const repos: RepoItem[] = [
     description: 'Hardware-beschleunigte 3D-Partikel- und Shader-Szenen im Browser.',
     details:
       'Die Standardbibliothek für 3D im Browser — Szenen, Kameras, Licht und GLSL-Shader über WebGL. Treibt die Partikel- und Shader-Experimente an, die als Nächstes im Bereich "Im Aufbau" live gehen.',
-    command: 'npm install three',
+    commands: [
+      { cmd: 'npm install three', note: 'Installiert die Bibliothek als Projekt-Abhängigkeit.' },
+    ],
     stars: 98000,
     tags: ['Three.js', 'WebGL', 'GLSL Shaders'],
     link: 'https://github.com/mrdoob/three.js',
@@ -66,7 +85,9 @@ const repos: RepoItem[] = [
     description: 'PostgreSQL-basierte Echtzeit-Datenbank und Authentifizierungsmotor.',
     details:
       'Open-Source-Alternative zu Firebase auf PostgreSQL-Basis — Datenbank, Auth, Realtime-Subscriptions und Storage über eine einzige API.',
-    command: 'npm install @supabase/supabase-js',
+    commands: [
+      { cmd: 'npm install @supabase/supabase-js', note: 'Installiert den Client als Projekt-Abhängigkeit.' },
+    ],
     stars: 68000,
     tags: ['PostgreSQL', 'Realtime', 'Auth'],
     link: 'https://github.com/supabase/supabase',
@@ -183,7 +204,7 @@ const ReposPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
 /* ─── Kopierbarer Terminal-Befehl ─────────────────────────────
    Bricht die Farbe des Papiers auf: dunkler Kasten, rote
    Mono-Schrift, ein Klick kopiert den Befehl in die Zwischenablage. */
-const CodeSnippet: React.FC<{ command: string }> = ({ command }) => {
+const CodeSnippet: React.FC<{ cmd: string; note: string; kind?: 'shell' | 'prompt' }> = ({ cmd, note, kind }) => {
   const [copied, setCopied] = useState(false);
 
   return (
@@ -192,18 +213,21 @@ const CodeSnippet: React.FC<{ command: string }> = ({ command }) => {
       onClick={async () => {
         playClick();
         try {
-          await navigator.clipboard.writeText(command);
+          await navigator.clipboard.writeText(cmd);
           setCopied(true);
           window.setTimeout(() => setCopied(false), 1500);
         } catch {
           // Zwischenablage nicht verfuegbar - kein Absturz noetig.
         }
       }}
-      className="group mt-4 flex w-full items-center justify-between gap-3 rounded-lg bg-[#0A0A0A] px-4 py-3 text-left cursor-pointer"
+      className="group mt-3 flex w-full items-center justify-between gap-3 rounded-lg bg-[#0A0A0A] px-4 py-3 text-left cursor-pointer"
     >
-      <code className="font-mono-ui text-[12px] text-[#FF3B30] truncate">
-        $ {command}
-      </code>
+      <span className="min-w-0">
+        <code className="block font-mono-ui text-[12px] text-[#FF3B30] truncate">
+          {kind === 'prompt' ? '» ' : '$ '}{cmd}
+        </code>
+        <span className="block text-[10px] text-white/40 mt-0.5">{note}</span>
+      </span>
       <span className="shrink-0 font-mono-ui text-[9px] uppercase tracking-[0.1em] text-white/40 group-hover:text-white/70 transition-colors">
         {copied ? 'Kopiert ✓' : 'Kopieren'}
       </span>
@@ -259,7 +283,9 @@ const RepoPrintPanel: React.FC<{ item: RepoItem | null; onClose: () => void; top
                   {item.details ?? item.description}
                 </p>
 
-                {item.command && <CodeSnippet command={item.command} />}
+                {item.commands?.map((c) => (
+                  <CodeSnippet key={c.cmd} cmd={c.cmd} note={c.note} kind={c.kind} />
+                ))}
 
                 {item.tags && (
                   <div className="flex flex-wrap gap-1.5 mt-5">

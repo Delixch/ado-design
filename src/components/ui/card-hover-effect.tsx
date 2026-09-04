@@ -3,12 +3,20 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
 import { playClick } from '../../lib/sound';
 
+export interface RepoCommand {
+  cmd: string;
+  note: string;
+  // 'prompt' = natuerlichsprachiger Agenten-Prompt statt Shell-Befehl -
+  // bekommt ein Sprechblasen-Zeichen statt "$" davor.
+  kind?: 'shell' | 'prompt';
+}
+
 export interface RepoItem {
   title: string;
   badge?: string;
   description: string;
   details?: string;
-  command?: string;
+  commands?: RepoCommand[];
   stars?: number;
   tags?: string[];
   link: string;
@@ -99,12 +107,12 @@ export const HoverEffect = ({
 
             <motion.div
               className="relative h-full w-full"
-              style={{ transformStyle: 'preserve-3d' }}
+              style={{ transformStyle: 'preserve-3d', WebkitTransformStyle: 'preserve-3d' }}
               animate={{ rotateY: isFlipped ? 180 : 0 }}
               transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
             >
               {/* Vorderseite */}
-              <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden' }}>
+              <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden', WebkitBackfaceVisibility: 'hidden' }}>
                 <Card className={activeIndex !== null ? 'group-hover:border-white/40' : undefined}>
                   <div className="flex items-center justify-between gap-2 mb-3">
                     {item.badge && <span className="card-badge">{item.badge}</span>}
@@ -155,12 +163,19 @@ export const HoverEffect = ({
                 </Card>
               </div>
 
-              {/* Rueckseite - nur mobil/tablet erreichbar (Tap statt Hover) */}
+              {/* Rueckseite - nur mobil/tablet erreichbar (Tap statt Hover).
+                  Scrollt intern statt abzuschneiden, falls eine Karte
+                  mehrere Befehle/Prompts hat und laenger ist als die Karte. */}
               <div
                 className="absolute inset-0"
-                style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
+                style={{
+                  backfaceVisibility: 'hidden',
+                  WebkitBackfaceVisibility: 'hidden',
+                  transform: 'rotateY(180deg)',
+                  WebkitTransform: 'rotateY(180deg)',
+                }}
               >
-                <Card>
+                <Card className="overflow-y-auto">
                   <button
                     type="button"
                     onClick={(e) => {
@@ -177,19 +192,23 @@ export const HoverEffect = ({
                   <p className="card-body mt-2 text-[12px] leading-relaxed">
                     {item.details ?? item.description}
                   </p>
-                  {item.command && (
+                  {item.commands?.map((c) => (
                     <button
+                      key={c.cmd}
                       type="button"
                       onClick={(e) => {
                         e.stopPropagation();
                         playClick();
-                        void navigator.clipboard?.writeText(item.command!);
+                        void navigator.clipboard?.writeText(c.cmd);
                       }}
-                      className="mt-2 block w-full truncate rounded bg-[#0A0A0A] px-2.5 py-1.5 text-left font-mono-ui text-[10px] text-[#FF3B30] cursor-pointer"
+                      className="mt-2 block w-full rounded bg-[#0A0A0A] px-2.5 py-1.5 text-left cursor-pointer"
                     >
-                      $ {item.command}
+                      <span className="block truncate font-mono-ui text-[10px] text-[#FF3B30]">
+                        {c.kind === 'prompt' ? '» ' : '$ '}{c.cmd}
+                      </span>
+                      <span className="block text-[9px] text-white/40">{c.note}</span>
                     </button>
-                  )}
+                  ))}
                   <a
                     href={item.link}
                     target="_blank"
