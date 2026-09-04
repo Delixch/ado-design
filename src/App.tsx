@@ -19,6 +19,7 @@ import { KonamiCode } from './components/KonamiCode';
 import { AiBotBubble } from './components/AiBotBubble';
 import { FloatingDock } from './components/ui/floating-dock';
 import { Home, User, FolderGit2, Cpu, Briefcase, Mail } from 'lucide-react';
+import { openAllSections } from './lib/nav';
 
 const GithubIcon = (props: React.SVGProps<SVGSVGElement>) => (
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
@@ -47,6 +48,12 @@ function App() {
       window.history.scrollRestoration = 'manual';
     }
     window.scrollTo(0, 0);
+  }, []);
+
+  // ponytail: befristet - Abschnitte starten diese Woche offen statt
+  // zugeklappt, danach wieder auf den normalen Standard zurueckstellen.
+  useEffect(() => {
+    openAllSections();
   }, []);
 
   // Der Farbschlag haengt am Fingerschnippen im Auftaktvideo.
