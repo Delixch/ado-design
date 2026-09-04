@@ -53,7 +53,6 @@ export const HoverEffect = ({
       onMouseLeave={() => setHoveredIndex(null)}
     >
       {items.map((item, idx) => {
-        const isActive = isDesktop && activeIndex === idx;
         const isFlipped = !isDesktop && flippedIndex === idx;
         return (
           <div
@@ -80,9 +79,12 @@ export const HoverEffect = ({
           >
             {isDesktop && (
               <AnimatePresence>
-                {hoveredIndex === idx && activeIndex === null && (
+                {hoveredIndex === idx && (
                   <motion.span
-                    className="absolute inset-0 h-full w-full bg-[#FF5A1F]/[0.2] border border-[#FF5A1F]/30 block rounded-3xl z-0 pointer-events-none"
+                    className={cn(
+                      'absolute inset-0 h-full w-full border block rounded-3xl z-0 pointer-events-none',
+                      activeIndex === null ? 'bg-[#FF5A1F]/[0.2] border-[#FF5A1F]/30' : 'bg-white border-white',
+                    )}
                     layoutId="hoverBackground"
                     layout="position"
                     transition={{ type: 'spring', bounce: 0, duration: 0.3 }}
@@ -102,7 +104,7 @@ export const HoverEffect = ({
             >
               {/* Vorderseite */}
               <div className="absolute inset-0" style={{ backfaceVisibility: 'hidden' }}>
-                <Card active={isActive}>
+                <Card className={activeIndex !== null ? 'group-hover:border-white/40' : undefined}>
                   <div className="flex items-center justify-between gap-2 mb-3">
                     {item.badge && <span className="card-badge">{item.badge}</span>}
                     <div className="flex items-center gap-2">
@@ -157,7 +159,7 @@ export const HoverEffect = ({
                 className="absolute inset-0"
                 style={{ backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
               >
-                <Card active={false}>
+                <Card>
                   <button
                     type="button"
                     onClick={(e) => {
@@ -195,18 +197,15 @@ export const HoverEffect = ({
 
 export const Card = ({
   className,
-  active,
   children,
 }: {
   className?: string;
-  active?: boolean;
   children: React.ReactNode;
 }) => {
   return (
     <div
       className={cn(
-        'rounded-2xl h-full w-full p-5 overflow-hidden bg-[#0A0A0A] border relative z-20 transition-colors duration-300',
-        active ? 'border-[#FF5A1F]/70' : 'border-white/10 group-hover:border-[#FF5A1F]/50',
+        'rounded-2xl h-full w-full p-5 overflow-hidden bg-[#0A0A0A] border border-white/10 group-hover:border-[#FF5A1F]/50 relative z-20 transition-colors duration-300',
         className
       )}
     >
