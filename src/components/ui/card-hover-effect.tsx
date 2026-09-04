@@ -83,7 +83,7 @@ export const HoverEffect = ({
                   <motion.span
                     className={cn(
                       'absolute inset-0 h-full w-full border block rounded-3xl z-0 pointer-events-none',
-                      activeIndex === null ? 'bg-[#FF5A1F]/[0.2] border-[#FF5A1F]/30' : 'bg-white border-white',
+                      activeIndex === null ? 'bg-[#FF5A1F]/[0.2] border-[#FF5A1F]/30' : 'bg-white/60 border-white/80',
                     )}
                     layoutId="hoverBackground"
                     layout="position"
