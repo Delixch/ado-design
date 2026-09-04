@@ -192,6 +192,7 @@ const RepoPrintPanel: React.FC<{ item: RepoItem | null; onClose: () => void; top
       className="absolute left-0 right-1/2 bottom-0 hidden min-[1000px]:block px-12 pointer-events-none z-30"
       style={{ top }}
     >
+      <div className="relative w-full">
       <AnimatePresence>
         {item && (
           <motion.div
@@ -203,15 +204,6 @@ const RepoPrintPanel: React.FC<{ item: RepoItem | null; onClose: () => void; top
             className="w-full max-h-[calc(100%-8rem)] rounded-2xl bg-[#F4F1EC] shadow-2xl pointer-events-auto overflow-y-auto"
           >
             <div className="relative w-full p-7">
-              <button
-                type="button"
-                onClick={onClose}
-                aria-label="Schliessen"
-                className="absolute top-5 right-5 flex h-7 w-7 items-center justify-center rounded-full border border-black/20 text-black hover:bg-black hover:text-white transition-colors cursor-pointer"
-              >
-                ✕
-              </button>
-
               <div>
                 <div className="flex items-center gap-3 mb-4 pr-10">
                   {item.badge && (
@@ -263,6 +255,20 @@ const RepoPrintPanel: React.FC<{ item: RepoItem | null; onClose: () => void; top
           </motion.div>
         )}
       </AnimatePresence>
+
+      {/* Ausserhalb der geclippten Papier-Flaeche: bleibt sofort
+          klickbar, auch waehrend das Blatt noch herausfaehrt. */}
+      {item && (
+        <button
+          type="button"
+          onClick={onClose}
+          aria-label="Schliessen"
+          className="absolute top-5 right-5 z-10 flex h-7 w-7 items-center justify-center rounded-full border border-black/20 text-black hover:bg-black hover:text-white transition-colors cursor-pointer pointer-events-auto"
+        >
+          ✕
+        </button>
+      )}
+      </div>
     </div>
   );
 };
