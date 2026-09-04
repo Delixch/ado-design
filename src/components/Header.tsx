@@ -138,7 +138,7 @@ export const Header: React.FC = () => {
                     <motion.span
                       animate={{
                         width: on ? 30 : 12,
-                        backgroundColor: on ? TONE.flood : 'rgba(250,250,250,0.3)',
+                        backgroundColor: on ? '#FF5A1F' : 'rgba(250,250,250,0.3)',
                       }}
                       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                       className="block h-[3px] rounded-full group-hover:opacity-70"
