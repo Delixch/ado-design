@@ -4,7 +4,7 @@ import { SectionHead } from './ui';
 import { HoverEffect, RepoItem } from './ui/card-hover-effect';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { useReducedMotion } from '../lib/motion';
-import { playPrint, stopPrint } from '../lib/sound';
+import { playPrint, stopPrint, playClick } from '../lib/sound';
 
 const repos: RepoItem[] = [
   {
@@ -12,7 +12,8 @@ const repos: RepoItem[] = [
     badge: 'UI Framework',
     description: 'Moderne, animierte und immersive Tailwind CSS Komponentensammlung.',
     details:
-      'Kein eigenständiges npm-Paket: Komponenten werden per shadcn-CLI direkt in den eigenen Code kopiert — z. B. mit "npx shadcn@latest add card-hover-effect". Danach gehört der Code vollständig dir, frei anpassbar mit Tailwind CSS und Framer Motion. Genau dieser Karten-Hover-Effekt hier stammt von dort.',
+      'Kein eigenständiges npm-Paket: Komponenten werden per shadcn-CLI direkt in den eigenen Code kopiert. Danach gehört der Code vollständig dir, frei anpassbar mit Tailwind CSS und Framer Motion. Genau dieser Karten-Hover-Effekt hier stammt von dort.',
+    command: 'npx shadcn@latest add card-hover-effect',
     stars: 14200,
     tags: ['React', 'TailwindCSS', 'Framer Motion'],
     link: 'https://ui.aceternity.com',
@@ -32,7 +33,8 @@ const repos: RepoItem[] = [
     badge: 'Animation Engine',
     description: 'Produktionsreife 60FPS-Animationsbibliothek für React.',
     details:
-      'Installation: "npm install framer-motion". Deklarative Animationen für React — motion.div, AnimatePresence, geteilte Layout-Übergänge über layoutId. Treibt auf dieser Seite fast jede Bewegung an: Karten-Hover, Sektionen-Aufklappen, Seitenübergänge, auch dieses Detail-Panel.',
+      'Deklarative Animationen für React — motion.div, AnimatePresence, geteilte Layout-Übergänge über layoutId. Treibt auf dieser Seite fast jede Bewegung an: Karten-Hover, Sektionen-Aufklappen, Seitenübergänge, auch dieses Detail-Panel.',
+    command: 'npm install framer-motion',
     stars: 24500,
     tags: ['React', 'TypeScript', 'Physics'],
     link: 'https://github.com/framer/motion',
@@ -52,7 +54,8 @@ const repos: RepoItem[] = [
     badge: '3D Graphics',
     description: 'Hardware-beschleunigte 3D-Partikel- und Shader-Szenen im Browser.',
     details:
-      'Installation: "npm install three". Die Standardbibliothek für 3D im Browser — Szenen, Kameras, Licht und GLSL-Shader über WebGL. Treibt die Partikel- und Shader-Experimente an, die als Nächstes im Bereich "Im Aufbau" live gehen.',
+      'Die Standardbibliothek für 3D im Browser — Szenen, Kameras, Licht und GLSL-Shader über WebGL. Treibt die Partikel- und Shader-Experimente an, die als Nächstes im Bereich "Im Aufbau" live gehen.',
+    command: 'npm install three',
     stars: 98000,
     tags: ['Three.js', 'WebGL', 'GLSL Shaders'],
     link: 'https://github.com/mrdoob/three.js',
@@ -62,7 +65,8 @@ const repos: RepoItem[] = [
     badge: 'Open Source Firebase',
     description: 'PostgreSQL-basierte Echtzeit-Datenbank und Authentifizierungsmotor.',
     details:
-      'Installation: "npm install @supabase/supabase-js". Open-Source-Alternative zu Firebase auf PostgreSQL-Basis — Datenbank, Auth, Realtime-Subscriptions und Storage über eine einzige API.',
+      'Open-Source-Alternative zu Firebase auf PostgreSQL-Basis — Datenbank, Auth, Realtime-Subscriptions und Storage über eine einzige API.',
+    command: 'npm install @supabase/supabase-js',
     stars: 68000,
     tags: ['PostgreSQL', 'Realtime', 'Auth'],
     link: 'https://github.com/supabase/supabase',
@@ -176,6 +180,37 @@ const ReposPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
   );
 };
 
+/* ─── Kopierbarer Terminal-Befehl ─────────────────────────────
+   Bricht die Farbe des Papiers auf: dunkler Kasten, rote
+   Mono-Schrift, ein Klick kopiert den Befehl in die Zwischenablage. */
+const CodeSnippet: React.FC<{ command: string }> = ({ command }) => {
+  const [copied, setCopied] = useState(false);
+
+  return (
+    <button
+      type="button"
+      onClick={async () => {
+        playClick();
+        try {
+          await navigator.clipboard.writeText(command);
+          setCopied(true);
+          window.setTimeout(() => setCopied(false), 1500);
+        } catch {
+          // Zwischenablage nicht verfuegbar - kein Absturz noetig.
+        }
+      }}
+      className="group mt-4 flex w-full items-center justify-between gap-3 rounded-lg bg-[#0A0A0A] px-4 py-3 text-left cursor-pointer"
+    >
+      <code className="font-mono-ui text-[12px] text-[#FF3B30] truncate">
+        $ {command}
+      </code>
+      <span className="shrink-0 font-mono-ui text-[9px] uppercase tracking-[0.1em] text-white/40 group-hover:text-white/70 transition-colors">
+        {copied ? 'Kopiert ✓' : 'Kopieren'}
+      </span>
+    </button>
+  );
+};
+
 /* ─── Ausdruck-Panel ──────────────────────────────────────────
    Statt eine Karte im Raster wachsen zu lassen (das schob das
    ganze Raster auf und streckte das Portrait darunter), erscheint
@@ -223,6 +258,8 @@ const RepoPrintPanel: React.FC<{ item: RepoItem | null; onClose: () => void; top
                 <p className="font-sans-ui text-[13px] leading-relaxed text-black/75">
                   {item.details ?? item.description}
                 </p>
+
+                {item.command && <CodeSnippet command={item.command} />}
 
                 {item.tags && (
                   <div className="flex flex-wrap gap-1.5 mt-5">

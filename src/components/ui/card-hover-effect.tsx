@@ -8,6 +8,7 @@ export interface RepoItem {
   badge?: string;
   description: string;
   details?: string;
+  command?: string;
   stars?: number;
   tags?: string[];
   link: string;
@@ -176,6 +177,19 @@ export const HoverEffect = ({
                   <p className="card-body mt-2 text-[12px] leading-relaxed">
                     {item.details ?? item.description}
                   </p>
+                  {item.command && (
+                    <button
+                      type="button"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        playClick();
+                        void navigator.clipboard?.writeText(item.command!);
+                      }}
+                      className="mt-2 block w-full truncate rounded bg-[#0A0A0A] px-2.5 py-1.5 text-left font-mono-ui text-[10px] text-[#FF3B30] cursor-pointer"
+                    >
+                      $ {item.command}
+                    </button>
+                  )}
                   <a
                     href={item.link}
                     target="_blank"
