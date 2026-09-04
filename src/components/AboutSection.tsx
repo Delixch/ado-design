@@ -4,13 +4,14 @@ import { useCountUp, useReducedMotion } from '../lib/motion';
 import { SectionHead } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { useEnterSound } from '../lib/sound';
+import { useLanguage } from '../lib/LanguageContext';
 
 /* ─── Stats ─────────────────────────────────────────────── */
-const stats = [
-  { value: 20, suffix: '+', label: 'Jahre Erfahrung' },
-  { value: 6,  suffix: '',  label: 'Projekte live' },
-  { value: 3,  suffix: '',  label: 'Sprachen' },
-  { value: 9,  suffix: '',  label: 'Archiv-Arbeiten' },
+const statValues = [
+  { value: 20, suffix: '+' },
+  { value: 6, suffix: '' },
+  { value: 3, suffix: '' },
+  { value: 9, suffix: '' },
 ];
 
 const sequenceSpinStyles = `
@@ -63,7 +64,7 @@ const StatCard: React.FC<{
       />
       {/* Inner Card */}
       <div className="relative w-full h-full flex flex-col items-center justify-center bg-[#0A0A0A] rounded-[1px] z-10 p-3">
-        <div className="font-robot text-xl font-black leading-none text-[#FF5A1F]">
+        <div className="font-robot text-xl font-black leading-none text-brand">
           <span ref={ref}>0</span>{suffix}
         </div>
         <div className="font-mono-ui mt-2 text-[9px] uppercase tracking-[0.1em] text-white/50 text-center">
@@ -136,7 +137,7 @@ const AboutPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
             daneben. Mit gleichem Seitenverhaeltnis deckt sich Box und
             Bild exakt, `object-cover` schneidet dann nichts mehr ab. */}
         <div className="absolute inset-0 z-0 flex items-center justify-center" style={{ isolation: 'isolate' }}>
-          <div className="relative max-w-full" style={{ aspectRatio: '1 / 1', width: 'auto', height: '100%' }}>
+          <div className="relative max-w-full" style={{ aspectRatio: '1 / 1', width: 'min(74%, 25rem)', height: 'auto' }}>
             <img
               src="/images/about-portrait.webp"
               alt="Portrait"
@@ -158,7 +159,7 @@ const AboutPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
               <div
                 className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%]"
                 style={{
-                  background: 'conic-gradient(from 0deg, transparent 70%, rgba(255,90,31,0.5) 95%, #FF5A1F 100%)',
+                  background: 'conic-gradient(from 0deg, transparent 70%, color-mix(in srgb, var(--color-brand) 50%, transparent) 95%, var(--color-brand) 100%)',
                   animation: 'sequence-spin 20s linear infinite',
                 }}
               />
@@ -216,7 +217,7 @@ const AboutPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
                 )}
                 <stop offset="0%" stopColor={s.color} />
                 <stop offset="42%" stopColor={s.color} />
-                <stop offset="50%" stopColor="#FF5A1F" />
+                <stop offset="50%" stopColor="var(--color-brand)" />
                 <stop offset="58%" stopColor={s.color} />
                 <stop offset="100%" stopColor={s.color} />
               </linearGradient>
@@ -234,6 +235,7 @@ const AboutPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
 
 /* ─── Section ────────────────────────────────────────────── */
 export const AboutSection: React.FC = () => {
+  const { t } = useLanguage();
   const sectionRef = useRef<HTMLElement>(null);
   const [open, setOpen] = useState(false);
   useEffect(() => {
@@ -273,9 +275,9 @@ export const AboutSection: React.FC = () => {
           <div className="flex flex-col gap-5 min-[1000px]:col-span-6 pointer-events-auto">
             <SectionHead
               index="01"
-              eyebrow="Über mich"
-              line1="Ich schreibe nicht nur Code."
-              line2="Ich baue, was bleibt."
+              eyebrow={t.about.eyebrow}
+              line1={t.about.line1}
+              line2={t.about.line2}
               gradientLine2={false}
               className="mb-6"
               open={open}
@@ -313,14 +315,14 @@ export const AboutSection: React.FC = () => {
                 {/* Bio text */}
                 <div className="flex-1 text-center sm:text-left">
                   <h3 className="card-title text-[18px]">
-                    Ich bin Adnan Aydin, Web-Entwickler in Zürich.
+                    {t.about.bioTitle}
                   </h3>
                   <p className="card-body mt-2">
-                    Angefangen habe ich mit dem Web-Publisher-Lehrgang (HTML, CSS, PHP, DB). Heute entwickle ich moderne High-End-Webseiten mit <strong className="font-semibold text-white">Echtzeit-3D</strong>, <strong className="font-semibold text-white">Motion Design</strong> und performantem Code.
+                    {t.about.bioPart1}<strong className="font-semibold text-white">{t.about.bioStrong1}</strong>{t.about.bioPart2}<strong className="font-semibold text-white">{t.about.bioStrong2}</strong>{t.about.bioPart3}
                   </p>
 
                   <div className="mt-3 flex flex-wrap gap-1.5 justify-center sm:justify-start">
-                    {['Echtzeit-3D', 'Mobil zuerst', 'Ohne Baukasten'].map((tag) => (
+                    {t.about.tags.map((tag) => (
                       <span key={tag} className="card-tag">
                         {tag}
                       </span>
@@ -338,7 +340,9 @@ export const AboutSection: React.FC = () => {
 
             {/* Minimized Stats Grid */}
             <div className="grid grid-cols-4 gap-3">
-              {stats.map((s, i) => <StatCard key={s.label} {...s} i={i} />)}
+              {statValues.map((s, i) => (
+                <StatCard key={t.about.statLabels[i]} {...s} label={t.about.statLabels[i]} i={i} />
+              ))}
             </div>
 
             {/* Minimized CTA button */}
@@ -351,12 +355,12 @@ export const AboutSection: React.FC = () => {
                 transition={{ duration: 0.5, delay: 0.1 }}
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.99 }}
-                className="group relative overflow-hidden rounded-sm px-4 py-2.5 inline-flex items-center justify-between gap-4 bg-[#FF5A1F] shadow-sm"
+                className="group relative overflow-hidden rounded-sm px-4 py-2.5 inline-flex items-center justify-between gap-4 bg-brand shadow-sm"
               >
-                <span className="font-robot relative text-[9px] uppercase tracking-[0.15em] text-white">
-                  Direkt schreiben
+                <span className="font-robot relative text-[9px] uppercase tracking-[0.15em] text-black">
+                  {t.about.cta}
                 </span>
-                <span className="font-mono-ui relative text-[9px] text-white/80 transition-transform duration-300 group-hover:translate-x-1">
+                <span className="font-mono-ui relative text-[9px] text-black/70 transition-transform duration-300 group-hover:translate-x-1">
                   adnan.aydin@bluewin.ch ↗
                 </span>
               </motion.a>

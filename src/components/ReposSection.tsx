@@ -6,105 +6,66 @@ import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { useReducedMotion } from '../lib/motion';
 import { playPrint, stopPrint, playClick } from '../lib/sound';
 import { cn } from '../lib/utils';
+import { useLanguage } from '../lib/LanguageContext';
 
-const repos: RepoItem[] = [
+// Sprachneutral: Titel, Befehle (nur `cmd`/`kind`), Sterne, Link. Badge/
+// Beschreibung/Details/Kommentare/Tags kommen aus t.repos.items (gleiche
+// Reihenfolge) und werden in ReposSection() zusammengefuehrt.
+const reposMeta: { title: string; commands?: { cmd: string; kind?: 'shell' | 'prompt' }[]; stars?: number; link: string }[] = [
   {
     title: 'Aceternity UI',
-    badge: 'UI Framework',
-    description: 'Moderne, animierte und immersive Tailwind CSS Komponentensammlung.',
-    details:
-      'Kein eigenständiges npm-Paket: Komponenten werden per shadcn-CLI direkt in den eigenen Code kopiert. Danach gehört der Code vollständig dir, frei anpassbar mit Tailwind CSS und Framer Motion. Genau dieser Karten-Hover-Effekt hier stammt von dort.',
-    commands: [
-      { cmd: 'npx shadcn@latest add card-hover-effect', note: 'Installiert genau diesen Karten-Hover-Effekt in dein Projekt.' },
-    ],
+    commands: [{ cmd: 'npx shadcn@latest add card-hover-effect' }],
     stars: 14200,
-    tags: ['React', 'TailwindCSS', 'Framer Motion'],
     link: 'https://ui.aceternity.com',
   },
   {
     title: 'Google Antigravity',
-    badge: 'AI Agent Engine',
-    description: 'Erweitertes KI-Pairing und autonomes Coding-Assistenten-System.',
-    details:
-      'Eigenständige, agentische Entwicklungsumgebung von Google, kein npm-Paket. Download unter antigravity.google. Statt Shell-Befehlen tippt man Aufgaben in natürlicher Sprache — der Agent plant, schreibt und testet den Code selbstständig. Beispielhafte Prompts:',
     commands: [
-      { kind: 'prompt', cmd: 'Erstelle eine responsive Navbar mit Dark Mode', note: 'Beispiel-Prompt — Feature aus dem Nichts bauen lassen.' },
-      { kind: 'prompt', cmd: 'Finde und behebe den Bug in checkout.ts', note: 'Beispiel-Prompt — Agent sucht selbst nach der Ursache.' },
-      { kind: 'prompt', cmd: 'Schreibe Tests für alle Funktionen in utils.ts', note: 'Beispiel-Prompt — Testabdeckung automatisch erzeugen.' },
+      { kind: 'prompt', cmd: 'Erstelle eine responsive Navbar mit Dark Mode' },
+      { kind: 'prompt', cmd: 'Finde und behebe den Bug in checkout.ts' },
+      { kind: 'prompt', cmd: 'Schreibe Tests für alle Funktionen in utils.ts' },
     ],
     stars: 28900,
-    tags: ['AI', 'Gemini', 'Agentic Workflow'],
     link: 'https://github.com/google',
   },
   {
     title: 'Framer Motion',
-    badge: 'Animation Engine',
-    description: 'Produktionsreife 60FPS-Animationsbibliothek für React.',
-    details:
-      'Deklarative Animationen für React — motion.div, AnimatePresence, geteilte Layout-Übergänge über layoutId. Treibt auf dieser Seite fast jede Bewegung an: Karten-Hover, Sektionen-Aufklappen, Seitenübergänge, auch dieses Detail-Panel.',
-    commands: [
-      { cmd: 'npm install framer-motion', note: 'Installiert die Bibliothek als Projekt-Abhängigkeit.' },
-    ],
+    commands: [{ cmd: 'npm install framer-motion' }],
     stars: 24500,
-    tags: ['React', 'TypeScript', 'Physics'],
     link: 'https://github.com/framer/motion',
   },
   {
     title: 'WebAudio Sound Engine',
-    badge: 'Audio Engine',
-    description: 'Echtzeit-Synthesizer für mechanische und Sci-Fi Soundeffekte.',
-    details:
-      'Kein externes Paket: eigener Code direkt auf der nativen Web Audio API, in src/lib/sound.ts. Erzeugt Klicks, Chimes und den Herzschlag-Puls der FloatingDock im Browser, ganz ohne Audio-Dateien.',
     commands: [
-      { cmd: 'playClick()', note: 'Mechanischer Tastenklick — bei jedem UI-Klick.' },
-      { cmd: 'playOpen()', note: 'Warmer Akkord-Swoosh beim Aufklappen einer Sektion.' },
-      { cmd: 'playClose()', note: 'Tiefer, dumpfer Thud beim Zuklappen.' },
-      { cmd: 'playChime()', note: 'Retro-Arpeggio — z. B. beim Wiedereinschalten des Tons.' },
-      { cmd: 'playPrint()', note: 'Der Tintenstrahl-Sample für dieses Ausdruck-Panel.' },
-      { cmd: 'playGlitch()', note: 'Digitaler Bitcrush-Stotterer für Sci-Fi-Momente.' },
+      { cmd: 'playClick()' },
+      { cmd: 'playOpen()' },
+      { cmd: 'playClose()' },
+      { cmd: 'playChime()' },
+      { cmd: 'playPrint()' },
+      { cmd: 'playGlitch()' },
     ],
     stars: 8700,
-    tags: ['WebAudio API', 'Synthesizer', 'DSP'],
     link: 'https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API',
   },
   {
     title: 'Three.js & WebGL',
-    badge: '3D Graphics',
-    description: 'Hardware-beschleunigte 3D-Partikel- und Shader-Szenen im Browser.',
-    details:
-      'Die Standardbibliothek für 3D im Browser — Szenen, Kameras, Licht und GLSL-Shader über WebGL. Treibt die Partikel- und Shader-Experimente an, die als Nächstes im Bereich "Im Aufbau" live gehen.',
-    commands: [
-      { cmd: 'npm install three', note: 'Installiert die Bibliothek als Projekt-Abhängigkeit.' },
-    ],
+    commands: [{ cmd: 'npm install three' }],
     stars: 98000,
-    tags: ['Three.js', 'WebGL', 'GLSL Shaders'],
     link: 'https://github.com/mrdoob/three.js',
   },
   {
     title: 'Supabase Backend',
-    badge: 'Open Source Firebase',
-    description: 'PostgreSQL-basierte Echtzeit-Datenbank und Authentifizierungsmotor.',
-    details:
-      'Open-Source-Alternative zu Firebase auf PostgreSQL-Basis — Datenbank, Auth, Realtime-Subscriptions und Storage über eine einzige API.',
-    commands: [
-      { cmd: 'npm install @supabase/supabase-js', note: 'Installiert den Client als Projekt-Abhängigkeit.' },
-    ],
+    commands: [{ cmd: 'npm install @supabase/supabase-js' }],
     stars: 68000,
-    tags: ['PostgreSQL', 'Realtime', 'Auth'],
     link: 'https://github.com/supabase/supabase',
   },
   {
     title: 'Awesome MCP Servers',
-    badge: 'MCP-Server-Verzeichnis',
-    description: 'Kuratierte Liste von Model-Context-Protocol-Servern für KI-Assistenten.',
-    details:
-      'Community-gepflegte GitHub-Liste: hunderte MCP-Server (Model Context Protocol) nach Kategorie sortiert — Dateisystem, Datenbanken, Browser-Automatisierung, Sicherheit, Finanzen und mehr. MCP ist das offene Protokoll, mit dem Clients wie Claude Desktop oder Claude Code diese Server ansprechen, um sicher auf Dateien, Datenbanken oder APIs zuzugreifen. Jeder Eintrag verlinkt zur eigenen Installationsanleitung.',
     commands: [
-      { cmd: 'npx -y @modelcontextprotocol/server-filesystem ~/Projekte', note: 'Beispiel: Filesystem-Server aus der Liste lokal starten.' },
-      { cmd: 'claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem ~/Projekte', note: 'Server in Claude Code registrieren — steht danach sofort als Tool bereit.' },
+      { cmd: 'npx -y @modelcontextprotocol/server-filesystem ~/Projekte' },
+      { cmd: 'claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem ~/Projekte' },
     ],
     stars: 65000,
-    tags: ['MCP', 'AI Tools', 'Awesome List'],
     link: 'https://github.com/punkpeye/awesome-mcp-servers',
   },
 ];
@@ -126,7 +87,7 @@ const ReposPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
       {/* Background Hover Flash */}
       <motion.div
         aria-hidden
-        className="absolute inset-0 pointer-events-none bg-[#FF5A1F]"
+        className="absolute inset-0 pointer-events-none bg-brand"
         animate={{ opacity: active ? 0.85 : 0 }}
         transition={{ duration: 0.15 }}
       />
@@ -141,10 +102,12 @@ const ReposPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
         onPointerLeave={() => setActive(false)}
       >
         <div className="absolute inset-0 flex items-center justify-center">
-          {/* Feste Obergrenze statt reiner 74%-Hoehe: der Rahmen wird je
-              nach Seiteninhalt (Kartenzahl) unterschiedlich hoch, das Foto
-              soll dabei aber immer gleich gross bleiben, nicht mitwachsen. */}
-          <div className="relative max-w-full" style={{ aspectRatio: '1 / 1', width: 'auto', height: 'min(74%, 25rem)' }}>
+          {/* Breite statt Hoehe begrenzt: der Rahmen wird je nach
+              Seiteninhalt (Kartenzahl) unterschiedlich hoch, aber die
+              Rahmenbreite bleibt konstant - darauf die Obergrenze zu
+              setzen (statt auf die schwankende Hoehe) haelt das Foto
+              gleich gross, ohne das Seitenverhaeltnis zu verzerren. */}
+          <div className="relative max-w-full" style={{ aspectRatio: '1 / 1', width: 'min(74%, 25rem)', height: 'auto' }}>
             <img
               src="/images/projects-portrait-color.webp"
               alt="Inspiration Space"
@@ -163,7 +126,7 @@ const ReposPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
               <div
                 className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%]"
                 style={{
-                  background: 'conic-gradient(from 0deg, transparent 70%, rgba(255,90,31,0.5) 95%, #FF5A1F 100%)',
+                  background: 'conic-gradient(from 0deg, transparent 70%, color-mix(in srgb, var(--color-brand) 50%, transparent) 95%, var(--color-brand) 100%)',
                   animation: 'sequence-spin-9 20s linear infinite',
                 }}
               />
@@ -203,7 +166,7 @@ const ReposPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
                 )}
                 <stop offset="0%" stopColor={s.color} />
                 <stop offset="42%" stopColor={s.color} />
-                <stop offset="50%" stopColor="#FF5A1F" />
+                <stop offset="50%" stopColor="var(--color-brand)" />
                 <stop offset="58%" stopColor={s.color} />
                 <stop offset="100%" stopColor={s.color} />
               </linearGradient>
@@ -224,6 +187,7 @@ const ReposPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
    dunkle Fuellung mehr - die war auf dem Papierhintergrund kaum
    lesbar. Statt eines Text-Labels ein Icon-Chip zum Kopieren. */
 const CodeSnippet: React.FC<{ cmd: string; note: string; kind?: 'shell' | 'prompt' }> = ({ cmd, note, kind }) => {
+  const { t } = useLanguage();
   const [copied, setCopied] = useState(false);
 
   return (
@@ -250,18 +214,18 @@ const CodeSnippet: React.FC<{ cmd: string; note: string; kind?: 'shell' | 'promp
       <span
         className={cn(
           'shrink-0 flex h-7 w-7 items-center justify-center rounded-full transition-colors',
-          copied ? 'bg-[#FF5A1F]' : 'bg-black group-hover:bg-[#FF5A1F]',
+          copied ? 'bg-brand text-black' : 'bg-black text-white group-hover:bg-brand group-hover:text-black',
         )}
-        aria-label={copied ? 'Kopiert' : 'Kopieren'}
+        aria-label={copied ? t.repos.copied : t.repos.copy}
       >
         {copied ? (
           <svg viewBox="0 0 20 20" fill="none" className="h-3.5 w-3.5">
-            <path d="M4 10.5L8 14.5L16 5.5" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+            <path d="M4 10.5L8 14.5L16 5.5" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
           </svg>
         ) : (
           <svg viewBox="0 0 20 20" fill="none" className="h-3.5 w-3.5">
-            <rect x="7" y="7" width="10" height="10" rx="1.5" stroke="white" strokeWidth={1.6} />
-            <path d="M13 7V4.5A1.5 1.5 0 0 0 11.5 3H4.5A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13H7" stroke="white" strokeWidth={1.6} strokeLinecap="round" />
+            <rect x="7" y="7" width="10" height="10" rx="1.5" stroke="currentColor" strokeWidth={1.6} />
+            <path d="M13 7V4.5A1.5 1.5 0 0 0 11.5 3H4.5A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13H7" stroke="currentColor" strokeWidth={1.6} strokeLinecap="round" />
           </svg>
         )}
       </span>
@@ -275,6 +239,7 @@ const CodeSnippet: React.FC<{ cmd: string; note: string; kind?: 'shell' | 'promp
    das Detail wie ein frisch ausgedrucktes Blatt ueber dem Foto
    links - Rasterhoehe bleibt konstant, das Portrait auch. */
 const RepoPrintPanel: React.FC<{ item: RepoItem | null; onClose: () => void; onHeightChange: (h: number) => void }> = ({ item, onClose, onHeightChange }) => {
+  const { t } = useLanguage();
   const paperRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -358,15 +323,15 @@ const RepoPrintPanel: React.FC<{ item: RepoItem | null; onClose: () => void; onH
 
               <div className="mt-6 pt-4 border-t border-black/10 flex items-center justify-between gap-4">
                 <span className="font-mono-ui text-[10px] text-black/40 uppercase">
-                  {item.link.includes('github.com') ? 'GitHub Repository' : 'Externer Link'}
+                  {item.link.includes('github.com') ? t.repos.githubRepo : t.repos.externalLink}
                 </span>
                 <a
                   href={item.link}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 px-4 py-2 text-[11px] font-bold font-mono-ui text-white bg-black hover:bg-[#FF5A1F] rounded transition-colors duration-200"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 text-[11px] font-bold font-mono-ui text-white bg-black hover:bg-brand hover:text-black rounded transition-colors duration-200"
                 >
-                  ÖFFNEN ↗
+                  {t.repos.openBtn}
                 </a>
               </div>
             </div>
@@ -380,7 +345,7 @@ const RepoPrintPanel: React.FC<{ item: RepoItem | null; onClose: () => void; onH
         <button
           type="button"
           onClick={onClose}
-          aria-label="Schliessen"
+          aria-label={t.repos.close}
           className="absolute top-5 right-5 z-10 flex h-7 w-7 items-center justify-center rounded-full border border-black/20 text-black hover:bg-black hover:text-white transition-colors cursor-pointer pointer-events-auto"
         >
           ✕
@@ -393,6 +358,20 @@ const RepoPrintPanel: React.FC<{ item: RepoItem | null; onClose: () => void; onH
 
 /* ─── Main Repos Section ───────────────────────────────────── */
 export const ReposSection: React.FC = () => {
+  const { t } = useLanguage();
+  const repos: RepoItem[] = reposMeta.map((meta, i) => {
+    const text = t.repos.items[i];
+    return {
+      title: meta.title,
+      badge: text.badge,
+      description: text.description,
+      details: text.details,
+      commands: meta.commands?.map((c, ci) => ({ ...c, note: text.commandNotes[ci] })),
+      stars: meta.stars,
+      tags: text.tags,
+      link: meta.link,
+    };
+  });
   const [sectionOpen, setSectionOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
   const [panelHeight, setPanelHeight] = useState(0);
@@ -434,9 +413,9 @@ export const ReposSection: React.FC = () => {
           <div className="min-[1000px]:col-span-6 pointer-events-auto">
             <SectionHead
               index="04"
-              eyebrow="Inspirationsquellen"
-              line1="Favoriten &"
-              line2="Inspiration."
+              eyebrow={t.repos.eyebrow}
+              line1={t.repos.line1}
+              line2={t.repos.line2}
               headClass="fluid-display-xs"
               className="mb-8 max-w-4xl"
               gradientLine2={true}
@@ -453,8 +432,7 @@ export const ReposSection: React.FC = () => {
                 className="space-y-4"
               >
                 <p className="card-body">
-                  Eine Auswahl an Open-Source-Tools und Repositories, die meine tägliche Arbeit inspirieren.
-                  Fahren Sie mit der Maus über die Karten, um die interaktiven Effekte zu entdecken.
+                  {t.repos.intro}
                 </p>
 
                 {/* Mobile Split Screen Image */}

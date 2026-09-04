@@ -1,6 +1,7 @@
 import React, { useRef } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { playOpen, playClose } from '../lib/sound';
+import { useLanguage } from '../lib/LanguageContext';
 
 /**
  * Kleinteile, die mehrere Abschnitte teilen. Sie liegen zusammen,
@@ -28,6 +29,7 @@ interface SectionHeadProps {
 }
 
 export const SectionHead: React.FC<SectionHeadProps> = (props) => {
+  const { t } = useLanguage();
   const {
     index,
     eyebrow,
@@ -54,7 +56,7 @@ export const SectionHead: React.FC<SectionHeadProps> = (props) => {
   const fillClip = useTransform(scrollYProgress, [0, 1], ['inset(100% 0 0 0)', 'inset(0% 0 0 0)']);
 
   // Use a sleek monochrome dark color for the band across all sections
-  const bgAccentColor = closed ? '#FF5A1F' : '#0A0A0A';
+  const bgAccentColor = closed ? 'var(--color-brand)' : '#0A0A0A';
 
   const isLeftSide = index === '01' || index === '03' || index === '05' || index === '07';
 
@@ -68,7 +70,7 @@ export const SectionHead: React.FC<SectionHeadProps> = (props) => {
             onToggleOpen?.();
           }}
           aria-expanded={open}
-          aria-label={open ? `${eyebrow} einklappen` : `${eyebrow} ausklappen`}
+          aria-label={open ? `${eyebrow} ${t.common.collapse}` : `${eyebrow} ${t.common.expand}`}
           className="relative z-10 flex w-9 shrink-0 items-center justify-center rounded-sm border border-white/15 bg-[#0A0A0A] text-white/70 transition-colors hover:border-white/40 hover:text-white sm:w-11"
         >
           <span className="relative block h-3.5 w-3.5 sm:h-4 sm:w-4">
@@ -176,13 +178,16 @@ export const SectionHead: React.FC<SectionHeadProps> = (props) => {
               }}
               className="relative block"
             >
-              <span className="block text-white/30">{line2}</span>
+              <span className={`block ${closed ? 'text-black/30' : 'text-white/30'}`}>{line2}</span>
               {/* Deckungsgleich darueber: die volle Schrift, von unten
-                  nach oben freigegeben. */}
+                  nach oben freigegeben. Geschlossen sitzt der Kopf auf
+                  Volltonfarbe (Orange/Amber) - da braucht line2 dieselbe
+                  feste Schwarz-Regel wie line1, sonst verschwindet der
+                  helle Gradient/Weiss-Text auf hellen Themes wie Amber. */}
               <motion.span
                 aria-hidden
                 style={{ clipPath: fillClip }}
-                className={`absolute inset-0 block ${gradientLine2 ? 'grad-text' : 'text-white'}`}
+                className={`absolute inset-0 block ${closed ? 'text-black' : gradientLine2 ? 'grad-text' : 'text-white'}`}
               >
                 {line2}
               </motion.span>
@@ -204,7 +209,7 @@ export const SocialLinks: React.FC<{ className?: string }> = ({ className = '' }
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Instagram"
-      className="text-[#FF5A1F] transition-opacity hover:opacity-70"
+      className="text-brand transition-opacity hover:opacity-70"
     >
       <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
         <rect x="2" y="2" width="20" height="20" rx="5" />
@@ -217,7 +222,7 @@ export const SocialLinks: React.FC<{ className?: string }> = ({ className = '' }
       target="_blank"
       rel="noopener noreferrer"
       aria-label="WhatsApp"
-      className="text-[#FF5A1F] transition-opacity hover:opacity-70"
+      className="text-brand transition-opacity hover:opacity-70"
     >
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91c0 1.75.46 3.45 1.33 4.95L2.05 22l5.29-1.39a9.87 9.87 0 0 0 4.7 1.2h.01c5.46 0 9.91-4.45 9.91-9.9C21.96 6.45 17.51 2 12.04 2zm5.8 14.06c-.24.68-1.4 1.32-1.93 1.4-.5.08-1.11.11-1.79-.11-.41-.13-.94-.3-1.62-.6-2.85-1.23-4.71-4.1-4.85-4.29-.14-.19-1.16-1.54-1.16-2.94s.72-2.08.98-2.36c.24-.28.53-.35.71-.35h.5c.16 0 .38-.06.59.45.24.58.8 2.01.87 2.16.07.15.12.32.02.51-.09.19-.14.31-.28.48-.14.17-.29.37-.42.5-.14.14-.28.28-.12.56.16.28.71 1.18 1.53 1.91 1.05.94 1.94 1.23 2.22 1.37.28.14.44.12.6-.07.16-.19.68-.79.87-1.06.19-.28.37-.23.62-.14.26.1 1.63.77 1.91.91.28.14.47.21.54.33.07.13.07.72-.17 1.4z" />
@@ -228,7 +233,7 @@ export const SocialLinks: React.FC<{ className?: string }> = ({ className = '' }
       target="_blank"
       rel="noopener noreferrer"
       aria-label="GitHub"
-      className="text-[#FF5A1F] transition-opacity hover:opacity-70"
+      className="text-brand transition-opacity hover:opacity-70"
     >
       <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
         <path d="M12 2C6.48 2 2 6.58 2 12.19c0 4.49 2.87 8.3 6.84 9.64.5.1.68-.22.68-.49 0-.24-.01-.88-.01-1.72-2.78.62-3.37-1.36-3.37-1.36-.46-1.19-1.11-1.51-1.11-1.51-.91-.63.07-.62.07-.62 1 .07 1.53 1.05 1.53 1.05.89 1.56 2.34 1.11 2.91.85.09-.66.35-1.11.63-1.37-2.22-.26-4.56-1.14-4.56-5.06 0-1.12.39-2.03 1.03-2.75-.1-.26-.45-1.31.1-2.73 0 0 .84-.28 2.75 1.05a9.3 9.3 0 0 1 2.5-.35c.85 0 1.7.12 2.5.35 1.91-1.33 2.75-1.05 2.75-1.05.55 1.42.2 2.47.1 2.73.64.72 1.03 1.63 1.03 2.75 0 3.93-2.34 4.79-4.57 5.05.36.32.68.95.68 1.92 0 1.39-.01 2.51-.01 2.85 0 .27.18.6.69.49A10.02 10.02 0 0 0 22 12.19C22 6.58 17.52 2 12 2z" />
@@ -258,7 +263,7 @@ export const ScrollProgress: React.FC = () => {
   return (
     <div aria-hidden className="fixed left-0 right-0 top-0 z-[60] h-[3px] bg-transparent">
       <div
-        className="h-full bg-gradient-to-r from-[#FF5A1F] to-[#C23E10]"
+        className="h-full bg-gradient-to-r from-brand to-brand-hover"
         style={{ transform: `scaleX(${progress})`, transformOrigin: 'left' }}
       />
     </div>

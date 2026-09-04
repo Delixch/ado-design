@@ -71,7 +71,7 @@ export const SecretTerminal: React.FC = () => {
           animate={{ y: 0 }}
           exit={{ y: '100%' }}
           transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
-          className="fixed inset-x-0 bottom-0 z-[9998] max-h-[60vh] border-t-2 border-[#FF5A1F] bg-black/95 backdrop-blur-sm"
+          className="fixed inset-x-0 bottom-0 z-[9998] max-h-[60vh] border-t-2 border-brand bg-black/95 backdrop-blur-sm"
         >
           <div className="flex items-center justify-between border-b border-white/10 px-4 py-2">
             <span className="font-mono-ui text-[10px] uppercase tracking-[0.2em] text-white/50">
@@ -85,13 +85,13 @@ export const SecretTerminal: React.FC = () => {
               [~] oder [Esc] schliessen
             </button>
           </div>
-          <div className="max-h-[50vh] overflow-y-auto px-4 py-4 font-mono text-[12px] leading-relaxed text-[#FF5A1F]">
+          <div className="max-h-[50vh] overflow-y-auto px-4 py-4 font-mono text-[12px] leading-relaxed text-brand">
             {lines.map((line, i) => (
               <div key={i} className={line.startsWith('$') ? 'text-white/70' : ''}>
                 {line}
               </div>
             ))}
-            <span className="cursor-blink inline-block h-3 w-1.5 bg-[#FF5A1F] align-middle" />
+            <span className="cursor-blink inline-block h-3 w-1.5 bg-brand align-middle" />
           </div>
         </motion.div>
       )}

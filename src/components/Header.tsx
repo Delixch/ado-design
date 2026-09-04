@@ -3,6 +3,8 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { navItems, scrollToSection, openAllSections } from '../lib/nav';
 import { SocialLinks } from './ui';
 import { isSoundMuted, toggleSound, playChime, playOpen, playClose, playClick, SOUND_MUTE_EVENT } from '../lib/sound';
+import { useLanguage } from '../lib/LanguageContext';
+import { useTheme } from '../lib/ThemeContext';
 
 /**
  * Ein einziges Menue fuer alle Breiten. Statt einer waagrechten
@@ -23,6 +25,8 @@ const clock = () =>
   }).format(new Date());
 
 export const Header: React.FC = () => {
+  const { language, setLanguage, t } = useLanguage();
+  const { theme, setTheme, accentHex } = useTheme();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState('');
@@ -120,7 +124,7 @@ export const Header: React.FC = () => {
               <span className="h-1.5 w-1.5 rounded-full bg-punch transition-transform duration-500 group-hover:scale-[2.4]" />
             </span>
             <span className="font-robot text-[12px] tracking-[0.14em] text-ground">
-              ADO DESIGN<span className="cursor-blink text-[#FF5A1F]">█</span>
+              ADO DESIGN<span className="cursor-blink text-brand">█</span>
             </span>
           </button>
 
@@ -132,13 +136,13 @@ export const Header: React.FC = () => {
                 <li key={item.id}>
                   <button
                     onClick={() => go(item.id)}
-                    aria-label={item.name}
+                    aria-label={t.nav[item.id as keyof typeof t.nav]}
                     className="group flex h-6 items-center"
                   >
                     <motion.span
                       animate={{
                         width: on ? 30 : 12,
-                        backgroundColor: on ? '#FF5A1F' : 'rgba(250,250,250,0.3)',
+                        backgroundColor: on ? accentHex : 'rgba(250,250,250,0.3)',
                       }}
                       transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
                       className="block h-[3px] rounded-full group-hover:opacity-70"
@@ -157,7 +161,7 @@ export const Header: React.FC = () => {
               type="button"
               onClick={toggleSound}
               aria-pressed={!soundMuted}
-              aria-label={soundMuted ? 'Ton einschalten' : 'Ton ausschalten'}
+              aria-label={soundMuted ? t.header.soundOn : t.header.soundOff}
               className="flex h-6 w-6 shrink-0 items-end justify-center gap-[2px] rounded-full border-2 border-ground/40 transition-colors hover:border-ground"
             >
               {[3, 6, 4].map((h, i) => (
@@ -166,10 +170,35 @@ export const Header: React.FC = () => {
                   className="w-[2.5px] rounded-full transition-all duration-300"
                   style={{
                     height: soundMuted ? 2 : h,
-                    backgroundColor: soundMuted ? 'rgba(250,250,250,0.3)' : '#FF5A1F',
+                    backgroundColor: soundMuted ? 'rgba(250,250,250,0.3)' : 'var(--color-brand)',
                   }}
                 />
               ))}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                playClick();
+                setLanguage(language === 'de' ? 'tr' : 'de');
+              }}
+              aria-label={language === 'de' ? 'Switch to Turkish' : 'Almancaya geç'}
+              className="flex h-6 items-center justify-center rounded-full border-2 border-ground/40 px-2 font-mono-ui text-[9px] uppercase tracking-[0.14em] text-ground/70 transition-colors hover:border-ground hover:text-ground"
+            >
+              {language === 'de' ? 'TR' : 'DE'}
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                playClick();
+                setTheme(theme === 'orange' ? 'amber' : 'orange');
+              }}
+              aria-label={theme === 'orange' ? 'Switch to amber theme' : 'Turuncu temaya geç'}
+              className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-ground/40 transition-colors hover:border-ground"
+            >
+              <span
+                className="h-2.5 w-2.5 rounded-full"
+                style={{ backgroundColor: theme === 'orange' ? '#FFD60A' : '#FF5A1F' }}
+              />
             </button>
             <button
               onClick={() => {
@@ -181,11 +210,11 @@ export const Header: React.FC = () => {
                 setOpen((v) => !v);
               }}
               aria-expanded={open}
-              aria-label={open ? 'Menü schliessen' : 'Menü öffnen'}
+              aria-label={open ? t.header.menuClose : t.header.menuOpen}
               className="group flex items-center gap-2.5 rounded-full border-2 border-ground px-4 py-1.5 text-ground transition-colors hover:bg-ground hover:text-ink"
             >
               <span className="font-robot text-[10px] tracking-[0.22em]">
-                {open ? 'ZU' : 'MENÜ'}
+                {open ? (language === 'tr' ? 'KAPAT' : 'ZU') : 'MENÜ'}
               </span>
               <span className="relative flex h-4 w-4 items-center justify-center">
                 <motion.span
@@ -254,7 +283,7 @@ export const Header: React.FC = () => {
                         0{i + 1}
                       </span>
                       <span className="font-robot fluid-display fluid-display-xs uppercase transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-3">
-                        {item.name}
+                        {t.nav[item.id as keyof typeof t.nav]}
                       </span>
                       <span
                         className="ml-auto h-2.5 w-2.5 shrink-0 scale-0 rounded-full transition-transform duration-300 group-hover:scale-100"
@@ -285,7 +314,7 @@ export const Header: React.FC = () => {
                       ✦
                     </span>
                     <span className="font-robot fluid-display fluid-display-xs uppercase transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-3">
-                      Alle öffnen
+                      {t.header.allOpen}
                     </span>
                     <span
                       className="ml-auto h-2.5 w-2.5 shrink-0 scale-0 rounded-full transition-transform duration-300 group-hover:scale-100"

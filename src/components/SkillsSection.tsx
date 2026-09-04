@@ -8,6 +8,8 @@ import { OPEN_TERMINAL_EVENT } from './SecretTerminal';
 import { useGyroTilt } from '../hooks/useGyroTilt';
 import { useEnterSound, playFissh, playClick } from '../lib/sound';
 import { useReducedMotion } from '../lib/motion';
+import { useLanguage } from '../lib/LanguageContext';
+import { useTheme } from '../lib/ThemeContext';
 
 /* ─── Type definitions & Data ───────────────────────────── */
 interface SkillBlock {
@@ -20,47 +22,13 @@ interface SkillBlock {
   accent: string;
 }
 
-const blocks: SkillBlock[] = [
-  {
-    title: 'Echtzeit-3D & Motion',
-    badge: 'Kernstärke',
-    stat: 'Ein Canvas, volle Szene',
-    items: ['Three.js', 'WebGL', 'GLSL', 'GSAP', 'ScrollTrigger'],
-    description:
-      'Partikelszenen, Shader und scroll-getriebene Kamerafahrten — gebaut für flüssige 60 Bilder pro Sekunde, auch auf dem Handy.',
-    span: 'min-[1000px]:col-span-7',
-    accent: '#FF5A1F',
-  },
-  {
-    title: 'Frontend-Handwerk',
-    badge: 'Oberfläche',
-    stat: 'Mobil zuerst',
-    items: ['TypeScript', 'React', 'Material UI', 'SCSS', 'Vite'],
-    description:
-      'Sauber getrennte Bausteine, klare Typografie, bedienbar mit Tastatur und Screenreader — nicht nur hübsch, sondern benutzbar.',
-    span: 'min-[1000px]:col-span-5',
-    accent: '#00738C',
-  },
-  {
-    title: 'Daten & Betrieb',
-    badge: 'Fundament',
-    stat: 'Vom Formular bis zur Mail',
-    items: ['Supabase', 'PostgreSQL', 'MySQL / phpMyAdmin', 'PHP'],
-    description:
-      'Tabellen, Beziehungen und Abfragen von Hand geschrieben. Deployment auf Vercel und Cloudflare Pages, inklusive Formularen und E-Mail-Versand.',
-    span: 'min-[1000px]:col-span-5',
-    accent: '#5E35B1',
-  },
-  {
-    title: 'Künstliche Intelligenz im Alltag',
-    badge: 'Werkstatt',
-    stat: 'Täglich im Einsatz',
-    items: ['Prompt Engineering', 'Bild- & Videogenerierung', 'Serverbefehle', 'Automatisierung'],
-    description:
-      'Ich nutze KI dort, wo sie Zeit spart — und dokumentiere jeden Schritt auf ADNAN 3D, damit andere ihn nachvollziehen können.',
-    span: 'min-[1000px]:col-span-7',
-    accent: '#C2185B',
-  },
+// Sprachneutrale Werte (Tech-Namen, Layout, Farbe) - Titel/Badge/Stat/
+// Beschreibung kommen aus t.skills.blocks (gleiche Reihenfolge).
+const blockMeta = [
+  { items: ['Three.js', 'WebGL', 'GLSL', 'GSAP', 'ScrollTrigger'], span: 'min-[1000px]:col-span-7', accent: '#FF5A1F' },
+  { items: ['TypeScript', 'React', 'Material UI', 'SCSS', 'Vite'], span: 'min-[1000px]:col-span-5', accent: '#00738C' },
+  { items: ['Supabase', 'PostgreSQL', 'MySQL / phpMyAdmin', 'PHP'], span: 'min-[1000px]:col-span-5', accent: '#5E35B1' },
+  { items: ['Prompt Engineering', 'Bild- & Videogenerierung', 'Serverbefehle', 'Automatisierung'], span: 'min-[1000px]:col-span-7', accent: '#C2185B' },
 ];
 
 const cardVariants: Variants = {
@@ -77,7 +45,7 @@ const cardVariants: Variants = {
 const FloatingParticles: React.FC = () => {
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-700">
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-[#FF5A1F]/20 filter blur-3xl animate-pulse" style={{ animationDuration: '4s' }} />
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-48 h-48 rounded-full bg-brand/20 filter blur-3xl animate-pulse" style={{ animationDuration: '4s' }} />
       {[
         { x: [10, 50, -20, 10], y: [20, -50, 40, 20], delay: 0 },
         { x: [-30, 40, -10, -30], y: [-20, 60, -30, -20], delay: 0.8 },
@@ -88,7 +56,7 @@ const FloatingParticles: React.FC = () => {
       ].map((p, idx) => (
         <motion.div
           key={idx}
-          className="absolute w-1.5 h-1.5 rounded-full bg-[#FF5A1F]/40"
+          className="absolute w-1.5 h-1.5 rounded-full bg-brand/40"
           style={{
             left: `${15 * (idx + 1)}%`,
             top: `${14 * (idx + 1)}%`,
@@ -175,6 +143,9 @@ const AICommandPrompt: React.FC = () => {
 };
 
 const SkillCard: React.FC<{ block: SkillBlock; i: number }> = ({ block, i }) => {
+  const { t } = useLanguage();
+  const { accentHex } = useTheme();
+  const terminal = t.skills.terminal;
   const mx = useMotionValue(0);
   const my = useMotionValue(0);
   const rx = useSpring(useTransform(mx, [-0.5, 0.5], [18, -18]), { stiffness: 200, damping: 20 });
@@ -270,7 +241,7 @@ const SkillCard: React.FC<{ block: SkillBlock; i: number }> = ({ block, i }) => 
               <motion.span
                 key={item}
                 className="card-tag cursor-pointer"
-                whileHover={{ scale: 1.05, borderColor: '#FF5A1F', color: '#FF5A1F' }}
+                whileHover={{ scale: 1.05, borderColor: accentHex, color: accentHex }}
               >
                 {item}
               </motion.span>
@@ -283,22 +254,22 @@ const SkillCard: React.FC<{ block: SkillBlock; i: number }> = ({ block, i }) => 
           (rotateY 180) — daher steht der Text hier schon "richtig". */}
       {i === 3 && (
         <div
-          className="absolute inset-0 rounded-[15px] z-10 overflow-hidden p-5 font-mono text-[10.5px] leading-relaxed text-[#FF5A1F]"
+          className="absolute inset-0 rounded-[15px] z-10 overflow-hidden p-5 font-mono text-[10.5px] leading-relaxed text-brand"
           style={{ backgroundColor: '#0F0F0F', backfaceVisibility: 'hidden', transform: 'rotateY(180deg)' }}
         >
-          <div className="text-white/50">$ whoami</div>
-          <div className="mb-2">Adnan Aydin</div>
-          <div className="text-white/50">$ echo "gefunden?"</div>
-          <div className="mb-2">gefunden das versteckte terminal 👀</div>
-          <div className="text-white/50">$ open --full</div>
+          <div className="text-white/50">{terminal.whoami}</div>
+          <div className="mb-2">{terminal.name}</div>
+          <div className="text-white/50">{terminal.echo}</div>
+          <div className="mb-2">{terminal.found}</div>
+          <div className="text-white/50">{terminal.openFull}</div>
           <button
             type="button"
             onClick={() => window.dispatchEvent(new CustomEvent(OPEN_TERMINAL_EVENT))}
             className="pointer-events-auto underline decoration-dotted underline-offset-2 hover:text-white"
           >
-            klick für mehr
+            {terminal.clickMore}
           </button>
-          <span className="cursor-blink mt-2 inline-block h-3 w-1.5 align-middle" style={{ backgroundColor: '#FF5A1F' }} />
+          <span className="cursor-blink mt-2 inline-block h-3 w-1.5 align-middle" style={{ backgroundColor: 'var(--color-brand)' }} />
         </div>
       )}
       </div>
@@ -403,7 +374,7 @@ const SkillsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant }
             `object-cover` nichts abschneidet. Die Lampe ist bereits im
             Foto warm beleuchtet — kein CSS-Lichtfleck mehr noetig. */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative max-w-full" style={{ aspectRatio: '1535 / 1024', width: 'auto', height: variant === 'desktop' ? '68%' : '92%' }}>
+          <div className="relative max-w-full" style={{ aspectRatio: '1535 / 1024', width: variant === 'desktop' ? 'min(74%, 25rem)' : 'auto', height: variant === 'desktop' ? 'auto' : '92%' }}>
             <div className="absolute inset-0" style={{ transform: 'scale(1.1)' }}>
               <motion.img
                 src="/images/skills-team-color.webp"
@@ -431,7 +402,7 @@ const SkillsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant }
               <div
                 className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%]"
                 style={{
-                  background: 'conic-gradient(from 0deg, transparent 70%, rgba(255,90,31,0.5) 95%, #FF5A1F 100%)',
+                  background: 'conic-gradient(from 0deg, transparent 70%, color-mix(in srgb, var(--color-brand) 50%, transparent) 95%, var(--color-brand) 100%)',
                   animation: 'sequence-spin 8s linear infinite',
                 }}
               />
@@ -480,7 +451,7 @@ const SkillsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant }
                 )}
                 <stop offset="0%" stopColor={s.color} />
                 <stop offset="42%" stopColor={s.color} />
-                <stop offset="50%" stopColor="#FF5A1F" />
+                <stop offset="50%" stopColor="var(--color-brand)" />
                 <stop offset="58%" stopColor={s.color} />
                 <stop offset="100%" stopColor={s.color} />
               </linearGradient>
@@ -498,6 +469,8 @@ const SkillsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant }
 
 /* ─── Main Skills Section ───────────────────────────────── */
 export const SkillsSection: React.FC = () => {
+  const { t } = useLanguage();
+  const blocks: SkillBlock[] = t.skills.blocks.map((b, i) => ({ ...b, ...blockMeta[i] }));
   const [sectionOpen, setSectionOpen] = useState(false);
   useEffect(() => {
     const onOpen = (e: Event) => {
@@ -551,9 +524,9 @@ export const SkillsSection: React.FC = () => {
           <div className="min-[1000px]:col-span-6 pointer-events-auto">
             <SectionHead
               index="03"
-              eyebrow="Werkzeuge"
-              line1="Werkzeuge, die ich"
-              line2="wirklich beherrsche."
+              eyebrow={t.skills.eyebrow}
+              line1={t.skills.line1}
+              line2={t.skills.line2}
               headClass="fluid-display-xs"
               className="mb-8 max-w-4xl"
               gradientLine2={true}

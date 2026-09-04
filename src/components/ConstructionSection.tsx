@@ -3,9 +3,11 @@ import { motion } from 'framer-motion';
 import { SectionHead } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { useReducedMotion } from '../lib/motion';
+import { useLanguage } from '../lib/LanguageContext';
 
 /* ─── Right Split Screen Portrait (Cloned 1:1 from AboutSection) ── */
 const ConstructionPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant }) => {
+  const { t } = useLanguage();
   const reducedMotion = useReducedMotion();
   const [active, setActive] = useState(false);
 
@@ -21,7 +23,7 @@ const ConstructionPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ var
       {/* Background Hover Flash */}
       <motion.div
         aria-hidden
-        className="absolute inset-0 pointer-events-none bg-[#FF5A1F]"
+        className="absolute inset-0 pointer-events-none bg-brand"
         animate={{ opacity: active ? 0.85 : 0 }}
         transition={{ duration: 0.15 }}
       />
@@ -36,7 +38,7 @@ const ConstructionPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ var
         onPointerLeave={() => setActive(false)}
       >
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative max-w-full" style={{ aspectRatio: '1537 / 1023', width: 'auto', height: '58%' }}>
+          <div className="relative max-w-full" style={{ aspectRatio: '1537 / 1023', width: variant === 'desktop' ? 'min(74%, 25rem)' : 'auto', height: variant === 'desktop' ? 'auto' : '58%' }}>
             <img
               src="/images/contact-bg-color.webp"
               alt="Im Aufbau Space"
@@ -45,9 +47,9 @@ const ConstructionPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ var
             />
             {/* Holographic Glowing Badge */}
             <div className="absolute inset-0 flex items-center justify-center bg-black/40 backdrop-blur-xs">
-              <div className="border-2 border-[#FF5A1F] bg-black/80 px-6 py-3 rounded-lg shadow-[0_0_25px_rgba(255,90,31,0.5)] text-center">
-                <span className="font-mono-ui text-[11px] font-bold uppercase tracking-[0.2em] text-[#FF5A1F]">
-                  🚧 IM AUFBAU 🚧
+              <div className="border-2 border-brand bg-black/80 px-6 py-3 rounded-lg shadow-[0_0_25px_color-mix(in_srgb,var(--color-brand)_50%,transparent)] text-center">
+                <span className="font-mono-ui text-[11px] font-bold uppercase tracking-[0.2em] text-brand">
+                  {t.construction.imageBadge}
                 </span>
               </div>
             </div>
@@ -86,7 +88,7 @@ const ConstructionPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ var
                 )}
                 <stop offset="0%" stopColor={s.color} />
                 <stop offset="42%" stopColor={s.color} />
-                <stop offset="50%" stopColor="#FF5A1F" />
+                <stop offset="50%" stopColor="var(--color-brand)" />
                 <stop offset="58%" stopColor={s.color} />
                 <stop offset="100%" stopColor={s.color} />
               </linearGradient>
@@ -104,6 +106,7 @@ const ConstructionPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ var
 
 /* ─── Main Construction Section ───────────────────────────── */
 export const ConstructionSection: React.FC = () => {
+  const { t } = useLanguage();
   const [sectionOpen, setSectionOpen] = useState(false);
 
   useEffect(() => {
@@ -132,9 +135,9 @@ export const ConstructionSection: React.FC = () => {
           <div className="min-[1000px]:col-span-6 space-y-6 pointer-events-auto">
             <SectionHead
               index="05"
-              eyebrow="Im Aufbau"
-              line1="Projekte im"
-              line2="Aufbau."
+              eyebrow={t.construction.eyebrow}
+              line1={t.construction.line1}
+              line2={t.construction.line2}
               gradientLine2={true}
               headClass="fluid-display-xs"
               className="mb-8 max-w-3xl"
@@ -150,8 +153,7 @@ export const ConstructionSection: React.FC = () => {
                 className="space-y-6"
               >
                 <p className="card-body">
-                  Hier entstehen WebGL-3D-Experimente der nächsten Generation, autonome KI-Agenten-Integrationen
-                  und experimentelle Interfaces. Live-Demos folgen in Kürze.
+                  {t.construction.paragraph}
                 </p>
 
                 {/* Mobile Split Screen Image */}
@@ -163,18 +165,18 @@ export const ConstructionSection: React.FC = () => {
                 <div className="card-container space-y-4">
                   <div className="flex items-center gap-3">
                     <span className="flex h-3 w-3 relative">
-                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FF5A1F] opacity-75"></span>
-                      <span className="relative inline-flex rounded-full h-3 w-3 bg-[#FF5A1F]"></span>
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-3 w-3 bg-brand"></span>
                     </span>
                     <span className="card-badge">
-                      IN AKTIVER ENTWICKLUNG
+                      {t.construction.statusBadge}
                     </span>
                   </div>
                   <h3 className="card-title">
-                    3D WebGL & AI Agent Lab
+                    {t.construction.cardTitle}
                   </h3>
                   <p className="card-body">
-                    Interaktive 3D-Simulationen und KI-Agenten-Module, die künftige Web-Erlebnisse prägen werden, erscheinen hier demnächst.
+                    {t.construction.cardDescription}
                   </p>
                   <div className="pt-2 flex flex-wrap gap-2">
                     {['WebGL', 'Three.js', 'AI Agents', 'GLSL Shaders', 'NextGen UI'].map((tag) => (

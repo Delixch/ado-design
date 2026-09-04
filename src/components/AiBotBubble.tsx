@@ -144,9 +144,9 @@ export const AiBotBubble: React.FC = () => {
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: reducedMotion ? 0 : 0.3 }}
-        className="fixed bottom-24 right-6 z-30 flex h-12 w-12 items-center justify-center rounded-full border-2 border-[#FF5A1F] bg-[#0A0A0A] shadow-[0_0_20px_rgba(255,90,31,0.25)]"
+        className="fixed bottom-24 right-6 z-30 flex h-12 w-12 items-center justify-center rounded-full border-2 border-brand bg-[#0A0A0A] shadow-[0_0_20px_color-mix(in_srgb,var(--color-brand)_25%,transparent)]"
       >
-        <span className="font-mono-ui text-[13px] font-bold text-[#FF5A1F]">
+        <span className="font-mono-ui text-[13px] font-bold text-brand">
           {open ? '×' : 'AI'}
         </span>
       </motion.button>
@@ -158,10 +158,10 @@ export const AiBotBubble: React.FC = () => {
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 16, scale: 0.96 }}
             transition={{ duration: reducedMotion ? 0 : 0.3, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed bottom-[9.5rem] right-6 z-30 flex w-[min(320px,calc(100vw-3rem))] flex-col overflow-hidden rounded-2xl border border-[#FF5A1F]/40 bg-[#0A0A0A] shadow-2xl"
+            className="fixed bottom-[9.5rem] right-6 z-30 flex w-[min(320px,calc(100vw-3rem))] flex-col overflow-hidden rounded-2xl border border-brand/40 bg-[#0A0A0A] shadow-2xl"
           >
             <div className="flex items-center gap-2 border-b border-white/10 px-4 py-3">
-              <span className="h-2 w-2 rounded-full bg-[#FF5A1F]" />
+              <span className="h-2 w-2 rounded-full bg-brand" />
               <span className="font-mono-ui text-[10px] uppercase tracking-[0.2em] text-white/70">
                 Adnans Bot
               </span>
@@ -173,7 +173,7 @@ export const AiBotBubble: React.FC = () => {
                   key={i}
                   className={`font-sans-ui max-w-[85%] rounded-xl px-3 py-2 text-[11px] leading-relaxed ${
                     m.role === 'bot'
-                      ? 'self-start border border-[#FF5A1F]/30 bg-black text-white/90'
+                      ? 'self-start border border-brand/30 bg-black text-white/90'
                       : 'self-end bg-white/10 text-white'
                   }`}
                 >
@@ -203,7 +203,7 @@ export const AiBotBubble: React.FC = () => {
                 type="button"
                 onClick={send}
                 aria-label="Senden"
-                className="font-mono-ui rounded-lg border border-[#FF5A1F]/50 px-3 py-2 text-[10px] uppercase tracking-[0.1em] text-[#FF5A1F] transition-colors hover:bg-[#FF5A1F]/10"
+                className="font-mono-ui rounded-lg border border-brand/50 px-3 py-2 text-[10px] uppercase tracking-[0.1em] text-brand transition-colors hover:bg-brand/10"
               >
                 Los
               </button>

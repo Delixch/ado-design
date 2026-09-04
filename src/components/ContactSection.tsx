@@ -5,6 +5,7 @@ import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { useGyroTilt } from '../hooks/useGyroTilt';
 import { useEnterSound } from '../lib/sound';
 import { useReducedMotion } from '../lib/motion';
+import { useLanguage } from '../lib/LanguageContext';
 
 
 
@@ -47,7 +48,7 @@ const ContactPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant 
       >
         <motion.div
           className="absolute inset-0 w-full h-full"
-          style={{ filter: 'drop-shadow(0 0 15px rgba(255,90,31,0.4))' }}
+          style={{ filter: 'drop-shadow(0 0 15px color-mix(in srgb, var(--color-brand) 40%, transparent))' }}
           variants={{
             initial: { x: 0, y: 0, scale: 1, rotateZ: 0, rotateY: 0, opacity: 1, clipPath: 'polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%)' },
             hover: {
@@ -135,7 +136,7 @@ const ContactPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant 
                 )}
                 <stop offset="0%" stopColor={s.color} />
                 <stop offset="42%" stopColor={s.color} />
-                <stop offset="50%" stopColor="#FF5A1F" />
+                <stop offset="50%" stopColor="var(--color-brand)" />
                 <stop offset="58%" stopColor={s.color} />
                 <stop offset="100%" stopColor={s.color} />
               </linearGradient>
@@ -152,6 +153,7 @@ const ContactPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant 
 };
 
 export const ContactSection: React.FC = () => {
+  const { t } = useLanguage();
   const [form, setForm] = useState({ name: '', email: '', message: '' });
   const [sent, setSent] = useState(false);
   const [sectionOpen, setSectionOpen] = useState(false);
@@ -173,7 +175,7 @@ export const ContactSection: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = `Anfrage von ${form.name}`;
+    const subject = `${t.contact.mailSubjectPrefix} ${form.name}`;
     const body = `${form.message}\n\n--\n${form.name}\n${form.email}`;
     window.location.href = `mailto:adnan.aydin@bluewin.ch?subject=${encodeURIComponent(
       subject,
@@ -207,9 +209,9 @@ export const ContactSection: React.FC = () => {
           <div className="flex flex-col gap-5 min-[1000px]:col-span-6 pointer-events-auto">
             <SectionHead
               index="07"
-              eyebrow="Kontakt"
-              line1="Schreiben"
-              line2="Sie mir."
+              eyebrow={t.contact.eyebrow}
+              line1={t.contact.line1}
+              line2={t.contact.line2}
               gradientLine2={true}
               headClass="fluid-display-xs"
               className="mb-2"
@@ -226,8 +228,7 @@ export const ContactSection: React.FC = () => {
               className="flex flex-col gap-5 overflow-hidden"
             >
             <p className="card-body max-w-xl">
-              Ein Projekt, eine Website, die nicht mehr passt, oder einfach eine Frage? Schreiben Sie
-              mir — unverbindlich und ohne Fachjargon.
+              {t.contact.intro}
             </p>
 
             {/* Mobil: gleicher Papierflieger-Effekt wie das Split-Panel,
@@ -253,11 +254,10 @@ export const ContactSection: React.FC = () => {
                     ✓
                   </span>
                   <h3 className="card-title">
-                    Mailprogramm geöffnet
+                    {t.contact.successTitle}
                   </h3>
                   <p className="card-body mx-auto max-w-sm">
-                    Ihre Nachricht ist vorbereitet — bitte im Mailprogramm noch abschicken. Alternativ
-                    direkt an adnan.aydin@bluewin.ch.
+                    {t.contact.successText}
                   </p>
                 </div>
               ) : (
@@ -271,11 +271,11 @@ export const ContactSection: React.FC = () => {
                         required
                         value={form.name}
                         onChange={(e) => setForm({ ...form, name: e.target.value })}
-                        placeholder="Ihr Name"
+                        placeholder={t.contact.namePlaceholder}
                         className="font-sans-ui w-full rounded-xl border bg-[#111111]/90 border-[#ffffff]/30 hover:border-[#ffffff]/50 px-3.5 py-2.5 text-[12.5px] font-medium text-white placeholder-[#ffffff]/55 outline-none transition-all duration-300 focus:bg-[#1A1A1A] focus:border-[#ffffff] focus:ring-2 focus:ring-[#ffffff]/30 focus:shadow-[0_0_15px_rgba(255,255,255,0.1)] peer"
                       />
                       <label htmlFor="contact-name" className="font-mono-ui mb-1.5 block text-[9.5px] uppercase tracking-[0.2em] text-white/70 font-bold transition-all duration-300 peer-focus:text-white origin-left peer-focus:scale-105">
-                        Name
+                        {t.contact.nameLabel}
                       </label>
                     </div>
                     <div className="flex flex-col-reverse relative group/input">
@@ -286,11 +286,11 @@ export const ContactSection: React.FC = () => {
                         required
                         value={form.email}
                         onChange={(e) => setForm({ ...form, email: e.target.value })}
-                        placeholder="Ihre E-Mail-Adresse"
+                        placeholder={t.contact.emailPlaceholder}
                         className="font-sans-ui w-full rounded-xl border bg-[#111111]/90 border-[#ffffff]/30 hover:border-[#ffffff]/50 px-3.5 py-2.5 text-[12.5px] font-medium text-white placeholder-[#ffffff]/55 outline-none transition-all duration-300 focus:bg-[#1A1A1A] focus:border-[#ffffff] focus:ring-2 focus:ring-[#ffffff]/30 focus:shadow-[0_0_15px_rgba(255,255,255,0.1)] peer"
                       />
                       <label htmlFor="contact-email" className="font-mono-ui mb-1.5 block text-[9.5px] uppercase tracking-[0.2em] text-white/70 font-bold transition-all duration-300 peer-focus:text-white origin-left peer-focus:scale-105">
-                        E-Mail
+                        {t.contact.emailLabel}
                       </label>
                     </div>
                   </div>
@@ -303,11 +303,11 @@ export const ContactSection: React.FC = () => {
                       rows={4}
                       value={form.message}
                       onChange={(e) => setForm({ ...form, message: e.target.value })}
-                      placeholder="Worum geht es?"
+                      placeholder={t.contact.messagePlaceholder}
                       className="font-sans-ui w-full rounded-xl border bg-[#111111]/90 border-[#ffffff]/30 hover:border-[#ffffff]/50 px-3.5 py-2.5 text-[12.5px] font-medium text-white placeholder-[#ffffff]/55 outline-none transition-all duration-300 focus:bg-[#1A1A1A] focus:border-[#ffffff] focus:ring-2 focus:ring-[#ffffff]/30 focus:shadow-[0_0_15px_rgba(255,255,255,0.1)] peer resize-none"
                     />
                     <label htmlFor="contact-message" className="font-mono-ui mb-1.5 block text-[9.5px] uppercase tracking-[0.2em] text-white/70 font-bold transition-all duration-300 peer-focus:text-white origin-left peer-focus:scale-105">
-                      Nachricht
+                      {t.contact.messageLabel}
                     </label>
                   </div>
 
@@ -317,7 +317,7 @@ export const ContactSection: React.FC = () => {
                   >
                     <span className="absolute inset-0 -translate-x-full bg-[#ffffff] transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0" />
                     <span className="font-sans-ui relative text-[10px] font-bold uppercase tracking-[0.22em] transition-colors duration-500 group-hover:text-[#000000]">
-                      Nachricht senden ↗
+                      {t.contact.sendBtn}
                     </span>
                   </button>
                 </form>
@@ -348,15 +348,15 @@ export const ContactSection: React.FC = () => {
               {/* Inner Card */}
               <div className="relative z-10 w-full rounded-[11px] py-2.5 px-4 flex flex-wrap items-center justify-between gap-4 bg-[#0A0A0A]">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-mono-ui text-[9px] uppercase tracking-[0.2em] font-semibold text-[#ffffff]">E-Mail:</span>
+                  <span className="font-mono-ui text-[9px] uppercase tracking-[0.2em] font-semibold text-[#ffffff]">{t.contact.emailLabelFooter}</span>
                   <a href="mailto:adnan.aydin@bluewin.ch" className="font-sans-ui text-[11px] font-medium text-white hover:text-white/80 transition-colors">
                     adnan.aydin@bluewin.ch
                   </a>
                 </div>
                 <div className="flex items-center gap-1.5">
-                  <span className="font-mono-ui text-[9px] uppercase tracking-[0.2em] font-semibold text-[#ffffff]">Ort:</span>
+                  <span className="font-mono-ui text-[9px] uppercase tracking-[0.2em] font-semibold text-[#ffffff]">{t.contact.locationLabelFooter}</span>
                   <span className="font-sans-ui text-[11px] font-medium text-white">
-                    Zürich · Schweiz
+                    {t.contact.location}
                   </span>
                 </div>
                 <SocialLinks />

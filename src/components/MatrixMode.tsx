@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { playGlitch } from '../lib/sound';
+import { useTheme } from '../lib/ThemeContext';
 
 export const MATRIX_MODE_EVENT = 'ado:matrix-mode';
 
@@ -9,6 +10,7 @@ const CHARS = 'アイウエオカキクケコサシスセソ01337FF5A1F';
  *  versteckten App-Icon im Hero-Telefon. Schaltet sich selbst
  *  wieder ab, kein Klick zum Schliessen noetig. */
 export const MatrixMode: React.FC = () => {
+  const { accentHex } = useTheme();
   const [active, setActive] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
@@ -41,7 +43,7 @@ export const MatrixMode: React.FC = () => {
     const draw = () => {
       ctx.fillStyle = 'rgba(0, 0, 0, 0.08)';
       ctx.fillRect(0, 0, canvas.width, canvas.height);
-      ctx.fillStyle = '#FF5A1F';
+      ctx.fillStyle = accentHex;
       ctx.font = `${fontSize}px monospace`;
       drops.forEach((y, i) => {
         const char = CHARS[Math.floor(Math.random() * CHARS.length)];
@@ -58,7 +60,7 @@ export const MatrixMode: React.FC = () => {
       cancelAnimationFrame(rafId);
       window.clearTimeout(closeTimer);
     };
-  }, [active]);
+  }, [active, accentHex]);
 
   if (!active) return null;
 

@@ -78,7 +78,7 @@ const FloatingDockMobile: React.FC<{
                       playClick();
                       setOpen(false);
                     }}
-                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#000000] border-2 border-[#FF5A1F] text-[#FF5A1F] shadow-[0_0_15px_rgba(255,90,31,0.5)] transition-transform active:scale-95"
+                    className="flex h-10 w-10 items-center justify-center rounded-full bg-[#000000] border-2 border-brand text-brand shadow-[0_0_15px_color-mix(in_srgb,var(--color-brand)_50%,transparent)] transition-transform active:scale-95"
                     title={item.title}
                   >
                     <div className="h-4 w-4 flex items-center justify-center">{item.icon}</div>
@@ -94,7 +94,7 @@ const FloatingDockMobile: React.FC<{
           playClick();
           setOpen(!open);
         }}
-        className="relative z-30 flex h-12 w-12 items-center justify-center rounded-full bg-[#000000] border-2 border-[#FF5A1F] text-[#FF5A1F] shadow-[0_0_20px_rgba(255,90,31,0.6)] active:scale-90 transition-transform"
+        className="relative z-30 flex h-12 w-12 items-center justify-center rounded-full bg-[#000000] border-2 border-brand text-brand shadow-[0_0_20px_color-mix(in_srgb,var(--color-brand)_60%,transparent)] active:scale-90 transition-transform"
       >
         <motion.span
           animate={{ rotate: open ? 135 : 0 }}
@@ -119,7 +119,7 @@ const FloatingDockDesktop: React.FC<{
       onMouseMove={(e) => mouseX.set(e.pageX)}
       onMouseLeave={() => mouseX.set(Infinity)}
       className={cn(
-        'mx-auto hidden md:flex h-16 items-end gap-3.5 rounded-sm bg-[#000000] border-2 border-[#FF5A1F] px-4 pb-2.5 shadow-[0_0_32px_rgba(255,90,31,0.55)] transition-shadow duration-300',
+        'mx-auto hidden md:flex h-16 items-end gap-3.5 rounded-sm bg-[#000000] border-2 border-brand px-4 pb-2.5 shadow-[0_0_32px_color-mix(in_srgb,var(--color-brand)_55%,transparent)] transition-shadow duration-300',
         className
       )}
     >
@@ -178,7 +178,7 @@ function IconContainer({
         onMouseLeave={() => setHovered(false)}
         className={cn(
           "relative flex items-center justify-center rounded-sm bg-[#000000] border transition-colors shadow-md group",
-          isHeartbeat ? "border-[#FF5A1F]/60 shadow-[0_0_15px_rgba(255,90,31,0.35)]" : "border-white/10 hover:border-[#FF5A1F] hover:bg-[#FF5A1F]/20"
+          isHeartbeat ? "border-brand/60 shadow-[0_0_15px_color-mix(in_srgb,var(--color-brand)_35%,transparent)]" : "border-white/10 hover:border-brand hover:bg-brand/20"
         )}
       >
         <AnimatePresence>
@@ -187,7 +187,7 @@ function IconContainer({
               initial={{ opacity: 0, y: 10, x: '-50%' }}
               animate={{ opacity: 1, y: 0, x: '-50%' }}
               exit={{ opacity: 0, y: 2, x: '-50%' }}
-              className="absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-white/10 bg-[#0A0A0A] px-2.5 py-1 font-mono-ui text-[10px] uppercase tracking-[0.14em] text-[#FF5A1F] shadow-lg"
+              className="absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap rounded-md border border-white/10 bg-[#0A0A0A] px-2.5 py-1 font-mono-ui text-[10px] uppercase tracking-[0.14em] text-brand shadow-lg"
             >
               {title}
             </motion.div>
@@ -215,7 +215,7 @@ function IconContainer({
           style={{ width: iconWidth, height: iconHeight }}
           className={cn(
             "flex items-center justify-center transition-colors",
-            isHeartbeat ? "text-[#FF5A1F]" : "text-white/80 group-hover:text-[#FF5A1F]"
+            isHeartbeat ? "text-brand" : "text-white/80 group-hover:text-brand"
           )}
         >
           {icon}

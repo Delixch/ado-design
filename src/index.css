@@ -36,6 +36,18 @@
   --color-peach:  #EFEFEF;   /* weiche Fuellung */
   --color-ink:    #111111;   /* Schrift */
   --color-ink-soft: #6B6B6B; /* zweite Schriftstufe */
+
+  /* Farbiger Akzent (Orange/Rot), unabhaengig von der Graustufen-Palette
+     oben - das ist die einzige echte Farbe im ganzen Design. Als Theme-Token
+     statt Literal-Hex, damit `[data-theme="amber"]` unten sie site-weit
+     tauschen kann, ohne 90+ Stellen im Code anzufassen. */
+  --color-brand:       #FF5A1F;
+  --color-brand-hover: #C23E10;
+}
+
+[data-theme="amber"] {
+  --color-brand:       #FFD60A;
+  --color-brand-hover: #FFE44D;
 }
 
 html, body {
@@ -60,16 +72,16 @@ html {
 
 * {
   scrollbar-width: thin;
-  scrollbar-color: #FF5A1F #E5E5E5;
+  scrollbar-color: var(--color-brand) #E5E5E5;
 }
 ::-webkit-scrollbar { width: 12px; height: 12px; }
 ::-webkit-scrollbar-track { background: #E5E5E5; }
 ::-webkit-scrollbar-thumb {
-  background-color: #FF5A1F;
+  background-color: var(--color-brand);
   border: 3px solid #E5E5E5;
   border-radius: 6px;
 }
-::-webkit-scrollbar-thumb:hover { background-color: #C23E10; }
+::-webkit-scrollbar-thumb:hover { background-color: var(--color-brand-hover); }
 
 /*
   ============================================================
@@ -611,7 +623,7 @@ html {
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
 }
 .card-container:hover {
-  border-color: rgba(255, 90, 31, 0.6) !important;
+  border-color: color-mix(in srgb, var(--color-brand) 60%, transparent) !important;
 }
 
 /* Kart Başlığı (Resim 2 standardı: 22-24px, Kalın, BEYAZ, Hover'da Turuncu) */
@@ -626,7 +638,7 @@ html {
 }
 .group:hover .card-title,
 .card-title:hover {
-  color: #FF5A1F !important;
+  color: var(--color-brand) !important;
 }
 
 /* Kart Açıklama Metni (PARLAK BEYAZ/GRİ) */
@@ -645,9 +657,9 @@ html {
   font-size: 0.625rem !important; /* 10px */
   text-transform: uppercase !important;
   letter-spacing: 0.14em !important;
-  color: #FF5A1F !important;
-  background-color: rgba(255, 90, 31, 0.1) !important;
-  border: 1px solid rgba(255, 90, 31, 0.3) !important;
+  color: var(--color-brand) !important;
+  background-color: color-mix(in srgb, var(--color-brand) 10%, transparent) !important;
+  border: 1px solid color-mix(in srgb, var(--color-brand) 30%, transparent) !important;
   padding: 0.125rem 0.5rem !important;
   border-radius: 0.125rem !important;
 }
@@ -671,6 +683,6 @@ html {
   font-family: var(--font-mono-ui, 'JetBrains Mono', monospace) !important;
   font-size: 0.625rem !important; /* 10px */
   font-weight: 700 !important;
-  color: #FF5A1F !important;
+  color: var(--color-brand) !important;
   text-transform: uppercase !important;
 }

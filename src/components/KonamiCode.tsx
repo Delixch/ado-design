@@ -53,9 +53,9 @@ export const KonamiCode: React.FC = () => {
             animate={{ scale: 1, y: 0 }}
             exit={{ scale: 0.9, opacity: 0 }}
             transition={{ duration: reducedMotion ? 0 : 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="mx-4 max-w-xs rounded-2xl border-2 border-[#FF5A1F] bg-[#0A0A0A] px-6 py-5 text-center shadow-[0_0_40px_rgba(255,90,31,0.35)]"
+            className="mx-4 max-w-xs rounded-2xl border-2 border-brand bg-[#0A0A0A] px-6 py-5 text-center shadow-[0_0_40px_color-mix(in_srgb,var(--color-brand)_35%,transparent)]"
           >
-            <div className="font-mono-ui text-[10px] uppercase tracking-[0.3em] text-[#FF5A1F]">
+            <div className="font-mono-ui text-[10px] uppercase tracking-[0.3em] text-brand">
               Konami-Code erkannt
             </div>
             <div className="font-display mt-2 text-[15px] uppercase text-white">
@@ -64,7 +64,7 @@ export const KonamiCode: React.FC = () => {
             <div className="font-sans-ui mt-2 text-[11px] text-white/60">
               Ehrlich — wer tippt sowas heute noch.
             </div>
-            <div className="font-mono-ui mt-3 text-[10px] text-[#FF5A1F]">+30 LEBEN</div>
+            <div className="font-mono-ui mt-3 text-[10px] text-brand">+30 LEBEN</div>
           </motion.div>
         </motion.div>
       )}

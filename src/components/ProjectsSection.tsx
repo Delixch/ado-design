@@ -6,6 +6,8 @@ import { useMediaQuery, useReducedMotion } from '../lib/motion';
 import { SectionHead } from './ui';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { useEnterSound, playClick } from '../lib/sound';
+import { useLanguage } from '../lib/LanguageContext';
+import { useTheme } from '../lib/ThemeContext';
 
 /** Zu jedem Projekt liegt ein Bildschirmfoto unter /shots. */
 const shot = (project: Project) => `/shots/${project.number}.webp`;
@@ -22,7 +24,7 @@ const shot = (project: Project) => `/shots/${project.number}.webp`;
 
     <span
       className={`font-sans-ui text-[12.5px] uppercase tracking-[0.08em] leading-none transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] relative z-10 ${
-        isActive ? 'translate-x-3 text-[#FF5A1F] font-bold' : 'text-[#FF5A1F]'
+        isActive ? 'translate-x-3 text-brand font-bold' : 'text-brand'
       }`}
     >
       {project.title}
@@ -68,6 +70,7 @@ const projectColors = ['#0A0A0A'];
    eingereihter Block auf Mobil — dort loest `pointerdown` den
    Effekt aus, `pointerup`/`pointercancel` beendet ihn. */
 const ProjectsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant }) => {
+  const { accentHex } = useTheme();
   const maskX = useMotionValue(-1000);
   const maskY = useMotionValue(-1000);
   const [active, setActive] = useState(false);
@@ -123,7 +126,7 @@ const ProjectsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant
         wie ein Lichtschalter: an/aus. */}
       <motion.div
         aria-hidden
-        className="absolute inset-0 pointer-events-none bg-[#FF5A1F]"
+        className="absolute inset-0 pointer-events-none bg-brand"
         animate={{ opacity: bgHover ? 1 : 0 }}
         transition={{ duration: 0.15 }}
       />
@@ -144,7 +147,7 @@ const ProjectsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant
             Lampen sind bereits im Foto warm beleuchtet — kein
             CSS-Lichtfleck mehr noetig. */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div ref={photoRef} className="relative max-w-full" style={{ aspectRatio: '1 / 1', width: 'auto', height: '74%' }}>
+          <div ref={photoRef} className="relative max-w-full" style={{ aspectRatio: '1 / 1', width: 'min(74%, 25rem)', height: 'auto' }}>
             <img
               src="/images/projects-portrait-color.webp"
               alt="Portrait"
@@ -166,7 +169,7 @@ const ProjectsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant
               <div
                 className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%]"
                 style={{
-                  background: 'conic-gradient(from 0deg, transparent 70%, rgba(255,90,31,0.5) 95%, #FF5A1F 100%)',
+                  background: 'conic-gradient(from 0deg, transparent 70%, color-mix(in srgb, var(--color-brand) 50%, transparent) 95%, var(--color-brand) 100%)',
                   animation: 'sequence-spin-9 20s linear infinite',
                 }}
               />
@@ -185,17 +188,17 @@ const ProjectsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant
           }}
         >
           {/* Orange tint on the image */}
-          <div className="absolute inset-0 bg-[#FF5A1F] mix-blend-color opacity-60" />
+          <div className="absolute inset-0 bg-brand mix-blend-color opacity-60" />
           {/* Glowing grid */}
           <div
             className="absolute inset-0 opacity-[0.8] mix-blend-screen"
             style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='16' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 16 0 L 0 0 0 16' fill='none' stroke='%23FF5A1F' stroke-width='1' stroke-opacity='0.5'/%3E%3C/svg%3E")`,
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='16' height='16' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M 16 0 L 0 0 0 16' fill='none' stroke='${encodeURIComponent(accentHex)}' stroke-width='1' stroke-opacity='0.5'/%3E%3C/svg%3E")`,
               backgroundSize: '16px 16px'
             }}
           />
           {/* High contrast overlay to pop the whites */}
-          <div className="absolute inset-0 bg-gradient-to-br from-transparent to-[#FF5A1F]/20 mix-blend-overlay" />
+          <div className="absolute inset-0 bg-gradient-to-br from-transparent to-brand/20 mix-blend-overlay" />
         </motion.div>
       </div>
 
@@ -230,7 +233,7 @@ const ProjectsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant
                 )}
                 <stop offset="0%" stopColor={s.color} />
                 <stop offset="42%" stopColor={s.color} />
-                <stop offset="50%" stopColor="#FF5A1F" />
+                <stop offset="50%" stopColor="var(--color-brand)" />
                 <stop offset="58%" stopColor={s.color} />
                 <stop offset="100%" stopColor={s.color} />
               </linearGradient>
@@ -247,6 +250,13 @@ const ProjectsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant
 };
 
 export const ProjectsSection: React.FC = () => {
+  const { t } = useLanguage();
+  const localizedProjects: Project[] = projects.map((p, i) => ({
+    ...p,
+    category: t.projects.items[i].category,
+    description: t.projects.items[i].description,
+    metrics: t.projects.items[i].metrics,
+  }));
   const canHover = useMediaQuery('(hover: hover) and (pointer: fine)');
 
   const [active, setActive] = useState<number | null>(null);
@@ -309,9 +319,9 @@ export const ProjectsSection: React.FC = () => {
           <div className="min-[1000px]:col-span-6 pointer-events-auto">
             <SectionHead
               index="02"
-              eyebrow="Projekte"
-              line1="Neun Arbeiten,"
-              line2="eine Handschrift."
+              eyebrow={t.projects.eyebrow}
+              line1={t.projects.line1}
+              line2={t.projects.line2}
               headClass="fluid-display-xs"
               className="mb-8 max-w-4xl"
               gradientLine2={true}
@@ -335,7 +345,7 @@ export const ProjectsSection: React.FC = () => {
             </div>
 
             <ul className="flex flex-col gap-3 min-[1000px]:pl-12">
-              {projects.map((project, i) => {
+              {localizedProjects.map((project, i) => {
                 const isActive = canHover ? active === i : open === i;
                 const baseColor = projectColors[i % projectColors.length];
                 const hoverColor = projectColors[(i + 1) % projectColors.length];
@@ -447,7 +457,7 @@ export const ProjectsSection: React.FC = () => {
                             >
                               <img
                                 src={shot(project)}
-                                alt={`${project.title} — Bildschirmfoto`}
+                                alt={`${project.title} — ${t.projects.screenshotAlt}`}
                                 loading="lazy"
                                 decoding="async"
                                 className="w-full rounded-xl border border-white/10 grayscale"
@@ -474,7 +484,7 @@ export const ProjectsSection: React.FC = () => {
                                 className="font-robot mt-5 inline-flex items-center gap-2 rounded-full px-5 py-3 text-[10.5px] uppercase tracking-[0.16em] text-white"
                                 style={{ backgroundColor: baseColor }}
                               >
-                                Seite ansehen ↗
+                                {t.projects.viewSite}
                               </a>
                             </div>
                           </motion.div>
@@ -487,7 +497,7 @@ export const ProjectsSection: React.FC = () => {
             </ul>
 
             <p className="font-mono-ui mt-10 text-[9px] uppercase tracking-[0.2em] text-white/45">
-              {canHover ? 'Zeiger auf eine Zeile — das Bild folgt' : 'Zeile antippen'} · neun Arbeiten
+              {canHover ? t.projects.footerHover : t.projects.footerTap} · {t.projects.footerSuffix}
             </p>
             </motion.div>
             )}
@@ -589,7 +599,7 @@ export const ProjectsSection: React.FC = () => {
                         boxShadow: '0 4px 12px rgba(0,0,0,0.5)',
                       }}
                     >
-                      {projects[active].category.split(' / ')[0]}
+                      {localizedProjects[active].category.split(' / ')[0]}
                     </div>
                   </div>
                 </div>

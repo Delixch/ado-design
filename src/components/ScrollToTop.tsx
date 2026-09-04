@@ -50,7 +50,7 @@ export const ScrollToTop: React.FC = () => {
               cy="24"
               r={RADIUS}
               fill="none"
-              stroke="#FF5A1F"
+              stroke="var(--color-brand)"
               strokeWidth="2"
               strokeLinecap="round"
               strokeDasharray={CIRCUMFERENCE}
@@ -58,8 +58,8 @@ export const ScrollToTop: React.FC = () => {
               transform="rotate(-90 24 24)"
             />
           </svg>
-          <span className="font-mono-ui flex items-center text-[11px] font-bold text-[#FF5A1F]">
-            ~<span className="cursor-blink ml-0.5 inline-block h-2.5 w-1 bg-[#FF5A1F] align-middle" />
+          <span className="font-mono-ui flex items-center text-[11px] font-bold text-brand">
+            ~<span className="cursor-blink ml-0.5 inline-block h-2.5 w-1 bg-brand align-middle" />
           </span>
         </motion.button>
       )}

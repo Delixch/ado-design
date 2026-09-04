@@ -3,6 +3,7 @@ import { motion, useMotionValue, useSpring, useTransform, useScroll } from 'fram
 import type { Variants } from 'framer-motion';
 import { scrollToSection } from '../lib/nav';
 import { MATRIX_MODE_EVENT } from './MatrixMode';
+import { useLanguage } from '../lib/LanguageContext';
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -67,6 +68,7 @@ const KineticLine: React.FC<{
 const SNAP_CUE_S = 7.54;
 
 export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
+  const { t } = useLanguage();
   const rootRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [snapped, setSnapped] = useState(false);
@@ -302,7 +304,7 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
                   fontFamily: 'monospace',
                   fontSize: 9,
                   lineHeight: 1.6,
-                  color: '#FF5A1F',
+                  color: 'var(--color-brand)',
                   whiteSpace: 'nowrap',
                   letterSpacing: 0,
                   userSelect: 'none',
@@ -330,7 +332,7 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
                   'const x = await fetch(url);',
                   'grep -r "TODO" ./src --color',
                 ].map((line, i) => (
-                  <div key={i} style={{ color: i % 5 === 0 ? '#FF5A1F' : i % 3 === 0 ? '#FF8C5A' : '#FF5A1F', opacity: 0.85 + (i % 3) * 0.05 }}>
+                  <div key={i} style={{ color: i % 5 === 0 ? 'var(--color-brand)' : i % 3 === 0 ? '#FF8C5A' : 'var(--color-brand)', opacity: 0.85 + (i % 3) * 0.05 }}>
                     {line}
                   </div>
                 ))}
@@ -346,10 +348,10 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
                 {/* 3 columns x 4 rows = 12 square icons */}
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
                   {[
-                    '#333333', '#444444', '#FF5A1F',
+                    '#333333', '#444444', 'var(--color-brand)',
                     '#555555', '#222222', '#666666',
-                    '#FF5A1F', '#333333', '#111111',
-                    '#FF5A1F', '#444444', '#222222',
+                    'var(--color-brand)', '#333333', '#111111',
+                    'var(--color-brand)', '#444444', '#222222',
                     '#555555', '#FF8C5A', '#333333',
                   ].map((color, i) => (
                     <div key={i} style={{
@@ -370,7 +372,7 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
             <motion.button
               type="button"
               onClick={() => window.dispatchEvent(new CustomEvent(MATRIX_MODE_EVENT))}
-              animate={{ opacity: [0.5, 1, 0.5], boxShadow: ['0 0 4px #FF5A1F', '0 0 14px #FF5A1F', '0 0 4px #FF5A1F'] }}
+              animate={{ opacity: [0.5, 1, 0.5], boxShadow: ['0 0 4px var(--color-brand)', '0 0 14px var(--color-brand)', '0 0 4px var(--color-brand)'] }}
               transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
               style={{
                 position: 'absolute',
@@ -380,13 +382,13 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
                 height: 26,
                 borderRadius: 7,
                 background: '#0A0A0A',
-                border: '1px solid #FF5A1F',
+                border: '1px solid var(--color-brand)',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
                 fontFamily: 'monospace',
                 fontSize: 9,
-                color: '#FF5A1F',
+                color: 'var(--color-brand)',
                 fontWeight: 700,
                 zIndex: 45,
               }}
@@ -428,18 +430,18 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
         >
           <motion.div variants={fadeUp} className="mb-5 flex flex-wrap items-center gap-2">
             <span className="font-mono-ui flex items-center gap-2 rounded-sm bg-ink px-2.5 py-1 text-[9px] uppercase tracking-[0.2em] text-ground">
-              <span className="h-1.5 w-1.5 animate-pulse bg-[#FF5A1F]" />
-              Frei für Projekte
+              <span className="h-1.5 w-1.5 animate-pulse bg-brand" />
+              {t.hero.badgeAvailable}
             </span>
             <span className="font-mono-ui rounded-sm bg-white/5 border border-white/10 px-2.5 py-1 text-[9px] uppercase tracking-[0.2em] text-white">
-              Zürich · Schweiz
+              {t.hero.badgeLocation}
             </span>
           </motion.div>
 
           <h1 className="font-robot relative uppercase text-ground text-2xl md:text-3xl lg:text-4xl font-bold tracking-tight">
             {/* Zeile 1 */}
             <span className="relative block">
-              <KineticLine text="Ich baue" delay={0.3} />
+              <KineticLine text={t.hero.lineBuild} delay={0.3} />
             </span>
 
             {/* Zeile 2: digitale Erlebnisse */}
@@ -449,19 +451,19 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
                   initial={{ y: '115%' }}
                   animate={{ y: '0%' }}
                   transition={{ duration: 1, delay: 0.5, ease: [0.16, 1, 0.3, 1] }}
-                  className="block text-[#FF5A1F] font-black"
+                  className="block text-brand font-black"
                 >
-                  digitale
+                  {t.hero.lineDigital}
                 </motion.span>
               </span>
               <span className="relative inline-block">
-                <span className="stroke-text stroke-text-light block">Erlebnisse</span>
+                <span className="stroke-text stroke-text-light block">{t.hero.lineExperiences}</span>
                 <motion.span
                   aria-hidden
                   style={{ clipPath: fillClip }}
-                  className="absolute inset-0 block text-[#FF5A1F]"
+                  className="absolute inset-0 block text-brand"
                 >
-                  Erlebnisse
+                  {t.hero.lineExperiences}
                 </motion.span>
               </span>
             </div>
@@ -469,30 +471,29 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
 
           <motion.div variants={fadeUp} className="mt-6 max-w-[clamp(200px,45vw,36rem)] space-y-4">
             <p className="font-mono-ui fluid-eyebrow uppercase text-ground/60">
-              Web-Entwickler <span className="text-[#FF5A1F]">•</span> 3D &amp; Motion{' '}
-              <span className="text-[#FF5A1F]">•</span> Zürich
+              {t.hero.roleLine} <span className="text-brand">•</span> 3D &amp; Motion{' '}
+              <span className="text-brand">•</span> Zürich
             </p>
             <p className="font-sans-ui fluid-body leading-[1.75] text-ground/85">
-              Ich verwandle Ideen in Websites, die man sich merkt. Gestaltung und Code aus einer
-              Hand — von der Skizze bis zum Deployment.
+              {t.hero.subtitle}
             </p>
           </motion.div>
 
           <motion.div variants={fadeUp} className="mt-8 flex flex-wrap items-center gap-3">
             <button
               onClick={() => scrollToSection('work')}
-              className="group font-robot relative overflow-hidden rounded-sm bg-[#FF5A1F] px-5 py-3 text-[10px] tracking-[0.2em] text-white transition-transform duration-300"
+              className="group font-robot relative overflow-hidden rounded-sm bg-brand px-5 py-3 text-[10px] tracking-[0.2em] text-black transition-transform duration-300"
             >
               <span className="absolute inset-0 -translate-x-full bg-white transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:translate-x-0" />
-              <span className="relative transition-colors duration-500 group-hover:text-ink">
-                MEINE ARBEIT ↗
+              <span className="relative transition-colors duration-500">
+                {t.hero.ctaWork}
               </span>
             </button>
             <a
               href="mailto:adnan.aydin@bluewin.ch"
               className="font-robot inline-block rounded-sm border-2 border-ground/15 px-5 py-3 text-[10px] tracking-[0.2em] text-ground transition-all hover:border-ground hover:bg-ground hover:text-ink duration-300"
             >
-              E-MAIL ↓
+              {t.hero.ctaEmail}
             </a>
           </motion.div>
 
@@ -501,9 +502,9 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
             className="mt-8 inline-block max-w-[190px] rounded-sm bg-white/5 border border-white/10 px-3 py-2.5 shadow-lg"
           >
             <p className="font-display text-[11px] uppercase leading-tight text-white/80 font-medium">
-              Siebenmal fallen,
+              {t.hero.quoteLine1}
               <br />
-              achtmal aufstehen.
+              {t.hero.quoteLine2}
             </p>
           </motion.div>
         </motion.div>

@@ -3,6 +3,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
 import { playClick } from '../../lib/sound';
 import { scrollToSection } from '../../lib/nav';
+import { useLanguage } from '../../lib/LanguageContext';
 
 export interface RepoCommand {
   cmd: string;
@@ -58,6 +59,7 @@ export const HoverEffect = ({
   onActiveIndexChange: (idx: number | null) => void;
   className?: string;
 }) => {
+  const { t } = useLanguage();
   const isDesktop = useIsDesktop();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
@@ -115,7 +117,7 @@ export const HoverEffect = ({
                   <motion.span
                     className={cn(
                       'absolute inset-0 h-full w-full border block rounded-3xl z-0 pointer-events-none',
-                      activeIndex === null ? 'bg-[#FF5A1F]/[0.2] border-[#FF5A1F]/30' : 'bg-white/60 border-white/80',
+                      activeIndex === null ? 'bg-brand/20 border-brand/30' : 'bg-white/60 border-white/80',
                     )}
                     layoutId="hoverBackground"
                     layout="position"
@@ -153,11 +155,11 @@ export const HoverEffect = ({
                             playClick();
                             onActiveIndexChange(idx);
                           }}
-                          aria-label={`${item.title} Details anzeigen`}
+                          aria-label={`${item.title} ${t.repos.detailsSuffix}`}
                           animate={{ scale: [1, 1.32, 1.08, 1.4, 1, 1] }}
                           transition={{ duration: 2.2, repeat: Infinity, ease: 'easeInOut', times: [0, 0.14, 0.28, 0.42, 0.6, 1] }}
                           whileHover={{ scale: 1.15 }}
-                          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-[#FF5A1F]/50 text-[#FF5A1F] hover:bg-[#FF5A1F] hover:text-black transition-colors cursor-pointer"
+                          className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-brand/50 text-brand hover:bg-brand hover:text-black transition-colors cursor-pointer"
                         >
                           +
                         </motion.button>
@@ -178,7 +180,7 @@ export const HoverEffect = ({
                   {!isDesktop && (
                     <span
                       aria-hidden
-                      className="absolute bottom-3 right-3 text-[#FF5A1F]/60 text-sm"
+                      className="absolute bottom-3 right-3 text-brand/60 text-sm"
                     >
                       ↺
                     </span>
@@ -206,8 +208,8 @@ export const HoverEffect = ({
                       playClick();
                       setFlippedIndex(null);
                     }}
-                    aria-label="Zurückdrehen"
-                    className="absolute top-3 right-3 flex h-6 w-6 items-center justify-center rounded-full border border-[#FF5A1F]/40 text-[#FF5A1F] text-xs"
+                    aria-label={t.repos.flipBack}
+                    className="absolute top-3 right-3 flex h-6 w-6 items-center justify-center rounded-full border border-brand/40 text-brand text-xs"
                   >
                     ✕
                   </button>
@@ -237,9 +239,9 @@ export const HoverEffect = ({
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(e) => e.stopPropagation()}
-                    className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-bold font-mono-ui uppercase text-[#FF5A1F]"
+                    className="mt-3 inline-flex items-center gap-1.5 text-[10px] font-bold font-mono-ui uppercase text-brand"
                   >
-                    {item.link.includes('github.com') ? "GitHub ↗" : 'Öffnen ↗'}
+                    {item.link.includes('github.com') ? t.repos.githubShort : t.repos.openShort}
                   </a>
                 </Card>
               </div>
@@ -255,8 +257,8 @@ export const HoverEffect = ({
           type="button"
           onClick={() => goToPage(page - 1)}
           disabled={page === 0}
-          aria-label="Vorherige Seite"
-          className="flex h-6 w-6 items-center justify-center rounded-full border border-white/15 text-white/60 hover:text-[#FF5A1F] hover:border-[#FF5A1F]/50 disabled:opacity-25 disabled:pointer-events-none transition-colors cursor-pointer"
+          aria-label={t.repos.prevPage}
+          className="flex h-6 w-6 items-center justify-center rounded-full border border-white/15 text-white/60 hover:text-brand hover:border-brand/50 disabled:opacity-25 disabled:pointer-events-none transition-colors cursor-pointer"
         >
           ‹
         </button>
@@ -267,8 +269,8 @@ export const HoverEffect = ({
           type="button"
           onClick={() => goToPage(page + 1)}
           disabled={page === pageCount - 1}
-          aria-label="Nächste Seite"
-          className="flex h-6 w-6 items-center justify-center rounded-full border border-white/15 text-white/60 hover:text-[#FF5A1F] hover:border-[#FF5A1F]/50 disabled:opacity-25 disabled:pointer-events-none transition-colors cursor-pointer"
+          aria-label={t.repos.nextPage}
+          className="flex h-6 w-6 items-center justify-center rounded-full border border-white/15 text-white/60 hover:text-brand hover:border-brand/50 disabled:opacity-25 disabled:pointer-events-none transition-colors cursor-pointer"
         >
           ›
         </button>
@@ -288,7 +290,7 @@ export const Card = ({
   return (
     <div
       className={cn(
-        'rounded-2xl h-full w-full p-5 overflow-hidden bg-[#0A0A0A] border border-white/10 group-hover:border-[#FF5A1F]/50 relative z-20 transition-colors duration-300',
+        'rounded-2xl h-full w-full p-5 overflow-hidden bg-[#0A0A0A] border border-white/10 group-hover:border-brand/50 relative z-20 transition-colors duration-300',
         className
       )}
     >
@@ -307,7 +309,7 @@ export const CardTitle = ({
   children: React.ReactNode;
 }) => {
   return (
-    <h4 className={cn('card-title text-white group-hover:text-[#FF5A1F] transition-colors duration-300 font-bold tracking-wide mt-2', className)}>
+    <h4 className={cn('card-title text-white group-hover:text-brand transition-colors duration-300 font-bold tracking-wide mt-2', className)}>
       {children}
     </h4>
   );

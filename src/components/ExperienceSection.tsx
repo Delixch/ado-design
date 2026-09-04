@@ -7,6 +7,7 @@ import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { useGyroTilt } from '../hooks/useGyroTilt';
 import { useEnterSound, playClick } from '../lib/sound';
 import { useReducedMotion } from '../lib/motion';
+import { useLanguage } from '../lib/LanguageContext';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -19,61 +20,15 @@ interface RouteStop {
   color: string;
 }
 
-const journey: RouteStop[] = [
-  {
-    id: '01',
-    year: 'seit 2025',
-    title: 'Web-Entwickler',
-    organization: 'Selbständig · Zürich',
-    description:
-      'Auftritte für Bäckerei, Autowerkstatt und Privatkunden — von der ersten Skizze bis zum Deployment. Dazu eigene Experimente mit Echtzeit-3D und künstlicher Intelligenz.',
-    color: '#FF5A1F',
-  },
-  {
-    id: '02',
-    year: '08.2014 — 08.2016',
-    title: 'Chauffeur',
-    organization: 'Zidus GmbH Transport, Zürich',
-    description:
-      'Belieferte die Verkaufsstellen zuverlässig, kontrollierte die tägeninge Ladung und sorgte für Pflege und Unterhalt des zugeteilten Fahrzeugs.',
-    color: '#00738C',
-  },
-  {
-    id: '03',
-    year: '02.2014 — 07.2014',
-    title: 'Administration & Personalwesen',
-    organization: 'Citybeck AG, Zürich',
-    description:
-      'Unterstützte Geschäftsleitung und Personalwesen: Lohnzahlungen, Pensionskassenangelegenheiten, Personalunterlagen sowie Ein- und Austritte.',
-    color: '#5E35B1',
-  },
-  {
-    id: '04',
-    year: '07.2009 — 12.2013',
-    title: 'Geschäftsführung / Nachtschichtleitung',
-    organization: 'Bäckerei Happy AG, Zürich',
-    description:
-      'Verantwortlich für Kassenstock, Abrechnung, Einrichtung und Personalwesen. Kundenorientiertes Handeln, Verkaufsbereitschaft, Warenpräsentation und Verkaufsförderung.',
-    color: '#C2185B',
-  },
-  {
-    id: '05',
-    year: '2002 — 2004',
-    title: 'Weiterbildung Web Publisher',
-    organization: 'EB Wolbach / Web Publisher Zentrum, Zürich',
-    description:
-      'Einjähriger Lehrgang plus Aufbaukurse: HTML, CSS und JavaScript, PHP, Datenbanken in phpMyAdmin, ActionScript mit Flash sowie Gestaltung und Präsentation.',
-    color: '#FF5A1F',
-  },
-  {
-    id: '06',
-    year: '09.1990 — 11.1998',
-    title: 'Verkäufer',
-    organization: 'Migros Genossenschaftszentrum, Zürich',
-    description:
-      'Warenbestellungen, Warenannahme, Aktionsaufbauten, Regalpflege sowie MHD- und Bestandskontrollen — dazu die Beratung der Kundschaft.',
-    color: '#00738C',
-  },
+// Sprachneutral: nur id/Farbe. Jahr/Titel/Organisation/Beschreibung
+// kommen aus t.experience.journey (gleiche Reihenfolge).
+const journeyMeta = [
+  { id: '01', color: 'var(--color-brand)' },
+  { id: '02', color: '#00738C' },
+  { id: '03', color: '#5E35B1' },
+  { id: '04', color: '#C2185B' },
+  { id: '05', color: 'var(--color-brand)' },
+  { id: '06', color: '#00738C' },
 ];
 
 /* ─── Portrait mit Lupen-Effekt ──────────────────────────────
@@ -135,7 +90,7 @@ const ExperiencePortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ varia
             Seitenverhaeltnis (1023:1537) fixiert und verkleinert,
             damit der eigene Bildrand nicht abgeschnitten wird. */}
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative max-w-full overflow-hidden rounded-2xl" style={{ aspectRatio: '1023 / 1537', width: 'auto', height: variant === 'desktop' ? '72%' : '96%' }}>
+          <div className="relative max-w-full overflow-hidden rounded-2xl" style={{ aspectRatio: '1023 / 1537', width: variant === 'desktop' ? 'min(74%, 25rem)' : 'auto', height: variant === 'desktop' ? 'auto' : '96%' }}>
             {/* Derselbe Spin-Sweep wie bei den Karten, orange, um den
                 Bildrand — hier kein Kreis, sondern das runde Rechteck
                 des Fotos selbst (Padding-Trick statt Masken-Trick). */}
@@ -143,7 +98,7 @@ const ExperiencePortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ varia
               aria-hidden
               className="absolute top-[-50%] left-[-50%] w-[200%] h-[200%] pointer-events-none"
               style={{
-                background: 'conic-gradient(from 0deg, transparent 70%, rgba(255,90,31,0.5) 95%, #FF5A1F 100%)',
+                background: 'conic-gradient(from 0deg, transparent 70%, color-mix(in srgb, var(--color-brand) 50%, transparent) 95%, var(--color-brand) 100%)',
                 animation: 'sequence-spin-6 20s linear infinite',
               }}
             />
@@ -212,7 +167,7 @@ const ExperiencePortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ varia
                 )}
                 <stop offset="0%" stopColor={s.color} />
                 <stop offset="42%" stopColor={s.color} />
-                <stop offset="50%" stopColor="#FF5A1F" />
+                <stop offset="50%" stopColor="var(--color-brand)" />
                 <stop offset="58%" stopColor={s.color} />
                 <stop offset="100%" stopColor={s.color} />
               </linearGradient>
@@ -305,6 +260,8 @@ const TimelineCard: React.FC<{ stop: RouteStop; i: number }> = ({ stop, i }) => 
 };
 
 export const ExperienceSection: React.FC = () => {
+  const { t } = useLanguage();
+  const journey: RouteStop[] = t.experience.journey.map((entry, i) => ({ ...entry, ...journeyMeta[i] }));
   const containerRef = useRef<HTMLDivElement>(null);
   const lineRef = useRef<HTMLDivElement>(null);
   const [sectionOpen, setSectionOpen] = useState(false);
@@ -380,9 +337,9 @@ export const ExperienceSection: React.FC = () => {
           <div className="min-[1000px]:col-span-6 pointer-events-auto">
             <SectionHead
               index="06"
-              eyebrow="Werdegang"
-              line1="Werdegang &"
-              line2="Stationen."
+              eyebrow={t.experience.eyebrow}
+              line1={t.experience.line1}
+              line2={t.experience.line2}
               gradientLine2={true}
               headClass="fluid-display-xs"
               className="mb-8 max-w-3xl"
@@ -436,7 +393,7 @@ export const ExperienceSection: React.FC = () => {
                     <span className="rail-line absolute top-2 flex -translate-x-1/2 items-center justify-center">
                       <span
                         className="absolute h-7 w-7 scale-0 rounded-full transition-transform duration-500 group-hover:scale-100"
-                        style={{ backgroundColor: `${stop.color}25` }}
+                        style={{ backgroundColor: `color-mix(in srgb, ${stop.color} 15%, transparent)` }}
                       />
                       <span
                         className="relative h-3.5 w-3.5 rounded-full border-2 border-white/20 bg-[#000000] transition-colors duration-300 group-hover:bg-white"
