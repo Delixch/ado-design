@@ -1,15 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import { AnimatePresence, motion } from 'framer-motion';
 import { SectionHead } from './ui';
 import { HoverEffect, RepoItem } from './ui/card-hover-effect';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { useReducedMotion } from '../lib/motion';
+import { playPrint, stopPrint } from '../lib/sound';
 
 const repos: RepoItem[] = [
   {
     title: 'Aceternity UI',
     badge: 'UI Framework',
     description: 'Moderne, animierte und immersive Tailwind CSS Komponentensammlung.',
+    details:
+      'Kein eigenständiges npm-Paket: Komponenten werden per shadcn-CLI direkt in den eigenen Code kopiert — z. B. mit "npx shadcn@latest add card-hover-effect". Danach gehört der Code vollständig dir, frei anpassbar mit Tailwind CSS und Framer Motion. Genau dieser Karten-Hover-Effekt hier stammt von dort.',
     stars: 14200,
     tags: ['React', 'TailwindCSS', 'Framer Motion'],
     link: 'https://ui.aceternity.com',
@@ -18,6 +21,8 @@ const repos: RepoItem[] = [
     title: 'Google Antigravity',
     badge: 'AI Agent Engine',
     description: 'Erweitertes KI-Pairing und autonomes Coding-Assistenten-System.',
+    details:
+      'Eigenständige, agentische Entwicklungsumgebung von Google, kein npm-Paket. Download unter antigravity.google. Der Agent liest, schreibt und testet Code direkt im Editor.',
     stars: 28900,
     tags: ['AI', 'Gemini', 'Agentic Workflow'],
     link: 'https://github.com/google',
@@ -26,6 +31,8 @@ const repos: RepoItem[] = [
     title: 'Framer Motion',
     badge: 'Animation Engine',
     description: 'Produktionsreife 60FPS-Animationsbibliothek für React.',
+    details:
+      'Installation: "npm install framer-motion". Deklarative Animationen für React — motion.div, AnimatePresence, geteilte Layout-Übergänge über layoutId. Treibt auf dieser Seite fast jede Bewegung an: Karten-Hover, Sektionen-Aufklappen, Seitenübergänge, auch dieses Detail-Panel.',
     stars: 24500,
     tags: ['React', 'TypeScript', 'Physics'],
     link: 'https://github.com/framer/motion',
@@ -34,14 +41,18 @@ const repos: RepoItem[] = [
     title: 'WebAudio Sound Engine',
     badge: 'Audio Engine',
     description: 'Echtzeit-Synthesizer für mechanische und Sci-Fi Soundeffekte.',
+    details:
+      'Kein externes Paket: eigener Code direkt auf der nativen Web Audio API, in src/lib/sound.ts. Erzeugt Klicks, Chimes und den Herzschlag-Puls der FloatingDock im Browser, ganz ohne Audio-Dateien.',
     stars: 8700,
     tags: ['WebAudio API', 'Synthesizer', 'DSP'],
-    link: 'https://github.com/Delixch/ado-design',
+    link: 'https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API',
   },
   {
     title: 'Three.js & WebGL',
     badge: '3D Graphics',
     description: 'Hardware-beschleunigte 3D-Partikel- und Shader-Szenen im Browser.',
+    details:
+      'Installation: "npm install three". Die Standardbibliothek für 3D im Browser — Szenen, Kameras, Licht und GLSL-Shader über WebGL. Treibt die Partikel- und Shader-Experimente an, die als Nächstes im Bereich "Im Aufbau" live gehen.',
     stars: 98000,
     tags: ['Three.js', 'WebGL', 'GLSL Shaders'],
     link: 'https://github.com/mrdoob/three.js',
@@ -50,6 +61,8 @@ const repos: RepoItem[] = [
     title: 'Supabase Backend',
     badge: 'Open Source Firebase',
     description: 'PostgreSQL-basierte Echtzeit-Datenbank und Authentifizierungsmotor.',
+    details:
+      'Installation: "npm install @supabase/supabase-js". Open-Source-Alternative zu Firebase auf PostgreSQL-Basis — Datenbank, Auth, Realtime-Subscriptions und Storage über eine einzige API.',
     stars: 68000,
     tags: ['PostgreSQL', 'Realtime', 'Auth'],
     link: 'https://github.com/supabase/supabase',
@@ -163,9 +176,104 @@ const ReposPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
   );
 };
 
+/* ─── Ausdruck-Panel ──────────────────────────────────────────
+   Statt eine Karte im Raster wachsen zu lassen (das schob das
+   ganze Raster auf und streckte das Portrait darunter), erscheint
+   das Detail wie ein frisch ausgedrucktes Blatt ueber dem Foto
+   links - Rasterhoehe bleibt konstant, das Portrait auch. */
+const RepoPrintPanel: React.FC<{ item: RepoItem | null; onClose: () => void; top: number }> = ({ item, onClose, top }) => {
+  useEffect(() => {
+    if (item) playPrint();
+    return () => stopPrint();
+  }, [item]);
+
+  return (
+    <div
+      className="absolute left-0 right-1/2 bottom-0 hidden min-[1000px]:block px-12 pointer-events-none z-30"
+      style={{ top }}
+    >
+      <AnimatePresence>
+        {item && (
+          <motion.div
+            key={item.title}
+            initial={{ clipPath: 'inset(0 0 0 100%)', opacity: 1 }}
+            animate={{ clipPath: 'inset(0 0 0 0%)', opacity: 1 }}
+            exit={{ opacity: 0, transition: { duration: 0.2, ease: 'easeIn' } }}
+            transition={{ delay: 2, duration: 14, ease: 'linear' }}
+            className="w-full max-h-[calc(100%-8rem)] rounded-2xl bg-[#F4F1EC] shadow-2xl pointer-events-auto overflow-y-auto"
+          >
+            <div className="relative w-full p-7">
+              <button
+                type="button"
+                onClick={onClose}
+                aria-label="Schliessen"
+                className="absolute top-5 right-5 flex h-7 w-7 items-center justify-center rounded-full border border-black/20 text-black hover:bg-black hover:text-white transition-colors cursor-pointer"
+              >
+                ✕
+              </button>
+
+              <div>
+                <div className="flex items-center gap-3 mb-4 pr-10">
+                  {item.badge && (
+                    <span className="font-mono-ui text-[10px] uppercase tracking-[0.14em] text-black/50 border border-black/20 rounded-sm px-2 py-0.5">
+                      {item.badge}
+                    </span>
+                  )}
+                  {item.stars && (
+                    <span className="font-mono-ui text-[11px] text-black/50">
+                      ★ {(item.stars / 1000).toFixed(1)}k
+                    </span>
+                  )}
+                </div>
+
+                <h4 className="font-display text-xl uppercase text-black font-bold mb-3">{item.title}</h4>
+
+                <p className="font-sans-ui text-[13px] leading-relaxed text-black/75">
+                  {item.details ?? item.description}
+                </p>
+
+                {item.tags && (
+                  <div className="flex flex-wrap gap-1.5 mt-5">
+                    {item.tags.map((t) => (
+                      <span
+                        key={t}
+                        className="font-mono-ui text-[9px] uppercase tracking-[0.1em] text-black/60 border border-black/15 rounded px-1.5 py-0.5"
+                      >
+                        {t}
+                      </span>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="mt-6 pt-4 border-t border-black/10 flex items-center justify-between gap-4">
+                <span className="font-mono-ui text-[10px] text-black/40 uppercase">
+                  {item.link.includes('github.com') ? 'GitHub Repository' : 'Externer Link'}
+                </span>
+                <a
+                  href={item.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 px-4 py-2 text-[11px] font-bold font-mono-ui text-white bg-black hover:bg-[#FF5A1F] rounded transition-colors duration-200"
+                >
+                  ÖFFNEN ↗
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+};
+
 /* ─── Main Repos Section ───────────────────────────────────── */
 export const ReposSection: React.FC = () => {
   const [sectionOpen, setSectionOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+  const gridRef = useRef<HTMLDivElement>(null);
+  const [panelTop, setPanelTop] = useState(96);
 
   useEffect(() => {
     const onOpen = (e: Event) => {
@@ -176,8 +284,28 @@ export const ReposSection: React.FC = () => {
     return () => window.removeEventListener(OPEN_SECTION_EVENT, onOpen);
   }, []);
 
+  // Das Ausdruck-Panel soll immer exakt auf Hoehe der ersten Kartenreihe
+  // starten - nicht geschaetzt, sondern an der echten Position der Karten
+  // gemessen. Wird laenger, waechst es einfach nach unten weiter.
+  useLayoutEffect(() => {
+    const measure = () => {
+      if (!sectionRef.current || !gridRef.current) return;
+      const sectionTop = sectionRef.current.getBoundingClientRect().top;
+      const gridTop = gridRef.current.getBoundingClientRect().top;
+      setPanelTop(gridTop - sectionTop);
+    };
+    measure();
+    window.addEventListener('resize', measure);
+    const id = window.setTimeout(measure, 300);
+    return () => {
+      window.removeEventListener('resize', measure);
+      window.clearTimeout(id);
+    };
+  }, [sectionOpen]);
+
   return (
     <section
+      ref={sectionRef}
       id="repos"
       className="framed relative w-full overflow-hidden py-16 fluid-gutter sm:py-24"
       style={{ background: '#000000' }}
@@ -185,6 +313,11 @@ export const ReposSection: React.FC = () => {
       {/* Dark left-half split screen background (Exact clone of ProjectsSection) */}
       <div className="layer pointer-events-none">
         <ReposPortrait variant="desktop" />
+        <RepoPrintPanel
+          item={activeIndex !== null ? repos[activeIndex] : null}
+          onClose={() => setActiveIndex(null)}
+          top={panelTop}
+        />
       </div>
 
       <div className="relative z-10 mx-auto w-full max-w-7xl pointer-events-none">
@@ -224,8 +357,9 @@ export const ReposSection: React.FC = () => {
                   <ReposPortrait variant="mobile" />
                 </div>
 
-                {/* Official Aceternity UI Hover Effect Component */}
-                <HoverEffect items={repos} />
+                <div ref={gridRef}>
+                  <HoverEffect items={repos} activeIndex={activeIndex} onActiveIndexChange={setActiveIndex} />
+                </div>
               </motion.div>
             )}
           </div>

@@ -285,6 +285,22 @@ export const playFissh = (): void => {
   osc.stop(now + duration + 0.02);
 };
 
+/** 9. Inkjet Printer Feed — real sample, lazy-loaded on first use */
+let printAudio: HTMLAudioElement | null = null;
+export const playPrint = (): void => {
+  if (isSoundMuted()) return;
+  if (!printAudio) {
+    printAudio = new Audio('/sounds/printer.mp3');
+    printAudio.volume = 0.55;
+  }
+  printAudio.currentTime = 0;
+  void printAudio.play().catch(() => {});
+};
+
+export const stopPrint = (): void => {
+  printAudio?.pause();
+};
+
 /** Scroll reveal hook */
 export const useEnterSound = (ref: RefObject<HTMLElement | null>, enabled: boolean): void => {
   const played = useRef(false);
