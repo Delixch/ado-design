@@ -35,6 +35,13 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- Hero-Video ist das LCP-Element, aber wird von React erst nach
+         dem Hydrieren gerendert - ohne Preload sieht der Browser die
+         URL erst nach JS-Parse+Mount, das kostet ~2.3s Ladeverzoegerung
+         (Lighthouse LCPDiscovery). Preload holt sie schon parallel zum
+         Skript ab. -->
+    <link rel="preload" as="video" href="/videos/333.mp4" fetchpriority="high" type="video/mp4" />
   </head>
   <body>
     <div id="root"></div>

@@ -93,10 +93,10 @@ function App() {
           Impressum/Datenschutz kommen dazu, sobald die echten Angaben da sind. */}
       <div className="border-t border-white/10 bg-[#000000] py-6 fluid-gutter">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 text-center">
-          <p className="font-mono-ui text-[9px] uppercase tracking-[0.2em] text-white/40">
+          <p className="font-mono-ui text-[9px] uppercase tracking-[0.2em] text-white/55">
             Gebaut mit React · TypeScript · Vite · Tailwind CSS · Framer Motion · GSAP
           </p>
-          <p className="font-mono-ui text-[9px] uppercase tracking-[0.2em] text-white/30">
+          <p className="font-mono-ui text-[9px] uppercase tracking-[0.2em] text-white/50">
             © {new Date().getFullYear()} Adnan Aydin · Zürich
           </p>
         </div>

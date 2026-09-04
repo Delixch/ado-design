@@ -181,7 +181,7 @@ export const Header: React.FC = () => {
                 playClick();
                 setLanguage(language === 'de' ? 'tr' : 'de');
               }}
-              aria-label={language === 'de' ? 'Switch to Turkish' : 'Almancaya geç'}
+              aria-label={language === 'de' ? 'TR: Türkçeye geç' : 'DE: Almancaya geç'}
               className="flex h-6 items-center justify-center rounded-full border-2 border-ground/40 px-2 font-mono-ui text-[9px] uppercase tracking-[0.14em] text-ground/70 transition-colors hover:border-ground hover:text-ground"
             >
               {language === 'de' ? 'TR' : 'DE'}

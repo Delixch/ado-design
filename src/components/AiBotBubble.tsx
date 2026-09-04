@@ -140,7 +140,7 @@ export const AiBotBubble: React.FC = () => {
       <motion.button
         type="button"
         onClick={toggle}
-        aria-label={open ? 'Chat schliessen' : 'Chat mit Adnans Bot öffnen'}
+        aria-label={open ? 'Chat schliessen' : 'AI-Chat mit Adnans Bot öffnen'}
         initial={{ opacity: 0, scale: 0.8 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: reducedMotion ? 0 : 0.3 }}

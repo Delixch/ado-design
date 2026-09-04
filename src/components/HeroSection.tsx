@@ -227,6 +227,8 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
             muted
             playsInline
             preload="auto"
+            // @ts-expect-error - fetchPriority ist fuer <video> noch nicht in @types/react, existiert im Browser trotzdem.
+            fetchPriority="high"
             onTimeUpdate={handleTimeUpdate}
           />
         </motion.div>
@@ -371,6 +373,7 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
                 weg und war zu kurz sichtbar. */}
             <motion.button
               type="button"
+              tabIndex={-1}
               onClick={() => window.dispatchEvent(new CustomEvent(MATRIX_MODE_EVENT))}
               animate={{ opacity: [0.5, 1, 0.5], boxShadow: ['0 0 4px var(--color-brand)', '0 0 14px var(--color-brand)', '0 0 4px var(--color-brand)'] }}
               transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
