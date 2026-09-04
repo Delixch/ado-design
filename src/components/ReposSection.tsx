@@ -1,10 +1,11 @@
-import React, { useState, useEffect, useLayoutEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { SectionHead } from './ui';
 import { HoverEffect, RepoItem } from './ui/card-hover-effect';
 import { OPEN_SECTION_EVENT } from '../lib/nav';
 import { useReducedMotion } from '../lib/motion';
 import { playPrint, stopPrint, playClick } from '../lib/sound';
+import { cn } from '../lib/utils';
 
 const repos: RepoItem[] = [
   {
@@ -92,6 +93,20 @@ const repos: RepoItem[] = [
     tags: ['PostgreSQL', 'Realtime', 'Auth'],
     link: 'https://github.com/supabase/supabase',
   },
+  {
+    title: 'Awesome MCP Servers',
+    badge: 'MCP-Server-Verzeichnis',
+    description: 'Kuratierte Liste von Model-Context-Protocol-Servern für KI-Assistenten.',
+    details:
+      'Community-gepflegte GitHub-Liste: hunderte MCP-Server (Model Context Protocol) nach Kategorie sortiert — Dateisystem, Datenbanken, Browser-Automatisierung, Sicherheit, Finanzen und mehr. MCP ist das offene Protokoll, mit dem Clients wie Claude Desktop oder Claude Code diese Server ansprechen, um sicher auf Dateien, Datenbanken oder APIs zuzugreifen. Jeder Eintrag verlinkt zur eigenen Installationsanleitung.',
+    commands: [
+      { cmd: 'npx -y @modelcontextprotocol/server-filesystem ~/Projekte', note: 'Beispiel: Filesystem-Server aus der Liste lokal starten.' },
+      { cmd: 'claude mcp add filesystem -- npx -y @modelcontextprotocol/server-filesystem ~/Projekte', note: 'Server in Claude Code registrieren — steht danach sofort als Tool bereit.' },
+    ],
+    stars: 65000,
+    tags: ['MCP', 'AI Tools', 'Awesome List'],
+    link: 'https://github.com/punkpeye/awesome-mcp-servers',
+  },
 ];
 
 /* ─── Left Split Screen Portrait (Cloned 1:1 from ProjectsSection) ─ */
@@ -126,7 +141,10 @@ const ReposPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
         onPointerLeave={() => setActive(false)}
       >
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="relative max-w-full" style={{ aspectRatio: '1 / 1', width: 'auto', height: '74%' }}>
+          {/* Feste Obergrenze statt reiner 74%-Hoehe: der Rahmen wird je
+              nach Seiteninhalt (Kartenzahl) unterschiedlich hoch, das Foto
+              soll dabei aber immer gleich gross bleiben, nicht mitwachsen. */}
+          <div className="relative max-w-full" style={{ aspectRatio: '1 / 1', width: 'auto', height: 'min(74%, 25rem)' }}>
             <img
               src="/images/projects-portrait-color.webp"
               alt="Inspiration Space"
@@ -202,8 +220,9 @@ const ReposPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant })
 };
 
 /* ─── Kopierbarer Terminal-Befehl ─────────────────────────────
-   Bricht die Farbe des Papiers auf: dunkler Kasten, rote
-   Mono-Schrift, ein Klick kopiert den Befehl in die Zwischenablage. */
+   Sitzt auf dem hellen Papier: nur ein schwarzer Rahmen, keine
+   dunkle Fuellung mehr - die war auf dem Papierhintergrund kaum
+   lesbar. Statt eines Text-Labels ein Icon-Chip zum Kopieren. */
 const CodeSnippet: React.FC<{ cmd: string; note: string; kind?: 'shell' | 'prompt' }> = ({ cmd, note, kind }) => {
   const [copied, setCopied] = useState(false);
 
@@ -220,16 +239,31 @@ const CodeSnippet: React.FC<{ cmd: string; note: string; kind?: 'shell' | 'promp
           // Zwischenablage nicht verfuegbar - kein Absturz noetig.
         }
       }}
-      className="group mt-3 flex w-full items-center justify-between gap-3 rounded-lg bg-[#0A0A0A] px-4 py-3 text-left cursor-pointer"
+      className="group mt-3 flex w-full items-center justify-between gap-3 rounded-lg border-2 border-black px-4 py-3 text-left cursor-pointer"
     >
       <span className="min-w-0">
         <code className="block font-mono-ui text-[12px] text-[#FF3B30] truncate">
           {kind === 'prompt' ? '» ' : '$ '}{cmd}
         </code>
-        <span className="block text-[10px] text-white/40 mt-0.5">{note}</span>
+        <span className="block text-[10px] text-black/50 mt-0.5">{note}</span>
       </span>
-      <span className="shrink-0 font-mono-ui text-[9px] uppercase tracking-[0.1em] text-white/40 group-hover:text-white/70 transition-colors">
-        {copied ? 'Kopiert ✓' : 'Kopieren'}
+      <span
+        className={cn(
+          'shrink-0 flex h-7 w-7 items-center justify-center rounded-full transition-colors',
+          copied ? 'bg-[#FF5A1F]' : 'bg-black group-hover:bg-[#FF5A1F]',
+        )}
+        aria-label={copied ? 'Kopiert' : 'Kopieren'}
+      >
+        {copied ? (
+          <svg viewBox="0 0 20 20" fill="none" className="h-3.5 w-3.5">
+            <path d="M4 10.5L8 14.5L16 5.5" stroke="white" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
+          </svg>
+        ) : (
+          <svg viewBox="0 0 20 20" fill="none" className="h-3.5 w-3.5">
+            <rect x="7" y="7" width="10" height="10" rx="1.5" stroke="white" strokeWidth={1.6} />
+            <path d="M13 7V4.5A1.5 1.5 0 0 0 11.5 3H4.5A1.5 1.5 0 0 0 3 4.5v7A1.5 1.5 0 0 0 4.5 13H7" stroke="white" strokeWidth={1.6} strokeLinecap="round" />
+          </svg>
+        )}
       </span>
     </button>
   );
@@ -240,21 +274,42 @@ const CodeSnippet: React.FC<{ cmd: string; note: string; kind?: 'shell' | 'promp
    ganze Raster auf und streckte das Portrait darunter), erscheint
    das Detail wie ein frisch ausgedrucktes Blatt ueber dem Foto
    links - Rasterhoehe bleibt konstant, das Portrait auch. */
-const RepoPrintPanel: React.FC<{ item: RepoItem | null; onClose: () => void; top: number }> = ({ item, onClose, top }) => {
+const RepoPrintPanel: React.FC<{ item: RepoItem | null; onClose: () => void; onHeightChange: (h: number) => void }> = ({ item, onClose, onHeightChange }) => {
+  const paperRef = useRef<HTMLDivElement>(null);
+
   useEffect(() => {
     if (item) playPrint();
     return () => stopPrint();
   }, [item]);
 
+  // Das Blatt kann laenger sein als das Raster daneben (z.B. auf einer
+  // duennen letzten Seite mit nur einer Karte) - ohne diese Messung
+  // schneidet `.layer`s eigenes overflow:hidden den Rest einfach ab.
+  useEffect(() => {
+    if (!item) {
+      onHeightChange(0);
+      return;
+    }
+    const el = paperRef.current;
+    if (!el) return;
+    const observer = new ResizeObserver(([entry]) => onHeightChange(entry.contentRect.height));
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, [item, onHeightChange]);
+
   return (
     <div
-      className="absolute left-0 right-1/2 bottom-0 hidden min-[1000px]:block px-12 pointer-events-none z-30"
-      style={{ top }}
+      // top-24 = 6rem, deckt sich mit dem sm:py-24 der Sektion (bei den
+      // Breiten, in denen dieses Panel ueberhaupt sichtbar ist, ist
+      // sm: laengst aktiv) - so faengt das Blatt exakt dort an, wo auch
+      // der normale Inhalt rechts beginnt, statt unter der Nav zu verschwinden.
+      className="absolute left-0 right-1/2 bottom-0 top-24 hidden min-[1000px]:block px-12 pointer-events-none z-30"
     >
       <div className="relative w-full">
       <AnimatePresence>
         {item && (
           <motion.div
+            ref={paperRef}
             key={item.title}
             initial={{ clipPath: 'inset(0 0 0 100%)', opacity: 1 }}
             animate={{ clipPath: 'inset(0 0 0 0%)', opacity: 1 }}
@@ -340,9 +395,7 @@ const RepoPrintPanel: React.FC<{ item: RepoItem | null; onClose: () => void; top
 export const ReposSection: React.FC = () => {
   const [sectionOpen, setSectionOpen] = useState(false);
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
-  const sectionRef = useRef<HTMLElement>(null);
-  const gridRef = useRef<HTMLDivElement>(null);
-  const [panelTop, setPanelTop] = useState(96);
+  const [panelHeight, setPanelHeight] = useState(0);
 
   useEffect(() => {
     const onOpen = (e: Event) => {
@@ -353,28 +406,8 @@ export const ReposSection: React.FC = () => {
     return () => window.removeEventListener(OPEN_SECTION_EVENT, onOpen);
   }, []);
 
-  // Das Ausdruck-Panel soll immer exakt auf Hoehe der ersten Kartenreihe
-  // starten - nicht geschaetzt, sondern an der echten Position der Karten
-  // gemessen. Wird laenger, waechst es einfach nach unten weiter.
-  useLayoutEffect(() => {
-    const measure = () => {
-      if (!sectionRef.current || !gridRef.current) return;
-      const sectionTop = sectionRef.current.getBoundingClientRect().top;
-      const gridTop = gridRef.current.getBoundingClientRect().top;
-      setPanelTop(gridTop - sectionTop);
-    };
-    measure();
-    window.addEventListener('resize', measure);
-    const id = window.setTimeout(measure, 300);
-    return () => {
-      window.removeEventListener('resize', measure);
-      window.clearTimeout(id);
-    };
-  }, [sectionOpen]);
-
   return (
     <section
-      ref={sectionRef}
       id="repos"
       className="framed relative w-full overflow-hidden py-16 fluid-gutter sm:py-24"
       style={{ background: '#000000' }}
@@ -385,11 +418,14 @@ export const ReposSection: React.FC = () => {
         <RepoPrintPanel
           item={activeIndex !== null ? repos[activeIndex] : null}
           onClose={() => setActiveIndex(null)}
-          top={panelTop}
+          onHeightChange={setPanelHeight}
         />
       </div>
 
-      <div className="relative z-10 mx-auto w-full max-w-7xl pointer-events-none">
+      <div
+        className="relative z-10 mx-auto w-full max-w-7xl pointer-events-none"
+        style={activeIndex !== null ? { minHeight: 96 + panelHeight + 24 } : undefined}
+      >
         <div className="grid grid-cols-1 gap-6 min-[1000px]:grid-cols-12 pointer-events-none">
           {/* Left half is completely empty */}
           <div className="hidden min-[1000px]:block min-[1000px]:col-span-6" />
@@ -426,7 +462,7 @@ export const ReposSection: React.FC = () => {
                   <ReposPortrait variant="mobile" />
                 </div>
 
-                <div ref={gridRef}>
+                <div>
                   <HoverEffect items={repos} activeIndex={activeIndex} onActiveIndexChange={setActiveIndex} />
                 </div>
               </motion.div>

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
 import { cn } from '../../lib/utils';
 import { playClick } from '../../lib/sound';
+import { scrollToSection } from '../../lib/nav';
 
 export interface RepoCommand {
   cmd: string;
@@ -41,6 +42,11 @@ const useIsDesktop = (): boolean => {
   return isDesktop;
 };
 
+// 4 Karten pro Seite (2x2) - kurz genug, dass das Ausdruck-Panel links
+// ohne grosse Hoehensprung zwischen den Seiten passt und der Nutzer
+// nicht staendig scrollen muss.
+const PAGE_SIZE = 4;
+
 export const HoverEffect = ({
   items,
   activeIndex,
@@ -55,13 +61,30 @@ export const HoverEffect = ({
   const isDesktop = useIsDesktop();
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null);
   const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
+  const [page, setPage] = useState(0);
+  const pageCount = Math.ceil(items.length / PAGE_SIZE);
+  const pageStart = page * PAGE_SIZE;
+
+  const goToPage = (p: number) => {
+    playClick();
+    setPage(p);
+    setHoveredIndex(null);
+    setFlippedIndex(null);
+    onActiveIndexChange(null);
+    // Seitenwechsel kann die Rasterhoehe aendern (letzte Seite hat
+    // weniger Karten) - dieselbe Sprung-Logik wie das Nav-Menu zieht
+    // den Abschnittsanfang zurueck an seinen festen Platz.
+    scrollToSection('repos');
+  };
 
   return (
+    <div>
     <div
       className={cn('relative grid grid-cols-1 sm:grid-cols-2 gap-x-1 gap-y-3.5 py-4', className)}
       onMouseLeave={() => setHoveredIndex(null)}
     >
       {items.map((item, idx) => {
+        if (idx < pageStart || idx >= pageStart + PAGE_SIZE) return null;
         const isFlipped = !isDesktop && flippedIndex === idx;
         return (
           <div
@@ -224,6 +247,33 @@ export const HoverEffect = ({
           </div>
         );
       })}
+    </div>
+
+    {pageCount > 1 && (
+      <div className="mt-1 flex items-center justify-center gap-4">
+        <button
+          type="button"
+          onClick={() => goToPage(page - 1)}
+          disabled={page === 0}
+          aria-label="Vorherige Seite"
+          className="flex h-6 w-6 items-center justify-center rounded-full border border-white/15 text-white/60 hover:text-[#FF5A1F] hover:border-[#FF5A1F]/50 disabled:opacity-25 disabled:pointer-events-none transition-colors cursor-pointer"
+        >
+          ‹
+        </button>
+        <span className="font-mono-ui text-[10px] tracking-[0.1em] text-white/40">
+          {String(page + 1).padStart(2, '0')} / {String(pageCount).padStart(2, '0')}
+        </span>
+        <button
+          type="button"
+          onClick={() => goToPage(page + 1)}
+          disabled={page === pageCount - 1}
+          aria-label="Nächste Seite"
+          className="flex h-6 w-6 items-center justify-center rounded-full border border-white/15 text-white/60 hover:text-[#FF5A1F] hover:border-[#FF5A1F]/50 disabled:opacity-25 disabled:pointer-events-none transition-colors cursor-pointer"
+        >
+          ›
+        </button>
+      </div>
+    )}
     </div>
   );
 };
