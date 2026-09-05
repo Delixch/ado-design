@@ -253,8 +253,18 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
         src="/logo.svg"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none right-[4%] top-1/2 hidden w-32 -translate-y-1/2 opacity-80 min-[1400px]:block"
-        style={{ position: 'absolute', zIndex: 20 }}
+        className="pointer-events-none hidden w-56 opacity-80 min-[1400px]:block"
+        style={{
+          position: 'absolute',
+          top: '50%',
+          /* Toter Streifen reicht von right:0 bis zur Telefon-Aussenkante
+             bei right:22%+200px - `right` hier + translate(50%) zentriert
+             das Logo in der Mitte dieses Streifens, unabhaengig von der
+             Logo-Breite selbst. */
+          right: 'calc(11% + 100px)',
+          transform: 'translate(50%, -50%)',
+          zIndex: 20,
+        }}
       />
 
       {/* Großes Telefon-Mockup, das bei 5s ins Bild gleitet.
