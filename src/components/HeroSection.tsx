@@ -244,13 +244,17 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
 
       {/* Toter Raum rechts vom Telefon (Video ist objectcontain, deckt
           auf breiten Viewports nicht die volle Breite) - ab 1400px
-          sichtbar, darunter ueberlappt es mit dem schrumpfenden Telefon. */}
+          sichtbar, darunter ueberlappt es mit dem schrumpfenden Telefon.
+          `position` steht in `style`, nicht in `className`: `.tinted > *`
+          (index.css) erzwingt sonst `position: relative` auf jedem
+          direkten Section-Kind und die Utility-Klasse verliert den
+          Kaskaden-Wettstreit — dasselbe Problem wie beim Video oben. */}
       <img
         src="/logo.svg"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none absolute right-[4%] top-1/2 hidden w-32 -translate-y-1/2 opacity-80 min-[1400px]:block"
-        style={{ zIndex: 20 }}
+        className="pointer-events-none right-[4%] top-1/2 hidden w-32 -translate-y-1/2 opacity-80 min-[1400px]:block"
+        style={{ position: 'absolute', zIndex: 20 }}
       />
 
       {/* Großes Telefon-Mockup, das bei 5s ins Bild gleitet.
