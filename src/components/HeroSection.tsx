@@ -242,6 +242,17 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
         />
       </div>
 
+      {/* Toter Raum rechts vom Telefon (Video ist objectcontain, deckt
+          auf breiten Viewports nicht die volle Breite) - ab 1400px
+          sichtbar, darunter ueberlappt es mit dem schrumpfenden Telefon. */}
+      <img
+        src="/logo.svg"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none absolute right-[4%] top-1/2 hidden w-32 -translate-y-1/2 opacity-80 min-[1400px]:block"
+        style={{ zIndex: 20 }}
+      />
+
       {/* Großes Telefon-Mockup, das bei 5s ins Bild gleitet.
           Der Rahmen bleibt bei 200x420 (Referenzgroesse ab 1500px),
           `phoneScale` (oben, in JS berechnet) schrumpft ihn auf
