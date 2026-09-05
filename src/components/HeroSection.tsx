@@ -258,6 +258,10 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
           (index.css) erzwingt sonst `position: relative` auf jedem
           direkten Section-Kind und die Utility-Klasse verliert den
           Kaskaden-Wettstreit — dasselbe Problem wie beim Video oben. */}
+      {/* Aktuelle Animation: Atmen (Skalierung/Opazitaet) + Glanzstreifen.
+          Variante 1 (durchgehende Drehung, `animate={{ rotate: 360 }}`)
+          liegt fertig in Commit ee488bf - bei Bedarf zurueckwechseln,
+          statt neu zu bauen. */}
       <motion.div
         aria-hidden="true"
         animate={reducedMotion ? undefined : { scale: [1, 1.06, 1], opacity: [0.65, 0.9, 0.65] }}
