@@ -79,9 +79,9 @@ const GlowLogo: React.FC<{
 }> = ({ src, reducedMotion, className = '', style }) => (
   <motion.div
     aria-hidden="true"
-    animate={reducedMotion ? undefined : { scale: [1, 1.06, 1], opacity: [0.65, 0.9, 0.65] }}
+    animate={reducedMotion ? undefined : { scale: [1, 1.06, 1], opacity: [0.95, 0.7, 0.95] }}
     transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-    className={`pointer-events-none aspect-square overflow-hidden opacity-80 ${className}`}
+    className={`pointer-events-none aspect-[7/10] overflow-hidden opacity-95 ${className}`}
     style={{
       WebkitMaskImage: `url(${src})`,
       maskImage: `url(${src})`,
@@ -357,7 +357,7 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
                 gibt der Telefonszene wenigstens Markenwert (auch auf
                 Mobil sichtbar, wo der tote Raum rechts vom Telefon fehlt). */}
             {codeVisible ? (
-              <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+              <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', paddingBottom: 69 }}>
                 <GlowLogo src={LOGO_SRC[theme]} reducedMotion={!!reducedMotion} className="w-[165px]" />
               </div>
             ) : (
