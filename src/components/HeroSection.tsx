@@ -266,7 +266,7 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
         aria-hidden="true"
         animate={reducedMotion ? undefined : { scale: [1, 1.06, 1], opacity: [0.65, 0.9, 0.65] }}
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        className="pointer-events-none hidden aspect-square w-64 opacity-80 min-[1400px]:block"
+        className="pointer-events-none hidden aspect-square w-56 opacity-80 min-[1400px]:block"
         style={{
           position: 'absolute',
           top: '50%',
