@@ -383,7 +383,7 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
                 Mobil sichtbar, wo der tote Raum rechts vom Telefon fehlt). */}
             {codeVisible ? (
               <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                <GlowLogo src={LOGO_SRC[theme]} reducedMotion={!!reducedMotion} className="w-36" />
+                <GlowLogo src={LOGO_SRC[theme]} reducedMotion={!!reducedMotion} className="w-[165px]" />
               </div>
             ) : (
               /* Standby: 3x4 App Icons */
