@@ -262,8 +262,8 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
         src={LOGO_SRC[theme]}
         alt=""
         aria-hidden="true"
-        animate={reducedMotion ? undefined : { rotate: 360 }}
-        transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
+        animate={reducedMotion ? undefined : { scale: [1, 1.06, 1], opacity: [0.65, 0.9, 0.65] }}
+        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
         className="pointer-events-none hidden w-64 opacity-80 min-[1400px]:block"
         style={{
           position: 'absolute',
