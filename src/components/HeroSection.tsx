@@ -253,7 +253,7 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
         src="/logo.svg"
         alt=""
         aria-hidden="true"
-        className="pointer-events-none hidden w-56 opacity-80 min-[1400px]:block"
+        className="pointer-events-none hidden w-64 opacity-80 min-[1400px]:block"
         style={{
           position: 'absolute',
           top: '50%',
