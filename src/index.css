@@ -58,9 +58,6 @@
 [data-theme="cyan"] {
   --color-brand:       #00D9FF;
   --color-brand-hover: #0099B8;
-  /* Kein neutrales Schwarz - leicht blau gestochen, damit der
-     Hintergrund selbst Teil des Themenwechsels ist, nicht nur der Akzent. */
-  --color-void:        #05070C;
 }
 
 html, body {
