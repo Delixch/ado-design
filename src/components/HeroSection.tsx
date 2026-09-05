@@ -242,6 +242,31 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
         />
       </div>
 
+      {/* Toter Raum rechts vom Telefon (Video ist objectcontain, deckt
+          auf breiten Viewports nicht die volle Breite) - ab 1400px
+          sichtbar, darunter ueberlappt es mit dem schrumpfenden Telefon.
+          `position` steht in `style`, nicht in `className`: `.tinted > *`
+          (index.css) erzwingt sonst `position: relative` auf jedem
+          direkten Section-Kind und die Utility-Klasse verliert den
+          Kaskaden-Wettstreit — dasselbe Problem wie beim Video oben. */}
+      <img
+        src="/logo.svg"
+        alt=""
+        aria-hidden="true"
+        className="pointer-events-none hidden w-56 opacity-80 min-[1400px]:block"
+        style={{
+          position: 'absolute',
+          top: '50%',
+          /* Toter Streifen reicht von right:0 bis zur Telefon-Aussenkante
+             bei right:22%+200px - `right` hier + translate(50%) zentriert
+             das Logo in der Mitte dieses Streifens, unabhaengig von der
+             Logo-Breite selbst. */
+          right: 'calc(11% + 100px)',
+          transform: 'translate(50%, -50%)',
+          zIndex: 20,
+        }}
+      />
+
       {/* Großes Telefon-Mockup, das bei 5s ins Bild gleitet.
           Der Rahmen bleibt bei 200x420 (Referenzgroesse ab 1500px),
           `phoneScale` (oben, in JS berechnet) schrumpft ihn auf
