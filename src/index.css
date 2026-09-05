@@ -471,15 +471,6 @@ html {
   margin-top: calc(var(--frame) * -1);
 }
 
-/* Hacker-Code-Scroll im Telefon */
-@keyframes codeScroll {
-  0%   { transform: translateY(0%); }
-  100% { transform: translateY(-50%); }
-}
-.code-scroll {
-  animation: codeScroll 6s linear infinite;
-}
-
 /* Cursor blink */
 @keyframes cursorBlink {
   50% { opacity: 0; }

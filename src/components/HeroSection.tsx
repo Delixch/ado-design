@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { motion, useMotionValue, useSpring, useTransform, useScroll, useReducedMotion } from 'framer-motion';
-import type { Variants } from 'framer-motion';
+import type { Variants, MotionStyle } from 'framer-motion';
 import { scrollToSection } from '../lib/nav';
 import { MATRIX_MODE_EVENT } from './MatrixMode';
 import { useLanguage } from '../lib/LanguageContext';
@@ -66,6 +66,48 @@ const KineticLine: React.FC<{
     </span>
   );
 };
+
+/** Logo mit Atem- und Glanzstreifen-Animation, maskiert auf die eigene
+ *  Silhouette. Wird zweimal gebraucht - im toten Raum rechts vom Telefon
+ *  UND im Telefonbildschirm selbst (statt des nutzlosen Scroll-Codes) -
+ *  daher eigene Komponente statt zweimal derselbe Animation. */
+const GlowLogo: React.FC<{
+  src: string;
+  reducedMotion: boolean;
+  className?: string;
+  style?: MotionStyle;
+}> = ({ src, reducedMotion, className = '', style }) => (
+  <motion.div
+    aria-hidden="true"
+    animate={reducedMotion ? undefined : { scale: [1, 1.06, 1], opacity: [0.65, 0.9, 0.65] }}
+    transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
+    className={`pointer-events-none aspect-square overflow-hidden opacity-80 ${className}`}
+    style={{
+      WebkitMaskImage: `url(${src})`,
+      maskImage: `url(${src})`,
+      WebkitMaskSize: 'contain',
+      maskSize: 'contain',
+      WebkitMaskRepeat: 'no-repeat',
+      maskRepeat: 'no-repeat',
+      WebkitMaskPosition: 'center',
+      maskPosition: 'center',
+      ...style,
+    }}
+  >
+    <img src={src} alt="" className="h-full w-full" />
+    {!reducedMotion && (
+      <motion.div
+        className="absolute inset-0"
+        style={{
+          background: 'linear-gradient(115deg, transparent 20%, rgba(255,255,255,1) 50%, transparent 80%)',
+          mixBlendMode: 'color-dodge',
+        }}
+        animate={{ x: ['-130%', '130%'] }}
+        transition={{ duration: 3.5, repeat: Infinity, repeatDelay: 0.8, ease: 'easeInOut' }}
+      />
+    )}
+  </motion.div>
+);
 
 /** Sekunde, in der im Video das Fingerschnippen sitzt.
  *  333.mp4 ist 10.00s lang und 1280x720 gross. Erst stand der
@@ -262,11 +304,10 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
           Variante 1 (durchgehende Drehung, `animate={{ rotate: 360 }}`)
           liegt fertig in Commit ee488bf - bei Bedarf zurueckwechseln,
           statt neu zu bauen. */}
-      <motion.div
-        aria-hidden="true"
-        animate={reducedMotion ? undefined : { scale: [1, 1.06, 1], opacity: [0.65, 0.9, 0.65] }}
-        transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        className="pointer-events-none hidden aspect-square w-56 opacity-80 min-[1400px]:block"
+      <GlowLogo
+        src={LOGO_SRC[theme]}
+        reducedMotion={!!reducedMotion}
+        className="hidden w-56 min-[1400px]:block"
         style={{
           position: 'absolute',
           top: '50%',
@@ -278,33 +319,8 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
           x: '50%',
           y: '-50%',
           zIndex: 20,
-          overflow: 'hidden',
-          // Der Glanzstreifen darf nur innerhalb der Logo-Silhouette
-          // leuchten, nicht im transparenten Rand des SVG-Canvas -
-          // Maske auf dasselbe Bild, statt eines rechteckigen Overlays.
-          WebkitMaskImage: `url(${LOGO_SRC[theme]})`,
-          maskImage: `url(${LOGO_SRC[theme]})`,
-          WebkitMaskSize: 'contain',
-          maskSize: 'contain',
-          WebkitMaskRepeat: 'no-repeat',
-          maskRepeat: 'no-repeat',
-          WebkitMaskPosition: 'center',
-          maskPosition: 'center',
         }}
-      >
-        <img src={LOGO_SRC[theme]} alt="" className="h-full w-full" />
-        {!reducedMotion && (
-          <motion.div
-            className="absolute inset-0"
-            style={{
-              background: 'linear-gradient(115deg, transparent 20%, rgba(255,255,255,1) 50%, transparent 80%)',
-              mixBlendMode: 'color-dodge',
-            }}
-            animate={{ x: ['-130%', '130%'] }}
-            transition={{ duration: 3.5, repeat: Infinity, repeatDelay: 0.8, ease: 'easeInOut' }}
-          />
-        )}
-      </motion.div>
+      />
 
       {/* Großes Telefon-Mockup, das bei 5s ins Bild gleitet.
           Der Rahmen bleibt bei 200x420 (Referenzgroesse ab 1500px),
@@ -361,47 +377,13 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
               <div style={{ width: 4, height: 4, borderRadius: '50%', background: '#222' }} />
             </div>
 
-            {/* Screen Content: scroll code if active, else standby */}
+            {/* Screen Content: Logo statt nutzlosem Scroll-Code, sonst
+                Standby - der Scroll-Code hatte keine Funktion, das Logo
+                gibt der Telefonszene wenigstens Markenwert (auch auf
+                Mobil sichtbar, wo der tote Raum rechts vom Telefon fehlt). */}
             {codeVisible ? (
-              <div
-                className="code-scroll"
-                style={{
-                  padding: '30px 10px 10px 10px',
-                  fontFamily: 'monospace',
-                  fontSize: 9,
-                  lineHeight: 1.6,
-                  color: 'var(--color-brand)',
-                  whiteSpace: 'nowrap',
-                  letterSpacing: 0,
-                  userSelect: 'none',
-                }}
-              >
-                {[
-                  'const app = require("./core");',
-                  'fn(x) => x * 0x4A3F + 1;',
-                  '#!/usr/bin/env node -e',
-                  'while(i<len) { buf[i++]; }',
-                  'import { exec } from "child";',
-                  'git commit -m "fix: #892"',
-                  'SELECT * FROM users LIMIT 9;',
-                  'try { parse(buf) } catch(e)',
-                  'sudo systemctl restart app',
-                  'λx.λy.(x y) => reduce(fn)',
-                  'npm run build --prod --ci',
-                  '0xFF3A & 0b10110001 >> 3',
-                  'async function* gen() {}',
-                  '_.map(arr, fn).filter(!!x)',
-                  'docker run -p 3000:3000 app',
-                  'export default class App {}',
-                  '[].reduce((a,b)=>a+b, 0x0)',
-                  'ssh root@192.168.1.1 -i key',
-                  'const x = await fetch(url);',
-                  'grep -r "TODO" ./src --color',
-                ].map((line, i) => (
-                  <div key={i} style={{ color: i % 5 === 0 ? 'var(--color-brand)' : i % 3 === 0 ? '#FF8C5A' : 'var(--color-brand)', opacity: 0.85 + (i % 3) * 0.05 }}>
-                    {line}
-                  </div>
-                ))}
+              <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+                <GlowLogo src={LOGO_SRC[theme]} reducedMotion={!!reducedMotion} className="w-28" />
               </div>
             ) : (
               /* Standby: 3x4 App Icons */
