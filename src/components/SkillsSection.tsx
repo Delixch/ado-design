@@ -344,7 +344,7 @@ const SkillsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant }
           ? 'absolute top-0 right-0 bottom-0 w-1/2 hidden min-[1000px]:block border-l border-white/5 overflow-hidden pointer-events-auto'
           : 'relative block w-full h-[clamp(16rem,80vw,24rem)] overflow-hidden rounded-2xl pointer-events-auto'
       }
-      style={{ background: '#000000' }}
+      style={{ background: 'var(--color-void)' }}
     >
       {/* Dynamic SVG Filter for Liquid Distortion */}
       <svg className="hidden">
@@ -485,7 +485,7 @@ export const SkillsSection: React.FC = () => {
     <section
       id="skills"
       className="framed relative w-full overflow-hidden py-16 fluid-gutter sm:py-24"
-      style={{ background: '#000000' }}
+      style={{ background: 'var(--color-void)' }}
     >
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes sequence-spin {

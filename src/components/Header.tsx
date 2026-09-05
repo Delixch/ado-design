@@ -190,14 +190,22 @@ export const Header: React.FC = () => {
               type="button"
               onClick={() => {
                 playClick();
-                setTheme(theme === 'orange' ? 'amber' : 'orange');
+                setTheme(theme === 'orange' ? 'amber' : theme === 'amber' ? 'cyan' : 'orange');
               }}
-              aria-label={theme === 'orange' ? 'Switch to amber theme' : 'Turuncu temaya geç'}
+              aria-label={
+                theme === 'orange'
+                  ? 'Switch to amber theme'
+                  : theme === 'amber'
+                    ? 'Switch to cyan theme'
+                    : 'Turuncu temaya geç'
+              }
               className="flex h-6 w-6 shrink-0 items-center justify-center rounded-full border-2 border-ground/40 transition-colors hover:border-ground"
             >
               <span
                 className="h-2.5 w-2.5 rounded-full"
-                style={{ backgroundColor: theme === 'orange' ? '#FFD60A' : '#FF5A1F' }}
+                style={{
+                  backgroundColor: theme === 'orange' ? '#FFD60A' : theme === 'amber' ? '#00D9FF' : '#FF5A1F',
+                }}
               />
             </button>
             <button

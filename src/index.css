@@ -43,11 +43,24 @@
      tauschen kann, ohne 90+ Stellen im Code anzufassen. */
   --color-brand:       #FF5A1F;
   --color-brand-hover: #C23E10;
+
+  /* Section-Grund, als Token statt Literal-#000 - aus demselben Grund
+     wie --color-brand oben: [data-theme="cyan"] tauscht ihn site-weit,
+     ohne dass jede Section einzeln angefasst wird. */
+  --color-void: #000000;
 }
 
 [data-theme="amber"] {
   --color-brand:       #FFD60A;
   --color-brand-hover: #FFE44D;
+}
+
+[data-theme="cyan"] {
+  --color-brand:       #00D9FF;
+  --color-brand-hover: #0099B8;
+  /* Kein neutrales Schwarz - leicht blau gestochen, damit der
+     Hintergrund selbst Teil des Themenwechsels ist, nicht nur der Akzent. */
+  --color-void:        #05070C;
 }
 
 html, body {
@@ -57,7 +70,7 @@ html, body {
      eine helle Grundflaeche dahinter blitzt bei Rundungsluecken
      (Zoom, Sektionsraender, iOS-Ueberscrollen) als grauer Rahmen
      durch. Schwarz macht dieselbe Luecke unsichtbar. */
-  background-color: #000000;
+  background-color: var(--color-void);
   color: #111111;
   /* Kein waagrechtes Gummiband auf Tablets. Bewusst nicht
      `overflow-x: hidden` — das macht body zum Scrollbehaelter und

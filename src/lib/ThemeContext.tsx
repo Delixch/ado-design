@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-export type Theme = 'orange' | 'amber';
+export type Theme = 'orange' | 'amber' | 'cyan';
 
 // Dieselben Werte stehen auch in index.css (--color-brand /
 // [data-theme="amber"]) - fuer reines CSS reicht das Custom Property,
@@ -10,6 +10,7 @@ export type Theme = 'orange' | 'amber';
 const ACCENT_HEX: Record<Theme, { accentHex: string; accentHoverHex: string }> = {
   orange: { accentHex: '#FF5A1F', accentHoverHex: '#C23E10' },
   amber: { accentHex: '#FFD60A', accentHoverHex: '#FFE44D' },
+  cyan: { accentHex: '#00D9FF', accentHoverHex: '#0099B8' },
 };
 
 interface ThemeContextProps {
@@ -24,7 +25,7 @@ const ThemeContext = createContext<ThemeContextProps | undefined>(undefined);
 const readStoredTheme = (): Theme => {
   try {
     const saved = localStorage.getItem('preferred-theme');
-    if (saved === 'orange' || saved === 'amber') return saved;
+    if (saved === 'orange' || saved === 'amber' || saved === 'cyan') return saved;
   } catch {
     // localStorage nicht verfuegbar (SSR, eingeschraenkter Modus) - Standard bleibt.
   }
@@ -44,10 +45,10 @@ export const ThemeProvider: React.FC<{ children: React.ReactNode }> = ({ childre
   };
 
   useEffect(() => {
-    if (theme === 'amber') {
-      document.documentElement.setAttribute('data-theme', 'amber');
-    } else {
+    if (theme === 'orange') {
       document.documentElement.removeAttribute('data-theme');
+    } else {
+      document.documentElement.setAttribute('data-theme', theme);
     }
   }, [theme]);
 

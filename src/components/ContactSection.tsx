@@ -31,7 +31,7 @@ const ContactPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant 
           ? 'absolute top-0 right-0 bottom-0 w-1/2 hidden min-[1000px]:block border-l border-white/5 pointer-events-auto'
           : 'relative block w-full h-[clamp(16rem,80vw,24rem)] pointer-events-auto'
       }
-      style={{ background: '#000000' }}
+      style={{ background: 'var(--color-void)' }}
     >
       {/* Stationary hover/hold target for the airplane effect */}
       <motion.div
@@ -187,7 +187,7 @@ export const ContactSection: React.FC = () => {
     <footer
       id="contact"
       className="framed relative w-full overflow-hidden py-16 fluid-gutter sm:py-24"
-      style={{ background: '#000000' }}
+      style={{ background: 'var(--color-void)' }}
     >
       {/* Dark right-half split screen background (wrapped in .layer to escape .tinted > *) */}
       <div className="layer pointer-events-none">

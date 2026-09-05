@@ -200,11 +200,11 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
           Bild sehen. */}
       <div
         aria-hidden
-        className="layer bg-black"
+        className="layer bg-void"
       >
         {/* Base dark background */}
         <span
-          className="absolute inset-0 bg-[#000000]"
+          className="absolute inset-0 bg-void"
         />
 
         <motion.div 

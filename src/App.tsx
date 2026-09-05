@@ -67,7 +67,7 @@ function App() {
   }, []);
 
   return (
-    <div className="w-full bg-black text-ink selection:bg-punch selection:text-ink">
+    <div className="w-full bg-void text-ink selection:bg-punch selection:text-ink">
       <CursorTrail />
       <ScrollProgress />
 
@@ -92,13 +92,13 @@ function App() {
       <ContactSection />
 
       {/* Floating Dock - macOS style magnification dock */}
-      <div className="border-t border-white/10 bg-[#000000] pt-12 pb-0 flex justify-center items-center">
+      <div className="border-t border-white/10 bg-void pt-12 pb-0 flex justify-center items-center">
         <FloatingDock items={dockItems} />
       </div>
 
       {/* Kleiner Streifen ganz unten: welche Werkzeuge dahinter stehen —
           Impressum/Datenschutz kommen dazu, sobald die echten Angaben da sind. */}
-      <div className="border-t border-white/10 bg-[#000000] py-6 fluid-gutter">
+      <div className="border-t border-white/10 bg-void py-6 fluid-gutter">
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-3 text-center">
           <p className="font-mono-ui text-[9px] uppercase tracking-[0.2em] text-white/55">
             Gebaut mit React · TypeScript · Vite · Tailwind CSS · Framer Motion · GSAP

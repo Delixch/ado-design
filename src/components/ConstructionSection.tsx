@@ -18,7 +18,7 @@ const ConstructionPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ var
           ? 'absolute top-0 right-0 bottom-0 w-1/2 hidden min-[1000px]:block border-l border-white/5 overflow-hidden pointer-events-auto'
           : 'relative block w-full h-[clamp(16rem,80vw,24rem)] overflow-hidden rounded-2xl pointer-events-auto'
       }
-      style={{ background: '#000000' }}
+      style={{ background: 'var(--color-void)' }}
     >
       {/* Background Hover Flash */}
       <motion.div
@@ -122,7 +122,7 @@ export const ConstructionSection: React.FC = () => {
     <section
       id="construction"
       className="framed relative w-full overflow-hidden py-16 fluid-gutter sm:py-24"
-      style={{ background: '#000000' }}
+      style={{ background: 'var(--color-void)' }}
     >
       {/* Dark right-half split screen background (Exact clone of AboutSection) */}
       <div className="layer pointer-events-none">

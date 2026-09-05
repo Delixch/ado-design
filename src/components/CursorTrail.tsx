@@ -18,7 +18,7 @@ interface Particle {
    (pointer:fine).     */
 // HSL-Gradzahl je Theme, statt Hex - der Funke braucht einen Hue-Wert,
 // kein CSS-Custom-Property. #FF5A1F liegt bei ~25deg, #FFD60A bei ~50deg.
-const THEME_HUE: Record<string, number> = { orange: 25, amber: 50 };
+const THEME_HUE: Record<string, number> = { orange: 25, amber: 50, cyan: 190 };
 
 export const CursorTrail: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);

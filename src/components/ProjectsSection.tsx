@@ -120,7 +120,7 @@ const ProjectsPortrait: React.FC<{ variant: 'desktop' | 'mobile' }> = ({ variant
           ? 'absolute top-0 left-0 bottom-0 w-1/2 hidden min-[1000px]:block border-r border-white/5 overflow-hidden pointer-events-auto'
           : 'relative block w-full h-[clamp(16rem,80vw,24rem)] overflow-hidden rounded-2xl pointer-events-auto'
       }
-      style={{ background: '#000000' }}
+      style={{ background: 'var(--color-void)' }}
     >
       {/* Flaechendeckendes, flaches Orange bei Hover — kein Verlauf,
         wie ein Lichtschalter: an/aus. */}
@@ -294,7 +294,7 @@ export const ProjectsSection: React.FC = () => {
       onPointerMove={canHover ? handleMove : undefined}
       className="tinted framed relative w-full overflow-hidden py-16 fluid-gutter sm:py-24"
       /* Der Abschnitt ist eine dunkle Wand, von Rahmen zu Rahmen. */
-      style={{ ['--ground-tone' as string]: '#000000', background: '#000000' }}
+      style={{ ['--ground-tone' as string]: 'var(--color-void)', background: 'var(--color-void)' }}
     >
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes sequence-spin-9 {
