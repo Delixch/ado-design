@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { motion, useMotionValue, useSpring, useTransform, useScroll } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform, useScroll, useReducedMotion } from 'framer-motion';
 import type { Variants } from 'framer-motion';
 import { scrollToSection } from '../lib/nav';
 import { MATRIX_MODE_EVENT } from './MatrixMode';
@@ -77,6 +77,7 @@ const SNAP_CUE_S = 7.54;
 export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
   const { t } = useLanguage();
   const { theme } = useTheme();
+  const reducedMotion = useReducedMotion();
   const rootRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [snapped, setSnapped] = useState(false);
@@ -257,10 +258,12 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
           (index.css) erzwingt sonst `position: relative` auf jedem
           direkten Section-Kind und die Utility-Klasse verliert den
           Kaskaden-Wettstreit — dasselbe Problem wie beim Video oben. */}
-      <img
+      <motion.img
         src={LOGO_SRC[theme]}
         alt=""
         aria-hidden="true"
+        animate={reducedMotion ? undefined : { rotate: 360 }}
+        transition={{ duration: 12, repeat: Infinity, ease: 'linear' }}
         className="pointer-events-none hidden w-64 opacity-80 min-[1400px]:block"
         style={{
           position: 'absolute',
@@ -270,7 +273,8 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
              das Logo in der Mitte dieses Streifens, unabhaengig von der
              Logo-Breite selbst. */
           right: 'calc(9% + 80px)',
-          transform: 'translate(50%, -50%)',
+          x: '50%',
+          y: '-50%',
           zIndex: 20,
         }}
       />
