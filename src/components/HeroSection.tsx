@@ -258,13 +258,11 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
           (index.css) erzwingt sonst `position: relative` auf jedem
           direkten Section-Kind und die Utility-Klasse verliert den
           Kaskaden-Wettstreit — dasselbe Problem wie beim Video oben. */}
-      <motion.img
-        src={LOGO_SRC[theme]}
-        alt=""
+      <motion.div
         aria-hidden="true"
         animate={reducedMotion ? undefined : { scale: [1, 1.06, 1], opacity: [0.65, 0.9, 0.65] }}
         transition={{ duration: 4, repeat: Infinity, ease: 'easeInOut' }}
-        className="pointer-events-none hidden w-64 opacity-80 min-[1400px]:block"
+        className="pointer-events-none hidden aspect-square w-64 opacity-80 min-[1400px]:block"
         style={{
           position: 'absolute',
           top: '50%',
@@ -276,8 +274,32 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
           x: '50%',
           y: '-50%',
           zIndex: 20,
+          overflow: 'hidden',
+          // Der Glanzstreifen darf nur innerhalb der Logo-Silhouette
+          // leuchten, nicht im transparenten Rand des SVG-Canvas -
+          // Maske auf dasselbe Bild, statt eines rechteckigen Overlays.
+          WebkitMaskImage: `url(${LOGO_SRC[theme]})`,
+          maskImage: `url(${LOGO_SRC[theme]})`,
+          WebkitMaskSize: 'contain',
+          maskSize: 'contain',
+          WebkitMaskRepeat: 'no-repeat',
+          maskRepeat: 'no-repeat',
+          WebkitMaskPosition: 'center',
+          maskPosition: 'center',
         }}
-      />
+      >
+        <img src={LOGO_SRC[theme]} alt="" className="h-full w-full" />
+        {!reducedMotion && (
+          <motion.div
+            className="absolute inset-0"
+            style={{
+              background: 'linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.9) 50%, transparent 60%)',
+            }}
+            animate={{ x: ['-120%', '120%'] }}
+            transition={{ duration: 3, repeat: Infinity, repeatDelay: 2.5, ease: 'easeInOut' }}
+          />
+        )}
+      </motion.div>
 
       {/* Großes Telefon-Mockup, das bei 5s ins Bild gleitet.
           Der Rahmen bleibt bei 200x420 (Referenzgroesse ab 1500px),
