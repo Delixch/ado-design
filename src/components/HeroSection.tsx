@@ -4,6 +4,13 @@ import type { Variants } from 'framer-motion';
 import { scrollToSection } from '../lib/nav';
 import { MATRIX_MODE_EVENT } from './MatrixMode';
 import { useLanguage } from '../lib/LanguageContext';
+import { useTheme } from '../lib/ThemeContext';
+
+const LOGO_SRC: Record<string, string> = {
+  orange: '/logo-orange.svg',
+  amber: '/logo-amber.svg',
+  cyan: '/logo-cyan.svg',
+};
 
 const container: Variants = {
   hidden: { opacity: 0 },
@@ -69,6 +76,7 @@ const SNAP_CUE_S = 7.54;
 
 export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
   const { t } = useLanguage();
+  const { theme } = useTheme();
   const rootRef = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
   const [snapped, setSnapped] = useState(false);
@@ -250,7 +258,7 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
           direkten Section-Kind und die Utility-Klasse verliert den
           Kaskaden-Wettstreit — dasselbe Problem wie beim Video oben. */}
       <img
-        src="/logo.svg"
+        src={LOGO_SRC[theme]}
         alt=""
         aria-hidden="true"
         className="pointer-events-none hidden w-64 opacity-80 min-[1400px]:block"

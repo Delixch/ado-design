@@ -1,0 +1,52 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 420" width="420" height="420">
+  <rect width="420" height="420" fill="none"/>
+
+  <!-- Compact futuristic ADO monogram -->
+  <g transform="translate(42 54)">
+    <!-- Outer technical ring -->
+    <circle cx="168" cy="150" r="118"
+            fill="none" stroke="#F2F4F7" stroke-width="10"/>
+
+    <!-- Cyan break in ring -->
+    <path d="M250 68 A118 118 0 0 1 280 118"
+          fill="none" stroke="#FFD60A" stroke-width="12" stroke-linecap="round"/>
+
+    <!-- A -->
+    <path d="M78 220 L130 92 L182 220 H154 L143 190 H116 L105 220 Z
+             M124 166 H136 L130 148 Z"
+          fill="#F2F4F7"/>
+
+    <!-- D -->
+    <path d="M158 100 H208
+             C255 100 280 121 280 156
+             C280 191 255 212 208 212
+             H158 Z
+             M184 124 V188 H206
+             C237 188 252 177 252 156
+             C252 135 237 124 206 124 Z"
+          fill="#F2F4F7"/>
+
+    <!-- O as cyan core -->
+    <circle cx="226" cy="156" r="27" fill="none" stroke="#FFD60A" stroke-width="10"/>
+
+    <!-- small UI dot -->
+    <circle cx="168" cy="32" r="6" fill="#FFD60A"/>
+  </g>
+
+  <!-- Brand text -->
+  <text x="210" y="344"
+        text-anchor="middle"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="34"
+        font-weight="800"
+        letter-spacing="8"
+        fill="#F2F4F7">ADO</text>
+
+  <text x="210" y="382"
+        text-anchor="middle"
+        font-family="Arial, Helvetica, sans-serif"
+        font-size="15"
+        font-weight="700"
+        letter-spacing="9"
+        fill="#8C939D">DESIGN</text>
+</svg>
