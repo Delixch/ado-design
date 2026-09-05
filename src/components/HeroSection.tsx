@@ -293,10 +293,11 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
           <motion.div
             className="absolute inset-0"
             style={{
-              background: 'linear-gradient(115deg, transparent 40%, rgba(255,255,255,0.9) 50%, transparent 60%)',
+              background: 'linear-gradient(115deg, transparent 20%, rgba(255,255,255,1) 50%, transparent 80%)',
+              mixBlendMode: 'color-dodge',
             }}
-            animate={{ x: ['-120%', '120%'] }}
-            transition={{ duration: 3, repeat: Infinity, repeatDelay: 2.5, ease: 'easeInOut' }}
+            animate={{ x: ['-130%', '130%'] }}
+            transition={{ duration: 3.5, repeat: Infinity, repeatDelay: 0.8, ease: 'easeInOut' }}
           />
         )}
       </motion.div>
