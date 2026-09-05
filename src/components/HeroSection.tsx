@@ -293,34 +293,9 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
         />
       </div>
 
-      {/* Toter Raum rechts vom Telefon (Video ist objectcontain, deckt
-          auf breiten Viewports nicht die volle Breite) - ab 1400px
-          sichtbar, darunter ueberlappt es mit dem schrumpfenden Telefon.
-          `position` steht in `style`, nicht in `className`: `.tinted > *`
-          (index.css) erzwingt sonst `position: relative` auf jedem
-          direkten Section-Kind und die Utility-Klasse verliert den
-          Kaskaden-Wettstreit — dasselbe Problem wie beim Video oben. */}
-      {/* Aktuelle Animation: Atmen (Skalierung/Opazitaet) + Glanzstreifen.
-          Variante 1 (durchgehende Drehung, `animate={{ rotate: 360 }}`)
-          liegt fertig in Commit ee488bf - bei Bedarf zurueckwechseln,
-          statt neu zu bauen. */}
-      <GlowLogo
-        src={LOGO_SRC[theme]}
-        reducedMotion={!!reducedMotion}
-        className="hidden w-56 min-[1400px]:block"
-        style={{
-          position: 'absolute',
-          top: '50%',
-          /* Toter Streifen reicht von right:0 bis zur Telefon-Aussenkante
-             bei right:22%+200px - `right` hier + translate(50%) zentriert
-             das Logo in der Mitte dieses Streifens, unabhaengig von der
-             Logo-Breite selbst. */
-          right: 'calc(9% + 80px)',
-          x: '50%',
-          y: '-50%',
-          zIndex: 20,
-        }}
-      />
+      {/* Logo lief zuerst im toten Raum rechts vom Telefon (ab 1400px) -
+          jetzt nur noch im Telefonbildschirm selbst, der auf allen
+          Breiten sichtbar ist und laut Rueckmeldung besser wirkt. */}
 
       {/* Großes Telefon-Mockup, das bei 5s ins Bild gleitet.
           Der Rahmen bleibt bei 200x420 (Referenzgroesse ab 1500px),
