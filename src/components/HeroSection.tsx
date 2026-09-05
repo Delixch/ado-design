@@ -261,7 +261,7 @@ export const HeroSection: React.FC<{ onSnap: () => void }> = ({ onSnap }) => {
              bei right:22%+200px - `right` hier + translate(50%) zentriert
              das Logo in der Mitte dieses Streifens, unabhaengig von der
              Logo-Breite selbst. */
-          right: 'calc(7% + 60px)',
+          right: 'calc(9% + 80px)',
           transform: 'translate(50%, -50%)',
           zIndex: 20,
         }}
